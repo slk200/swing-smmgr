@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceMap>
+    <entry>
+        <string>normal</string>
+        <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/off.9.png"
+                      className="org.tizzer.smmgr.system.component.WebBSNavButton"/>
+    </entry>
+    <entry>
+        <string>selected</string>
+        <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/on.9.png"
+                      className="org.tizzer.smmgr.system.component.WebBSNavButton"/>
+    </entry>
+</ResourceMap>
