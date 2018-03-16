@@ -71,7 +71,7 @@ public class FunctionsBoundary extends Initialization implements NavigationListe
             @Override
             public void mouseClicked(MouseEvent e) {
                 parent.removeAll();
-                parent.add(new AddVipBoundary(FunctionsBoundary.this), "North");
+                parent.add(new AddInsiderBoundary(FunctionsBoundary.this), "North");
                 parent.validate();
                 parent.repaint();
             }

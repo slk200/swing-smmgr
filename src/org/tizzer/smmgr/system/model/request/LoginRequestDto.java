@@ -6,11 +6,11 @@ package org.tizzer.smmgr.system.model.request;
  */
 public class LoginRequestDto {
 
-    private String account;
+    private String staffNo;
     private String password;
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setStaffNo(String staffNo) {
+        this.staffNo = staffNo;
     }
 
     public void setPassword(String password) {
@@ -19,7 +19,7 @@ public class LoginRequestDto {
 
     @Override
     public String toString() {
-        return "account=" + account +
+        return "staffNo=" + staffNo +
                 "&password=" + password;
     }
 

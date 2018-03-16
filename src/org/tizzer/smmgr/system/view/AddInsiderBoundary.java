@@ -22,7 +22,7 @@ import java.awt.event.ActionListener;
  * @author tizzer
  * @version 1.0
  */
-public class AddVipBoundary extends Initialization {
+public class AddInsiderBoundary extends Initialization {
 
     private WebTextField field$vip$number;
     private WebPasswordField field$vip$password;
@@ -38,7 +38,7 @@ public class AddVipBoundary extends Initialization {
     private WebBSButton button$save$vip;
     private NavigationListener navigationListener;
 
-    public AddVipBoundary(NavigationListener navigationListener) {
+    public AddInsiderBoundary(NavigationListener navigationListener) {
         super();
         this.navigationListener = navigationListener;
     }
@@ -111,7 +111,7 @@ public class AddVipBoundary extends Initialization {
         button$save$vip.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int option = JOptionPane.showConfirmDialog(AddVipBoundary.this, "<html><p>会员保存成功！</p><p>是否离开此界面？</p></html>", "下一步操作", JOptionPane.YES_NO_OPTION);
+                int option = JOptionPane.showConfirmDialog(AddInsiderBoundary.this, "<html><p>会员保存成功！</p><p>是否离开此界面？</p></html>", "下一步操作", JOptionPane.YES_NO_OPTION);
                 if (option == JOptionPane.YES_OPTION) {
                     backToSale();
                 } else {

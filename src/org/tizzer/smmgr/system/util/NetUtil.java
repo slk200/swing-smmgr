@@ -45,7 +45,7 @@ public class NetUtil {
                     log.info("网络正常，时间：" + TimeUtil.getCurrentTime());
                     return true;
                 } else {
-                    log.info("网络断开，时间：" + TimeUtil.getCurrentTime());
+                    log.warn("网络断开，时间：" + TimeUtil.getCurrentTime());
                     return false;
                 }
             }
@@ -60,9 +60,9 @@ public class NetUtil {
      * 获取定位
      */
     public static void getLocation() {
-        String str = "cmd /c start iexplore http://localhost:8080/smmgr/location";
+        String cmd = "cmd /c start iexplore http://localhost:8080/smmgr/location";
         try {
-            Runtime.getRuntime().exec(str);
+            Runtime.getRuntime().exec(cmd);
         } catch (IOException e) {
             log.error("获取定位异常：" + e.getMessage());
         }

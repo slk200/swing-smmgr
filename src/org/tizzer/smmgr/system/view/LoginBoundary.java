@@ -138,10 +138,10 @@ public class LoginBoundary extends Initialization {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //TODO for dev (need del in prod)
-                enter();
-                updateRuntimeParam(TimeUtil.getCurrentTime());
-                if (true)
-                    return;
+//                enter();
+//                updateRuntimeParam(TimeUtil.getCurrentTime());
+//                if (true)
+//                    return;
                 //TODO for prod
                 localVerify();
             }
@@ -151,7 +151,7 @@ public class LoginBoundary extends Initialization {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        GradientPaint gradientPaint = new GradientPaint(0, 0, Color.ORANGE, getWidth() * 3 / 4, getHeight() * 3 / 4, Color.GREEN, false);
+        GradientPaint gradientPaint = new GradientPaint(0, 0, Color.WHITE, getWidth() * 3 / 4, getHeight() * 3 / 4, ColorManager._28_102_220, false);
         g2d.setPaint(gradientPaint);
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -201,7 +201,7 @@ public class LoginBoundary extends Initialization {
      *
      * @return
      */
-    public String getSecurityCode() {
+    private String getSecurityCode() {
         String code = "";
         Random random = new Random();
         for (int i = 0; i < 3; i++) {
@@ -233,7 +233,7 @@ public class LoginBoundary extends Initialization {
         }
         try {
             LoginRequestDto loginRequestDto = new LoginRequestDto();
-            loginRequestDto.setAccount(account);
+            loginRequestDto.setStaffNo(account);
             loginRequestDto.setPassword(password);
             LoginResponseDto loginResponseDto = HttpResolver.post("/login", loginRequestDto.toString(), LoginResponseDto.class);
             if (loginResponseDto.getCode() == ResultCode.ERROR) {

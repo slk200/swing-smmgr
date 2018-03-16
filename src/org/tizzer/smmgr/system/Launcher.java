@@ -36,6 +36,8 @@ public class Launcher extends WebFrame {
                         return;
                     }
                     setGlassPane(new TransUserBoundary());
+                    getGlassPane().validate();
+                    getGlassPane().repaint();
                     getGlassPane().setVisible(true);
                 } else {
                     System.exit(0);

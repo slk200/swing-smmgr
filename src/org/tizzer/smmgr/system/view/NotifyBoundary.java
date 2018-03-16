@@ -105,6 +105,8 @@ public class NotifyBoundary extends Initialization {
             public void mouseClicked(MouseEvent e) {
                 WebFrame root = (WebFrame) getRootPane().getParent();
                 root.setGlassPane(new TransUserBoundary());
+                root.getGlassPane().validate();
+                root.getGlassPane().repaint();
                 root.getGlassPane().setVisible(true);
             }
         });

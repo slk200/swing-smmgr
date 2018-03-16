@@ -121,7 +121,7 @@ public class TransUserBoundary extends Initialization {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        GradientPaint gradientPaint = new GradientPaint(0, 0, Color.ORANGE, getWidth() * 3 / 4, getHeight() * 3 / 4, Color.GREEN, false);
+        GradientPaint gradientPaint = new GradientPaint(0, 0, Color.WHITE, getWidth() * 3 / 4, getHeight() * 3 / 4, ColorManager._28_102_220, false);
         g2d.setPaint(gradientPaint);
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

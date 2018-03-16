@@ -1,7 +1,11 @@
 package org.tizzer.smmgr.system.view;
 
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import com.alee.laf.rootpane.WebDialog;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author tizzer
@@ -27,16 +31,18 @@ public class LocationBoundary extends WebDialog {
     }
 
     public static void main(String[] args) {
-
-//        SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//                frame.getContentPane().add(new LocationBoundary(), BorderLayout.CENTER);
-//                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//                frame.setLocationByPlatform(true);
-//                frame.setVisible(true);
-//            }
-//        });
+        NativeInterface.open();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame frame = new JFrame();
+                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                frame.getContentPane().add(new LocationBoundary(), BorderLayout.CENTER);
+                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                frame.setLocationByPlatform(true);
+                frame.setVisible(true);
+            }
+        });
+        NativeInterface.runEventPump();
     }
 
 }  

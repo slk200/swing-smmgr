@@ -83,7 +83,7 @@ public class HomeBoundary extends Initialization implements NavigationListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel$handle.removeAll();
-                panel$handle.add(new AddVipBoundary(HomeBoundary.this), "North");
+                panel$handle.add(new AddInsiderBoundary(HomeBoundary.this), "North");
                 panel$handle.validate();
                 panel$handle.repaint();
             }
