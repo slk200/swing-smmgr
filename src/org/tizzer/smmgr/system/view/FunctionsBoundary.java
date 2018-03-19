@@ -5,10 +5,9 @@ import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebFrame;
 import com.alee.managers.style.skin.ninepatch.NPLabelPainter;
-import org.tizzer.smmgr.system.template.Initialization;
-import org.tizzer.smmgr.system.template.NavigationListener;
-import org.tizzer.smmgr.system.util.GridBagUtil;
+import org.tizzer.smmgr.system.component.listener.NavigationListener;
 import org.tizzer.smmgr.system.util.NPatchUtil;
+import org.tizzer.smmgr.system.util.SwingUtil;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -18,7 +17,7 @@ import java.awt.event.MouseEvent;
  * @author tizzer
  * @version 1.0
  */
-public class FunctionsBoundary extends Initialization implements NavigationListener {
+public class FunctionsBoundary extends WebPanel implements NavigationListener {
 
     private WebLabel[] items;
     private Container parent;
@@ -28,16 +27,14 @@ public class FunctionsBoundary extends Initialization implements NavigationListe
         this.parent = parent;
     }
 
-    @Override
     public void initProp() {
         setLayout(new GridBagLayout());
         setMargin(50);
         setOpaque(false);
     }
 
-    @Override
     public void initVal() {
-        String[] keys = {"交接班", "新增会员", "销售单据", "退货", "调货", "报损", "商品编辑", "系统设置", "帮助", "通知"};
+        String[] keys = {"交接班", "新增会员", "销售单据", "退货", "调货", "进货", "订货", "报损", "商品编辑", "会员充值"};
         items = new WebLabel[keys.length];
         for (int i = 0; i < keys.length; i++) {
             items[i] = new WebLabel(keys[i], WebLabel.CENTER);
@@ -50,15 +47,13 @@ public class FunctionsBoundary extends Initialization implements NavigationListe
         }
     }
 
-    @Override
     public void initView() {
         for (int i = 0; i < items.length; i++) {
-            GridBagUtil.setupComponent(this, items[i], i % 5, i / 5, 1, 1);
+            SwingUtil.setupComponent(this, items[i], i % 5, i / 5, 1, 1);
         }
     }
 
-    @Override
-    public void initAction() {
+    public void initListener() {
         items[0].addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

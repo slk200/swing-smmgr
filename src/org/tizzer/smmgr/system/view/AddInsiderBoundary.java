@@ -1,17 +1,18 @@
 package org.tizzer.smmgr.system.view;
 
 import com.alee.extended.date.WebDateField;
+import com.alee.laf.button.WebButton;
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.label.WebLabel;
+import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.text.WebPasswordField;
 import com.alee.laf.text.WebTextArea;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.component.WebBSButton;
+import org.tizzer.smmgr.system.component.listener.NavigationListener;
 import org.tizzer.smmgr.system.constant.SystemConstants;
-import org.tizzer.smmgr.system.template.Initialization;
-import org.tizzer.smmgr.system.template.NavigationListener;
-import org.tizzer.smmgr.system.util.GridBagUtil;
+import org.tizzer.smmgr.system.util.NPatchUtil;
+import org.tizzer.smmgr.system.util.SwingUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,103 +23,115 @@ import java.awt.event.ActionListener;
  * @author tizzer
  * @version 1.0
  */
-public class AddInsiderBoundary extends Initialization {
+public class AddInsiderBoundary extends WebPanel implements ActionListener {
 
-    private WebTextField field$vip$number;
-    private WebPasswordField field$vip$password;
-    private WebPasswordField field$confirm$password;
-    private WebComboBox box$vip$category;
-    private WebTextField field$vip$name;
-    private WebTextField field$vip$phone;
-    private WebDateField field$deadline;
-    private WebDateField field$vip$birth;
-    private WebTextField field$contact$address;
-    private WebTextArea area$remark;
-    private WebBSButton button$back$sale;
-    private WebBSButton button$save$vip;
+    private WebTextField insiderNoField;
+    private WebPasswordField passwordField;
+    private WebPasswordField rePasswordField;
+    private WebComboBox typeComboBox;
+    private WebTextField nameField;
+    private WebTextField phoneField;
+    private WebDateField deadLineField;
+    private WebDateField birthField;
+    private WebTextField addressField;
+    private WebTextArea remarkArea;
+    private WebButton backToSaleButton;
+    private WebButton saveInsiderButton;
+
     private NavigationListener navigationListener;
 
     public AddInsiderBoundary(NavigationListener navigationListener) {
-        super();
+        insiderNoField = createInformationField();
+        passwordField = createPasswordField();
+        rePasswordField = createPasswordField();
+        typeComboBox = new WebComboBox();
+        nameField = createInformationField();
+        phoneField = createInformationField();
+        deadLineField = createDateChooser();
+        birthField = createDateChooser();
+        addressField = createInformationField();
+        remarkArea = createRemarkArea();
+        backToSaleButton = createBootstrapButton("返回收银");
+        saveInsiderButton = createBootstrapButton("保存会员");
+
+        backToSaleButton.addActionListener(this);
+        saveInsiderButton.addActionListener(this);
+
+        this.setMargin(50);
+        this.setLayout(new GridBagLayout());
+        this.setBackground(Color.WHITE);
+        this.createInsiderPanel();
         this.navigationListener = navigationListener;
     }
 
     @Override
-    public void initProp() {
-        setMargin(50);
-        setLayout(new GridBagLayout());
-        setBackground(Color.WHITE);
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(backToSaleButton)) {
+            backToSale();
+            return;
+        }
+
+        String message = "<html><h3>会员保存成功！</h3><p>是否离开此界面？</p></html>";
+        int option = JOptionPane.showConfirmDialog(AddInsiderBoundary.this, message, "下一步操作", JOptionPane.YES_NO_OPTION);
+        if (option == JOptionPane.YES_OPTION) {
+            backToSale();
+        } else {
+            reset();
+        }
     }
 
-    @Override
-    public void initVal() {
-        field$vip$number = new WebTextField(15);
-        field$vip$number.setInputPrompt("必填");
-        field$vip$password = new WebPasswordField(15);
-        field$confirm$password = new WebPasswordField(15);
-        box$vip$category = new WebComboBox();
-        field$vip$name = new WebTextField(15);
-        field$vip$name.setInputPrompt("必填");
-        field$vip$phone = new WebTextField(15);
-        field$vip$phone.setInputPrompt("必填");
-        field$deadline = new WebDateField();
-        field$deadline.setEditable(false);
-        field$deadline.setDateFormat(SystemConstants._DEFAULT_DATE_FORM);
-        field$vip$birth = new WebDateField();
-        field$vip$birth.setEditable(false);
-        field$vip$birth.setDateFormat(SystemConstants._DEFAULT_DATE_FORM);
-        field$contact$address = new WebTextField(15);
-        area$remark = new WebTextArea(5, 15);
-        button$back$sale = new WebBSButton("返回收银", WebBSButton.BLUE);
-        button$save$vip = new WebBSButton("保存会员", WebBSButton.BLUE);
+    private WebTextField createInformationField() {
+        return new WebTextField(15);
     }
 
-    @Override
-    public void initView() {
-        GridBagUtil.setupComponent(this, new WebLabel("会员卡号：", SwingConstants.CENTER), 0, 0, 1, 1);
-        GridBagUtil.setupComponent(this, field$vip$number, 1, 0, 1, 1);
-        GridBagUtil.setupComponent(this, new WebLabel("会员密码：", SwingConstants.CENTER), 2, 0, 1, 1);
-        GridBagUtil.setupComponent(this, field$vip$password, 3, 0, 1, 1);
-        GridBagUtil.setupComponent(this, new WebLabel("确认密码：", SwingConstants.CENTER), 0, 1, 1, 1);
-        GridBagUtil.setupComponent(this, field$confirm$password, 1, 1, 1, 1);
-        GridBagUtil.setupComponent(this, new WebLabel("会员分类：", SwingConstants.CENTER), 2, 1, 1, 1);
-        GridBagUtil.setupComponent(this, box$vip$category, 3, 1, 1, 1);
-        GridBagUtil.setupComponent(this, new WebLabel("会员姓名：", SwingConstants.CENTER), 0, 2, 1, 1);
-        GridBagUtil.setupComponent(this, field$vip$name, 1, 2, 1, 1);
-        GridBagUtil.setupComponent(this, new WebLabel("会员电话：", SwingConstants.CENTER), 2, 2, 1, 1);
-        GridBagUtil.setupComponent(this, field$vip$phone, 3, 2, 1, 1);
-        GridBagUtil.setupComponent(this, new WebLabel("会员生日：", SwingConstants.CENTER), 0, 3, 1, 1);
-        GridBagUtil.setupComponent(this, field$vip$birth, 1, 3, 1, 1);
-        GridBagUtil.setupComponent(this, new WebLabel("过期时间：", SwingConstants.CENTER), 2, 3, 1, 1);
-        GridBagUtil.setupComponent(this, field$deadline, 3, 3, 1, 1);
-        GridBagUtil.setupComponent(this, new WebLabel("联系地址：", SwingConstants.CENTER), 0, 4, 1, 1);
-        GridBagUtil.setupComponent(this, field$contact$address, 1, 4, 3, 1);
-        GridBagUtil.setupComponent(this, new WebLabel("会员备注：", SwingConstants.CENTER), 0, 5, 1, 1);
-        GridBagUtil.setupComponent(this, new WebScrollPane(area$remark), 1, 5, 3, 2);
-        GridBagUtil.setupComponent(this, button$back$sale, 1, 7, 1, 1);
-        GridBagUtil.setupComponent(this, button$save$vip, 3, 7, 1, 1);
+    private WebPasswordField createPasswordField() {
+        return new WebPasswordField(15);
     }
 
-    @Override
-    public void initAction() {
-        button$back$sale.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                backToSale();
-            }
-        });
+    private WebTextArea createRemarkArea() {
+        return new WebTextArea(5, 15);
+    }
 
-        button$save$vip.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int option = JOptionPane.showConfirmDialog(AddInsiderBoundary.this, "<html><p>会员保存成功！</p><p>是否离开此界面？</p></html>", "下一步操作", JOptionPane.YES_NO_OPTION);
-                if (option == JOptionPane.YES_OPTION) {
-                    backToSale();
-                } else {
-                    reset();
-                }
-            }
-        });
+    private WebDateField createDateChooser() {
+        WebDateField webDateField = new WebDateField();
+        webDateField.setEditable(false);
+        webDateField.setDateFormat(SystemConstants._DEFAULT_DATE_FORM);
+        return webDateField;
+    }
+
+    private WebButton createBootstrapButton(String text) {
+        WebButton webButton = new WebButton(text);
+        webButton.setBoldFont(true);
+        webButton.setForeground(Color.WHITE);
+        webButton.setSelectedForeground(Color.WHITE);
+        webButton.setCursor(Cursor.getDefaultCursor());
+        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        return webButton;
+    }
+
+    private void createInsiderPanel() {
+        SwingUtil.setupComponent(this, new WebLabel("会员卡号：", SwingConstants.CENTER), 0, 0, 1, 1);
+        SwingUtil.setupComponent(this, insiderNoField, 1, 0, 1, 1);
+        SwingUtil.setupComponent(this, new WebLabel("会员密码：", SwingConstants.CENTER), 2, 0, 1, 1);
+        SwingUtil.setupComponent(this, passwordField, 3, 0, 1, 1);
+        SwingUtil.setupComponent(this, new WebLabel("确认密码：", SwingConstants.CENTER), 0, 1, 1, 1);
+        SwingUtil.setupComponent(this, rePasswordField, 1, 1, 1, 1);
+        SwingUtil.setupComponent(this, new WebLabel("会员分类：", SwingConstants.CENTER), 2, 1, 1, 1);
+        SwingUtil.setupComponent(this, typeComboBox, 3, 1, 1, 1);
+        SwingUtil.setupComponent(this, new WebLabel("会员姓名：", SwingConstants.CENTER), 0, 2, 1, 1);
+        SwingUtil.setupComponent(this, nameField, 1, 2, 1, 1);
+        SwingUtil.setupComponent(this, new WebLabel("会员电话：", SwingConstants.CENTER), 2, 2, 1, 1);
+        SwingUtil.setupComponent(this, phoneField, 3, 2, 1, 1);
+        SwingUtil.setupComponent(this, new WebLabel("会员生日：", SwingConstants.CENTER), 0, 3, 1, 1);
+        SwingUtil.setupComponent(this, birthField, 1, 3, 1, 1);
+        SwingUtil.setupComponent(this, new WebLabel("过期时间：", SwingConstants.CENTER), 2, 3, 1, 1);
+        SwingUtil.setupComponent(this, deadLineField, 3, 3, 1, 1);
+        SwingUtil.setupComponent(this, new WebLabel("联系地址：", SwingConstants.CENTER), 0, 4, 1, 1);
+        SwingUtil.setupComponent(this, addressField, 1, 4, 3, 1);
+        SwingUtil.setupComponent(this, new WebLabel("会员备注：", SwingConstants.CENTER), 0, 5, 1, 1);
+        SwingUtil.setupComponent(this, new WebScrollPane(remarkArea), 1, 5, 3, 2);
+        SwingUtil.setupComponent(this, backToSaleButton, 1, 7, 1, 1);
+        SwingUtil.setupComponent(this, saveInsiderButton, 3, 7, 1, 1);
     }
 
     /**
@@ -149,5 +162,4 @@ public class AddInsiderBoundary extends Initialization {
             }
         }
     }
-
 }

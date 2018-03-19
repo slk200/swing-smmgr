@@ -8,27 +8,28 @@ import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
+import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.text.WebPasswordField;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.component.WebBSButton;
-import org.tizzer.smmgr.system.component.WebBSPasswordField;
-import org.tizzer.smmgr.system.component.WebBSTextField;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
-import org.tizzer.smmgr.system.manager.ColorManager;
-import org.tizzer.smmgr.system.manager.FontManager;
-import org.tizzer.smmgr.system.manager.IconManager;
+import org.tizzer.smmgr.system.constant.ColorManager;
+import org.tizzer.smmgr.system.constant.FontManager;
+import org.tizzer.smmgr.system.constant.IconManager;
 import org.tizzer.smmgr.system.model.request.LoginRequestDto;
 import org.tizzer.smmgr.system.model.response.LoginResponseDto;
 import org.tizzer.smmgr.system.resolver.HttpResolver;
-import org.tizzer.smmgr.system.template.Initialization;
-import org.tizzer.smmgr.system.util.GridBagUtil;
-import org.tizzer.smmgr.system.util.TimeUtil;
-import org.tizzer.smmgr.system.util.ToolTipUtil;
+import org.tizzer.smmgr.system.util.NPatchUtil;
+import org.tizzer.smmgr.system.util.SwingUtil;
+import org.tizzer.smmgr.system.util.TextUtil;
+import org.tizzer.smmgr.system.view.admin.ManageModeBoundary;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,113 +38,54 @@ import java.util.TimerTask;
  * @author tizzer
  * @version 1.0
  */
-public class LoginBoundary extends Initialization {
+public class LoginBoundary extends WebPanel {
 
     private WebImage image1;
     private WebImage image2;
     private WebImage image3;
-    private ComponentTransition animation$component;
-    private WebTextField field$account;
-    private WebPasswordField field$password;
-    private WebTextField field$security;
-    private WebButton button$security;
-    private WebButton button$login;
+    private ComponentTransition animationComponent;
+    private WebTextField staffNoField;
+    private WebPasswordField passwordField;
+    private WebTextField securityField;
+    private WebButton securityButton;
+    private WebButton loginButton;
 
     public LoginBoundary() {
-        super();
-    }
+        image1 = createPosterImage(IconManager._ICON_POSTER1);
+        image2 = createPosterImage(IconManager._ICON_POSTER2);
+        image3 = createPosterImage(IconManager._ICON_POSTER3);
+        animationComponent = createAnimationComponent();
+        staffNoField = createBootstrapField(15, "请输入员工号", new WebImage(IconManager._ICON_ACCOUNT));
+        passwordField = createBootstrapPasswordField(15, "请输入密码", new WebImage(IconManager._ICON_PASSWORD));
+        securityField = createBootstrapField(8, "请输入验证码", new WebImage(IconManager._ICON_SECURITY));
+        securityButton = createBootstrapButton(getSecurityCode());
+        loginButton = createBootstrapButton("登录");
 
-    @Override
-    public void initProp() {
-        setMargin(150);
-        setLayout(new TableLayout(new double[][]{
+        this.setMargin(150);
+        this.setLayout(new TableLayout(new double[][]{
                 {TableLayout.FILL, TableLayout.PREFERRED},
                 {TableLayout.FILL}
         }));
+        this.add(animationComponent, "0,0");
+        this.add(createLoginPanel(), "1,0");
+        this.initListener();
+        this.startAnimation();
     }
 
-    @Override
-    public void initVal() {
-        image1 = new WebImage(IconManager._ICON_POSTER1);
-        image1.setDisplayType(DisplayType.fitComponent);
-        image2 = new WebImage(IconManager._ICON_POSTER2);
-        image2.setDisplayType(DisplayType.fitComponent);
-        image3 = new WebImage(IconManager._ICON_POSTER3);
-        image3.setDisplayType(DisplayType.fitComponent);
-        animation$component = new ComponentTransition();
-        animation$component.setOpaque(false);
-        animation$component.setContent(image1);
-        animation$component.addTransitionEffect(createFadeTransitionEffect());
-        field$account = new WebBSTextField(15);
-        field$account.setFieldMargin(0, 6, 0, 0);
-        field$account.setLeadingComponent(new WebImage(IconManager._ICON_ACCOUNT));
-        field$account.setInputPrompt("请输入账号");
-        field$password = new WebBSPasswordField(15);
-        field$password.setFieldMargin(0, 6, 0, 0);
-        field$password.setLeadingComponent(new WebImage(IconManager._ICON_PASSWORD));
-        field$password.setInputPrompt("请输入密码");
-        field$security = new WebBSTextField(8);
-        field$security.setFieldMargin(0, 6, 0, 0);
-        field$security.setLeadingComponent(new WebImage(IconManager._ICON_SECURITY));
-        field$security.setInputPrompt("请输入验证码");
-        button$security = new WebBSButton(getSecurityCode(), WebBSButton.BLUE);
-        button$login = new WebBSButton("登录", WebBSButton.BLUE);
-    }
-
-    @Override
-    public void initView() {
-        add(new WebPanel() {{
-            setOpaque(false);
-            add(animation$component);
-        }}, "0,0");
-        add(new WebPanel(new GridBagLayout()) {{
-            setOpaque(false);
-            GridBagUtil.setupComponent(this, new WebPanel() {
-                {
-                    setLayout(new GridBagLayout());
-                    setMargin(20);
-                    GridBagUtil.setupComponent(this, new WebLabel() {{
-                        setHorizontalAlignment(WebLabel.CENTER);
-                        setText("超市管家登录管理系统");
-                        setFont(FontManager._FONT_IMPORTANT);
-                        setForeground(ColorManager._28_102_220);
-                    }}, 0, 0, 3, 1);
-                    GridBagUtil.setupComponent(this, field$account, 0, 1, 3, 1);
-                    GridBagUtil.setupComponent(this, field$password, 0, 2, 3, 1);
-                    GridBagUtil.setupComponent(this, field$security, 0, 3, 2, 1);
-                    GridBagUtil.setupComponent(this, button$security, 2, 3, 1, 1);
-                    GridBagUtil.setupComponent(this, button$login, 0, 4, 3, 1);
-                }
-
-                @Override
-                protected void paintComponent(Graphics g) {
-                    g.setColor(Color.WHITE);
-                    g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
-                }
-            }, 0, 0, 1, 1);
-        }}, "1,0");
-        startAnimation();
-    }
-
-    @Override
-    public void initAction() {
-        button$security.addActionListener(new ActionListener() {
+    public void initListener() {
+        securityButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                button$security.setText(getSecurityCode());
+                securityButton.setText(getSecurityCode());
             }
         });
 
-        button$login.addActionListener(new ActionListener() {
+        loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO for dev (need del in prod)
-//                enter();
-//                updateRuntimeParam(TimeUtil.getCurrentTime());
-//                if (true)
-//                    return;
-                //TODO for prod
-                localVerify();
+                enter(true);
+//                enter(false);
+//                verify();
             }
         });
     }
@@ -157,11 +99,20 @@ public class LoginBoundary extends Initialization {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
 
-    /**
-     * 创建渐变动画
-     *
-     * @return
-     */
+    private WebImage createPosterImage(ImageIcon icon) {
+        WebImage webImage = new WebImage(icon);
+        webImage.setDisplayType(DisplayType.fitComponent);
+        return webImage;
+    }
+
+    private ComponentTransition createAnimationComponent() {
+        ComponentTransition componentTransition = new ComponentTransition();
+        componentTransition.setOpaque(false);
+        componentTransition.setContent(image1);
+        componentTransition.addTransitionEffect(createFadeTransitionEffect());
+        return componentTransition;
+    }
+
     private FadeTransitionEffect createFadeTransitionEffect() {
         FadeTransitionEffect fadeTransitionEffect = new FadeTransitionEffect();
         fadeTransitionEffect.setMinimumSpeed(0.03f);
@@ -169,20 +120,84 @@ public class LoginBoundary extends Initialization {
         return fadeTransitionEffect;
     }
 
+    private WebTextField createBootstrapField(int column, String inputPrompt, JComponent leadingComponent) {
+        WebTextField webTextField = new WebTextField(column);
+        webTextField.setFieldMargin(0, 6, 0, 0);
+        webTextField.setInputPrompt(inputPrompt);
+        webTextField.setLeadingComponent(leadingComponent);
+        webTextField.setPainter(NPatchUtil.getNinePatchPainter("androidstylefield.xml"));
+        return webTextField;
+    }
+
+    private WebPasswordField createBootstrapPasswordField(int column, String inputPrompt, JComponent leadingComponent) {
+        WebPasswordField webPasswordField = new WebPasswordField(column);
+        webPasswordField.setFieldMargin(0, 6, 0, 0);
+        webPasswordField.setInputPrompt(inputPrompt);
+        webPasswordField.setLeadingComponent(leadingComponent);
+        webPasswordField.setPainter(NPatchUtil.getNinePatchPainter("androidstylefield.xml"));
+        return webPasswordField;
+    }
+
+    private WebButton createBootstrapButton(String text) {
+        WebButton webButton = new WebButton(text);
+        webButton.setBoldFont(true);
+        webButton.setForeground(Color.WHITE);
+        webButton.setSelectedForeground(Color.WHITE);
+        webButton.setCursor(Cursor.getDefaultCursor());
+        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        return webButton;
+    }
+
+    private WebLabel createTitleLabel() {
+        WebLabel webLabel = new WebLabel();
+        webLabel.setHorizontalAlignment(WebLabel.CENTER);
+        webLabel.setText("超市管家登录管理系统");
+        webLabel.setFont(FontManager._FONT_IMPORTANT);
+        webLabel.setForeground(ColorManager._28_102_220);
+        return webLabel;
+    }
+
+    private WebPanel createLoginPanel() {
+        WebPanel webPanel = new WebPanel();
+        webPanel.setLayout(new GridBagLayout());
+        webPanel.setOpaque(false);
+        SwingUtil.setupComponent(webPanel, createRoundPanel(), 0, 0, 1, 1);
+        return webPanel;
+    }
+
+    private WebPanel createRoundPanel() {
+        WebPanel webPanel = new WebPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(Color.WHITE);
+                g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+            }
+        };
+        webPanel.setLayout(new GridBagLayout());
+        webPanel.setMargin(20);
+        SwingUtil.setupComponent(webPanel, createTitleLabel(), 0, 0, 3, 1);
+        SwingUtil.setupComponent(webPanel, staffNoField, 0, 1, 3, 1);
+        SwingUtil.setupComponent(webPanel, passwordField, 0, 2, 3, 1);
+        SwingUtil.setupComponent(webPanel, securityField, 0, 3, 2, 1);
+        SwingUtil.setupComponent(webPanel, securityButton, 2, 3, 1, 1);
+        SwingUtil.setupComponent(webPanel, loginButton, 0, 4, 3, 1);
+        return webPanel;
+    }
+
     /**
-     * 开始动画
+     * execute the created animation
      */
     private void startAnimation() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (animation$component.getContent() == image1) {
-                    animation$component.performTransition(image2);
-                } else if (animation$component.getContent() == image2) {
-                    animation$component.performTransition(image3);
+                if (animationComponent.getContent() == image1) {
+                    animationComponent.performTransition(image2);
+                } else if (animationComponent.getContent() == image2) {
+                    animationComponent.performTransition(image3);
                 } else {
-                    animation$component.performTransition(image1);
+                    animationComponent.performTransition(image1);
                 }
                 startAnimation();
             }
@@ -190,14 +205,14 @@ public class LoginBoundary extends Initialization {
     }
 
     /**
-     * 设置全局默认按钮
+     * set default button for the context
      */
     public void setDefaultButton() {
-        getRootPane().setDefaultButton(button$login);
+        getRootPane().setDefaultButton(loginButton);
     }
 
     /**
-     * 获取安全码
+     * get the security code
      *
      * @return
      */
@@ -212,39 +227,38 @@ public class LoginBoundary extends Initialization {
     }
 
     /**
-     * 执行本地验证
+     * firstly, verify local information<br/>
+     * then, verify via server
      */
-    private void localVerify() {
-        String account = field$account.getText();
-        if (account.equals("")) {
-            ToolTipUtil.showTip(button$login, "账号不能为空");
+    private void verify() {
+        String staffNo = staffNoField.getText();
+        if (staffNo.equals("")) {
+            SwingUtil.showTip(loginButton, "账号不能为空");
             return;
         }
-        String password = field$password.getText();
+        String password = passwordField.getText();
         if (password.equals("")) {
-            ToolTipUtil.showTip(button$login, "密码不能为空");
+            SwingUtil.showTip(loginButton, "密码不能为空");
             return;
         }
-        String securityCode = button$security.getText().replaceAll(" ", "");
-        if (!field$security.getText().equals(securityCode.replaceAll(" ", ""))) {
-            button$security.setText(getSecurityCode());
-            ToolTipUtil.showTip(button$login, "验证码不正确");
+        String securityCode = securityButton.getText().replaceAll(" ", "");
+        if (!securityField.getText().equals(securityCode.replaceAll(" ", ""))) {
+            SwingUtil.showTip(loginButton, "验证码不正确");
             return;
         }
         try {
             LoginRequestDto loginRequestDto = new LoginRequestDto();
-            loginRequestDto.setStaffNo(account);
+            loginRequestDto.setStaffNo(staffNo);
             loginRequestDto.setPassword(password);
             LoginResponseDto loginResponseDto = HttpResolver.post("/login", loginRequestDto.toString(), LoginResponseDto.class);
             if (loginResponseDto.getCode() == ResultCode.ERROR) {
-                button$security.setText(getSecurityCode());
-                ToolTipUtil.showTip(button$login, loginResponseDto.getMessage());
+                securityButton.setText(getSecurityCode());
+                SwingUtil.showTip(loginButton, loginResponseDto.getMessage());
                 return;
             }
             if (loginResponseDto.getCode() == ResultCode.OK) {
-                //TODO for up to identity enter homepage
-                enter();
-                updateRuntimeParam(TimeUtil.getCurrentTime());
+                enter(loginResponseDto.isAdmin());
+                updateRuntimeParam(staffNo, TextUtil.getCurrentTime());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -252,21 +266,45 @@ public class LoginBoundary extends Initialization {
     }
 
     /**
-     * 进入主界面
+     * enter homepage by your identity
+     *
+     * @param isAdmin
      */
-    private void enter() {
+    private void enter(boolean isAdmin) {
         Container parent = getParent();
         parent.removeAll();
-        parent.add(new HomeBoundary());
+        parent.add(isAdmin ? new ManageModeBoundary() : new StandardModeBoundary());
         parent.validate();
         parent.repaint();
+        this.setClosingOperation();
     }
 
     /**
+     * set closing operation for the context
+     */
+    private void setClosingOperation() {
+        WebFrame root = RuntimeConstants.root;
+        root.removeWindowListener(root.getWindowListeners()[0]);
+        root.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                root.setGlassPane(new TransUserBoundary());
+                root.getGlassPane().validate();
+                root.getGlassPane().repaint();
+                root.getGlassPane().setVisible(true);
+            }
+        });
+    }
+
+    /**
+     * update params' value in running process
+     *
+     * @param staffNo
      * @param date
      */
-    private void updateRuntimeParam(String date) {
+    private void updateRuntimeParam(String staffNo, String date) {
         RuntimeConstants.isLogin = true;
+        RuntimeConstants.login_account = staffNo;
         RuntimeConstants.login_at = date;
     }
 

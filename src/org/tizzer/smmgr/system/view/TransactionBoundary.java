@@ -7,11 +7,12 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.component.WebBSButton;
-import org.tizzer.smmgr.system.manager.ColorManager;
-import org.tizzer.smmgr.system.manager.IconManager;
-import org.tizzer.smmgr.system.template.Initialization;
+import org.tizzer.smmgr.system.constant.ColorManager;
+import org.tizzer.smmgr.system.constant.IconManager;
+import org.tizzer.smmgr.system.util.NPatchUtil;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,124 +22,142 @@ import java.awt.event.ActionListener;
  * @author tizzer
  * @version 1.0
  */
-public class TransactionBoundary extends Initialization {
+public class TransactionBoundary extends WebPanel implements ActionListener {
 
-    private static final Object[] TABLE_HEAD = {"商品条码", "商品名称", "原价", "折扣", "数量", "小计", "现价"};
+    private final static Class clazz = TransactionBoundary.class;
+    private final static Object[] tableHead = {"商品条码", "商品名称", "原价", "折扣", "数量", "小计", "现价"};
 
-    private DefaultTableModel table$model;
-    private WebTable table$data;
-    private WebButton button$add$goods;
-    private WebButton button$delete$item;
-    private WebToggleButton button$none$bar;
-    private WebTextField field$goods;
-    private WebButton button$specific;
-    private WebTextField field$vip;
-    private WebButton button$checkout;
+    private DefaultTableModel tableModel;
+    private WebTable table;
+    private WebButton addButton;
+    private WebButton delButton;
+    private WebToggleButton noCodeButton;
+    private WebTextField scanField;
+    private WebButton insiderButton;
+    private WebTextField insiderField;
+    private WebButton checkoutButton;
 
     public TransactionBoundary() {
-        super();
+        table = createTransactionTable();
+        addButton = createBootstrapButton("新增商品", IconManager._ICON_ADDGOODS, "brown.xml");
+        delButton = createBootstrapButton("删除", IconManager._ICON_DELETE, "brown.xml");
+        noCodeButton = createTrailingButton("无码");
+        scanField = createTrailingField("商品条码/商品名称", noCodeButton);
+        insiderButton = createBootstrapButton("详情", null, "default.xml");
+        insiderField = createTrailingField("会员号", insiderButton);
+        checkoutButton = createBootstrapButton("收款", null, "recred.xml");
+
+        addButton.addActionListener(this);
+        delButton.addActionListener(this);
+        noCodeButton.addActionListener(this);
+        insiderButton.addActionListener(this);
+        checkoutButton.addActionListener(this);
+        scanField.addActionListener(this);
+        insiderField.addActionListener(this);
+
+        this.setOpaque(false);
+        this.add(new WebScrollPane(table), BorderLayout.CENTER);
+        this.add(createBottomPanel(), BorderLayout.SOUTH);
     }
 
     @Override
-    public void initProp() {
-        setOpaque(false);
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(scanField)) {
+
+            return;
+        }
+
+        if (e.getSource().equals(insiderField)) {
+
+            return;
+        }
+
+        if (e.getSource().equals(delButton)) {
+
+            return;
+        }
+
+        if (e.getSource().equals(noCodeButton)) {
+
+            return;
+        }
+
+        if (e.getSource().equals(insiderButton)) {
+
+            return;
+        }
+
+        //addbutton
     }
 
-    @Override
-    public void initVal() {
-        table$model = new DefaultTableModel(null, TABLE_HEAD);
-        table$data = new WebTable(table$model) {
+    private WebTable createTransactionTable() {
+        tableModel = new DefaultTableModel(null, tableHead);
+        WebTable webTable = new WebTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column == 4;
             }
         };
-        button$add$goods = new WebBSButton("新增商品", IconManager._ICON_ADDGOODS, WebBSButton.BROWN);
-        button$delete$item = new WebBSButton("删除", IconManager._ICON_DELETE, WebBSButton.BROWN);
-        button$none$bar = new WebToggleButton("无码");
-        button$none$bar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        field$goods = new WebTextField();
-        field$goods.setPreferredSize(300, 50);
-        field$goods.setInputPrompt("商品条码/商品名称");
-        field$goods.setMargin(5);
-        field$goods.setTrailingComponent(button$none$bar);
-        button$specific = new WebBSButton("详情", WebBSButton.BLUE);
-        button$specific.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        field$vip = new WebTextField();
-        field$vip.setPreferredSize(300, 50);
-        field$vip.setInputPrompt("会员号");
-        field$vip.setMargin(5);
-        field$vip.setTrailingComponent(button$specific);
-        button$checkout = new WebBSButton("收款", WebBSButton.RED);
-        button$checkout.setPreferredSize(300, 50);
+        DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer();
+        tableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        webTable.setDefaultRenderer(Object.class, tableCellRenderer);
+        webTable.setShowVerticalLines(false);
+        webTable.setRowHeight(30);
+        webTable.getTableHeader().setReorderingAllowed(false);
+        webTable.getTableHeader().setResizingAllowed(false);
+        return webTable;
     }
 
-    @Override
-    public void initView() {
-        add(new WebScrollPane(table$data), "Center");
-        add(new WebPanel() {{
-            setOpaque(false);
-            setLayout(new VerticalFlowLayout());
-            add(new WebPanel() {{
-                setOpaque(false);
-                setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-                add(button$add$goods);
-                add(button$delete$item);
-            }});
-            add(new WebPanel() {{
-                setMargin(10);
-                setBackground(ColorManager._242_242_242);
-                add(new WebPanel() {{
-                    setOpaque(false);
-                    setLayout(new FlowLayout());
-                    add(field$goods);
-                    add(field$vip);
-                }}, "West");
-                add(new WebPanel() {{
-                    setOpaque(false);
-                    setLayout(new FlowLayout(FlowLayout.RIGHT));
-                    add(button$checkout);
-                }}, "East");
-            }});
-        }}, "South");
+    private WebTextField createTrailingField(String inputPrompt, JComponent trailingComponent) {
+        WebTextField webTextField = new WebTextField();
+        webTextField.setInputPrompt(inputPrompt);
+        webTextField.setMargin(5);
+        webTextField.setTrailingComponent(trailingComponent);
+        return webTextField;
     }
 
-    @Override
-    public void initAction() {
-        button$add$goods.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        button$delete$item.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        button$none$bar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        button$specific.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        button$checkout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+    private WebToggleButton createTrailingButton(String text) {
+        WebToggleButton webToggleButton = new WebToggleButton(text);
+        webToggleButton.setForeground(Color.WHITE);
+        webToggleButton.setCursor(Cursor.getDefaultCursor());
+        webToggleButton.setPainter(NPatchUtil.getNinePatchPainter("toggle.xml"));
+        return webToggleButton;
     }
 
+    private WebButton createBootstrapButton(String text, ImageIcon icon, String colorConfig) {
+        WebButton webButton = new WebButton(text, icon);
+        webButton.setBoldFont(true);
+        webButton.setForeground(Color.WHITE);
+        webButton.setSelectedForeground(Color.WHITE);
+        webButton.setCursor(Cursor.getDefaultCursor());
+        webButton.setPainter(NPatchUtil.getNinePatchPainter(colorConfig));
+        return webButton;
+    }
+
+    private WebPanel createBottomPanel() {
+        WebPanel webPanel = new WebPanel();
+        webPanel.setOpaque(false);
+        webPanel.setLayout(new VerticalFlowLayout());
+        webPanel.add(createFunctionPanel());
+        webPanel.add(createCheckoutPanel());
+        return webPanel;
+    }
+
+    private WebPanel createFunctionPanel() {
+        WebPanel webPanel = new WebPanel();
+        webPanel.setOpaque(false);
+        webPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        webPanel.add(addButton);
+        webPanel.add(delButton);
+        return webPanel;
+    }
+    private WebPanel createCheckoutPanel() {
+        WebPanel webPanel = new WebPanel();
+        webPanel.setOpaque(false);
+        webPanel.setMargin(0, 10, 10, 10);
+        webPanel.setLayout(new GridLayout(1, 3, 5, 5));
+        webPanel.setBackground(ColorManager._242_242_242);
+        webPanel.add(scanField, insiderField, checkoutButton);
+        return webPanel;
+    }
 }

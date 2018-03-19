@@ -7,9 +7,9 @@ import org.tizzer.smmgr.system.template.Initialization;
  * @author tizzer
  * @version 1.0
  */
-public class TransGoodsBoundary extends WebPanel {
+public class SystemHelpBoundary extends WebPanel {
 
-    public TransGoodsBoundary() {
+    public SystemHelpBoundary() {
 
     }
 }

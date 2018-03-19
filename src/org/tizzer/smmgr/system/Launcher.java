@@ -3,10 +3,9 @@ package org.tizzer.smmgr.system;
 import com.alee.laf.rootpane.WebFrame;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.constant.SystemConstants;
-import org.tizzer.smmgr.system.manager.IconManager;
-import org.tizzer.smmgr.system.util.LafUtil;
+import org.tizzer.smmgr.system.constant.IconManager;
+import org.tizzer.smmgr.system.util.SwingUtil;
 import org.tizzer.smmgr.system.view.LoginBoundary;
-import org.tizzer.smmgr.system.view.TransUserBoundary;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -31,24 +30,15 @@ public class Launcher extends WebFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (RuntimeConstants.isLogin) {
-                    if (getGlassPane().isVisible()) {
-                        return;
-                    }
-                    setGlassPane(new TransUserBoundary());
-                    getGlassPane().validate();
-                    getGlassPane().repaint();
-                    getGlassPane().setVisible(true);
-                } else {
-                    System.exit(0);
-                }
+                System.exit(0);
             }
         });
         loginBoundary.setDefaultButton();
+        RuntimeConstants.root = this;
     }
 
     public static void main(String[] args) {
-        LafUtil.setWebLaF();
+        SwingUtil.setWebLaF();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

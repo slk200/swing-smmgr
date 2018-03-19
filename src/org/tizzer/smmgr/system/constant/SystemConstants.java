@@ -19,11 +19,6 @@ public interface SystemConstants {
     Dimension _DEFAULT_SIZE = new Dimension(1280, 800);
 
     /**
-     * 起始时间格式
-     */
-    SimpleDateFormat _START_TIME_FORM = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
-
-    /**
      * 默认时间格式
      */
     SimpleDateFormat _DEFAULT_TIME_FORM = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

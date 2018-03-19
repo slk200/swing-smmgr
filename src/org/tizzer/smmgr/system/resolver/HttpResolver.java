@@ -1,7 +1,7 @@
 package org.tizzer.smmgr.system.resolver;
 
 import com.alibaba.fastjson.JSONObject;
-import org.tizzer.smmgr.system.util.CloseableUtil;
+import org.tizzer.smmgr.system.util.TextUtil;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -47,7 +47,7 @@ public class HttpResolver {
                 result += tempLine;
             }
         } finally {
-            CloseableUtil.close(reader, inputStreamReader, inputStream);
+            TextUtil.close(reader, inputStreamReader, inputStream);
         }
         return result;
     }
@@ -92,7 +92,7 @@ public class HttpResolver {
                 result += tempLine;
             }
         } finally {
-            CloseableUtil.close(outputStreamWriter, outputStream, reader, inputStreamReader, inputStream);
+            TextUtil.close(outputStreamWriter, outputStream, reader, inputStreamReader, inputStream);
         }
         return result;
     }
