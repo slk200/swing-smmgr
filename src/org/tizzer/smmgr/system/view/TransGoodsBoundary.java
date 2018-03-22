@@ -1,7 +1,6 @@
 package org.tizzer.smmgr.system.view;
 
 import com.alee.laf.panel.WebPanel;
-import org.tizzer.smmgr.system.template.Initialization;
 
 /**
  * @author tizzer

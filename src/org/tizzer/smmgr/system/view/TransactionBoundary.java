@@ -22,7 +22,7 @@ import java.awt.event.ActionListener;
  * @author tizzer
  * @version 1.0
  */
-public class TransactionBoundary extends WebPanel implements ActionListener {
+public class TransactionBoundary extends WebPanel {
 
     private final static Class clazz = TransactionBoundary.class;
     private final static Object[] tableHead = {"商品条码", "商品名称", "原价", "折扣", "数量", "小计", "现价"};
@@ -47,47 +47,54 @@ public class TransactionBoundary extends WebPanel implements ActionListener {
         insiderField = createTrailingField("会员号", insiderButton);
         checkoutButton = createBootstrapButton("收款", null, "recred.xml");
 
-        addButton.addActionListener(this);
-        delButton.addActionListener(this);
-        noCodeButton.addActionListener(this);
-        insiderButton.addActionListener(this);
-        checkoutButton.addActionListener(this);
-        scanField.addActionListener(this);
-        insiderField.addActionListener(this);
-
         this.setOpaque(false);
         this.add(new WebScrollPane(table), BorderLayout.CENTER);
         this.add(createBottomPanel(), BorderLayout.SOUTH);
+        this.initListener();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(scanField)) {
+    private void initListener() {
+        scanField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-            return;
-        }
+            }
+        });
 
-        if (e.getSource().equals(insiderField)) {
+        insiderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-            return;
-        }
+            }
+        });
 
-        if (e.getSource().equals(delButton)) {
+        delButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-            return;
-        }
+            }
+        });
 
-        if (e.getSource().equals(noCodeButton)) {
+        noCodeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-            return;
-        }
+            }
+        });
 
-        if (e.getSource().equals(insiderButton)) {
+        insiderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-            return;
-        }
+            }
+        });
 
-        //addbutton
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     private WebTable createTransactionTable() {
@@ -119,6 +126,7 @@ public class TransactionBoundary extends WebPanel implements ActionListener {
     private WebToggleButton createTrailingButton(String text) {
         WebToggleButton webToggleButton = new WebToggleButton(text);
         webToggleButton.setForeground(Color.WHITE);
+        webToggleButton.setSelectedForeground(Color.WHITE);
         webToggleButton.setCursor(Cursor.getDefaultCursor());
         webToggleButton.setPainter(NPatchUtil.getNinePatchPainter("toggle.xml"));
         return webToggleButton;
@@ -126,7 +134,6 @@ public class TransactionBoundary extends WebPanel implements ActionListener {
 
     private WebButton createBootstrapButton(String text, ImageIcon icon, String colorConfig) {
         WebButton webButton = new WebButton(text, icon);
-        webButton.setBoldFont(true);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
@@ -151,6 +158,7 @@ public class TransactionBoundary extends WebPanel implements ActionListener {
         webPanel.add(delButton);
         return webPanel;
     }
+
     private WebPanel createCheckoutPanel() {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);

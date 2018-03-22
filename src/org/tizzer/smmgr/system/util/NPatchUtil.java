@@ -13,21 +13,21 @@ import java.util.Map;
  */
 public class NPatchUtil {
 
-    private static Map<Integer, NinePatchIcon> ninePatchIconCache = new HashMap<>();
+    private static Map<String, NinePatchIcon> ninePatchIconCache = new HashMap<>();
     private static Map<String, NinePatchStatePainter> ninePatchStatePainterCache = new HashMap<>();
 
     /**
      * 点9图
      *
-     * @param index
+     * @param paintConfig
      * @return
      */
-    public static NinePatchIcon getNinePatchIcon(int index) {
-        if (!ninePatchIconCache.containsKey(index)) {
-            ninePatchIconCache.put(index, NinePatchUtils.loadNinePatchIcon(
-                    NPatchUtil.class.getResource("/org/tizzer/smmgr/config/npicon/label" + index + ".xml")));
+    public static NinePatchIcon getNinePatchIcon(String paintConfig) {
+        if (!ninePatchIconCache.containsKey(paintConfig)) {
+            ninePatchIconCache.put(paintConfig, NinePatchUtils.loadNinePatchIcon(
+                    NPatchUtil.class.getResource("/org/tizzer/smmgr/config/npicon/" + paintConfig + ".xml")));
         }
-        return ninePatchIconCache.get(index);
+        return ninePatchIconCache.get(paintConfig);
     }
 
     /**

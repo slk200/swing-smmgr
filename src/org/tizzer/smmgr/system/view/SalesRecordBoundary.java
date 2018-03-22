@@ -11,7 +11,7 @@ import org.tizzer.smmgr.system.resolver.HttpResolver;
  */
 public class SalesRecordBoundary extends WebPanel {
 
-    private static final Object[] tableHead = {"条形码", "名称", "种类", "采购价", "零售价", "库存"};
+    private static final Object[] tableHead = {"商品名", "售价", "折扣价", "数量"};
 
     public SalesRecordBoundary() {
         super();

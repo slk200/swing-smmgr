@@ -36,4 +36,8 @@ public interface IconManager {
     ImageIcon _ICON_EMPLOYEE = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/employee.png"));
     ImageIcon _ICON_INSIDER = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/insider.png"));
     ImageIcon _ICON_SETTING = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/setting.png"));
+    ImageIcon _ICON_ADMINTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/admin.png"));
+    ImageIcon _ICON_STANDARDTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/standard.png"));
+    ImageIcon _ICON_USINGTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/using.png"));
+    ImageIcon _ICON_STOP = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/stop.png"));
 }

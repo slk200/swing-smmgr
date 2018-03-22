@@ -8,28 +8,21 @@ import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
-import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.text.WebPasswordField;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.constant.ResultCode;
-import org.tizzer.smmgr.system.constant.RuntimeConstants;
-import org.tizzer.smmgr.system.constant.ColorManager;
-import org.tizzer.smmgr.system.constant.FontManager;
-import org.tizzer.smmgr.system.constant.IconManager;
+import com.alee.utils.TimeUtils;
+import org.tizzer.smmgr.system.constant.*;
 import org.tizzer.smmgr.system.model.request.LoginRequestDto;
 import org.tizzer.smmgr.system.model.response.LoginResponseDto;
 import org.tizzer.smmgr.system.resolver.HttpResolver;
 import org.tizzer.smmgr.system.util.NPatchUtil;
 import org.tizzer.smmgr.system.util.SwingUtil;
-import org.tizzer.smmgr.system.util.TextUtil;
 import org.tizzer.smmgr.system.view.admin.ManageModeBoundary;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -83,11 +76,118 @@ public class LoginBoundary extends WebPanel {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                enter(true);
-//                enter(false);
-//                verify();
+//                enter(true);
+                String staffNo = staffNoField.getText();
+                if (staffNo.equals("")) {
+                    SwingUtil.showTip(staffNoField, "账号不能为空");
+                    return;
+                }
+                String password = passwordField.getText();
+                if (password.equals("")) {
+                    SwingUtil.showTip(passwordField, "密码不能为空");
+                    return;
+                }
+                String securityCode = securityButton.getText().replaceAll(" ", "");
+                if (!securityField.getText().equals(securityCode.replaceAll(" ", ""))) {
+                    SwingUtil.showTip(securityField, "验证码不正确");
+                    return;
+                }
+                verify(staffNo, password);
             }
         });
+    }
+
+    /**
+     * 开始动画
+     */
+    private void startAnimation() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (animationComponent.getContent() == image1) {
+                    animationComponent.performTransition(image2);
+                } else if (animationComponent.getContent() == image2) {
+                    animationComponent.performTransition(image3);
+                } else {
+                    animationComponent.performTransition(image1);
+                }
+                startAnimation();
+            }
+        }, 3000);
+    }
+
+    /**
+     * 设置全局默认按钮
+     */
+    public void setDefaultButton() {
+        getRootPane().setDefaultButton(loginButton);
+    }
+
+    /**
+     * 生成安全码
+     *
+     * @return
+     */
+    private String getSecurityCode() {
+        String code = "";
+        Random random = new Random();
+        for (int i = 0; i < 3; i++) {
+            code += random.nextInt(10) + " ";
+        }
+        code += random.nextInt(10);
+        return code;
+    }
+
+    /**
+     * 执行服务器验证
+     *
+     * @param staffNo
+     * @param password
+     */
+    private void verify(String staffNo, String password) {
+        try {
+            LoginRequestDto loginRequestDto = new LoginRequestDto();
+            loginRequestDto.setStaffNo(staffNo);
+            loginRequestDto.setPassword(password);
+            LoginResponseDto loginResponseDto = HttpResolver.post("/login", loginRequestDto.toString(), LoginResponseDto.class);
+            if (loginResponseDto.getCode() == ResultCode.ERROR) {
+                securityButton.setText(getSecurityCode());
+                SwingUtil.showTip(loginButton, loginResponseDto.getMessage());
+                return;
+            }
+            if (loginResponseDto.getCode() == ResultCode.OK) {
+                enter(loginResponseDto.getAdmin());
+                updateRuntimeParam(staffNo, loginResponseDto.getStoreId());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 根据用户权限进入管理系统
+     *
+     * @param isAdmin
+     */
+    private void enter(boolean isAdmin) {
+        Container parent = getParent();
+        parent.removeAll();
+        parent.add(isAdmin ? new ManageModeBoundary() : new StandardModeBoundary());
+        parent.validate();
+        parent.repaint();
+    }
+
+    /**
+     * 更新运行时参数
+     *
+     * @param staffNo
+     * @param storeId
+     */
+    private void updateRuntimeParam(String staffNo, Long storeId) {
+        RuntimeConstants.loginAccount = staffNo;
+        RuntimeConstants.storeId = storeId;
+        RuntimeConstants.loginAt = TimeUtils.formatCurrentDate("yyyy-MM-dd HH:mm:ss");
     }
 
     @Override
@@ -140,7 +240,6 @@ public class LoginBoundary extends WebPanel {
 
     private WebButton createBootstrapButton(String text) {
         WebButton webButton = new WebButton(text);
-        webButton.setBoldFont(true);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
@@ -182,130 +281,6 @@ public class LoginBoundary extends WebPanel {
         SwingUtil.setupComponent(webPanel, securityButton, 2, 3, 1, 1);
         SwingUtil.setupComponent(webPanel, loginButton, 0, 4, 3, 1);
         return webPanel;
-    }
-
-    /**
-     * execute the created animation
-     */
-    private void startAnimation() {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (animationComponent.getContent() == image1) {
-                    animationComponent.performTransition(image2);
-                } else if (animationComponent.getContent() == image2) {
-                    animationComponent.performTransition(image3);
-                } else {
-                    animationComponent.performTransition(image1);
-                }
-                startAnimation();
-            }
-        }, 3000);
-    }
-
-    /**
-     * set default button for the context
-     */
-    public void setDefaultButton() {
-        getRootPane().setDefaultButton(loginButton);
-    }
-
-    /**
-     * get the security code
-     *
-     * @return
-     */
-    private String getSecurityCode() {
-        String code = "";
-        Random random = new Random();
-        for (int i = 0; i < 3; i++) {
-            code += random.nextInt(10) + " ";
-        }
-        code += random.nextInt(10);
-        return code;
-    }
-
-    /**
-     * firstly, verify local information<br/>
-     * then, verify via server
-     */
-    private void verify() {
-        String staffNo = staffNoField.getText();
-        if (staffNo.equals("")) {
-            SwingUtil.showTip(loginButton, "账号不能为空");
-            return;
-        }
-        String password = passwordField.getText();
-        if (password.equals("")) {
-            SwingUtil.showTip(loginButton, "密码不能为空");
-            return;
-        }
-        String securityCode = securityButton.getText().replaceAll(" ", "");
-        if (!securityField.getText().equals(securityCode.replaceAll(" ", ""))) {
-            SwingUtil.showTip(loginButton, "验证码不正确");
-            return;
-        }
-        try {
-            LoginRequestDto loginRequestDto = new LoginRequestDto();
-            loginRequestDto.setStaffNo(staffNo);
-            loginRequestDto.setPassword(password);
-            LoginResponseDto loginResponseDto = HttpResolver.post("/login", loginRequestDto.toString(), LoginResponseDto.class);
-            if (loginResponseDto.getCode() == ResultCode.ERROR) {
-                securityButton.setText(getSecurityCode());
-                SwingUtil.showTip(loginButton, loginResponseDto.getMessage());
-                return;
-            }
-            if (loginResponseDto.getCode() == ResultCode.OK) {
-                enter(loginResponseDto.isAdmin());
-                updateRuntimeParam(staffNo, TextUtil.getCurrentTime());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * enter homepage by your identity
-     *
-     * @param isAdmin
-     */
-    private void enter(boolean isAdmin) {
-        Container parent = getParent();
-        parent.removeAll();
-        parent.add(isAdmin ? new ManageModeBoundary() : new StandardModeBoundary());
-        parent.validate();
-        parent.repaint();
-        this.setClosingOperation();
-    }
-
-    /**
-     * set closing operation for the context
-     */
-    private void setClosingOperation() {
-        WebFrame root = RuntimeConstants.root;
-        root.removeWindowListener(root.getWindowListeners()[0]);
-        root.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                root.setGlassPane(new TransUserBoundary());
-                root.getGlassPane().validate();
-                root.getGlassPane().repaint();
-                root.getGlassPane().setVisible(true);
-            }
-        });
-    }
-
-    /**
-     * update params' value in running process
-     *
-     * @param staffNo
-     * @param date
-     */
-    private void updateRuntimeParam(String staffNo, String date) {
-        RuntimeConstants.isLogin = true;
-        RuntimeConstants.login_account = staffNo;
-        RuntimeConstants.login_at = date;
     }
 
 }

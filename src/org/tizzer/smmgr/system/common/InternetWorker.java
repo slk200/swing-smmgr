@@ -1,5 +1,6 @@
 package org.tizzer.smmgr.system.common;
 
+import com.alee.utils.TimeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.tizzer.smmgr.system.util.TextUtil;
 
@@ -41,16 +42,16 @@ public class InternetWorker {
             String result = new String(sb.toString().getBytes("UTF-8"));
             if (!StringUtils.isBlank(result)) {
                 if (result.indexOf("TTL") > 0 || result.indexOf("ttl") > 0) {
-                    Logcat.type(clazz, "网络正常，时间：" + TextUtil.getCurrentTime(), LogLevel.INFO);
+                    Logcat.type(clazz, "网络正常，时间：" + TimeUtils.formatCurrentDate("yyyy-MM-dd HH:mm:ss"), LogLevel.INFO);
                     return true;
                 } else {
-                    Logcat.type(clazz, "网络断开，时间：" + TextUtil.getCurrentTime(), LogLevel.WARN);
+                    Logcat.type(clazz, "网络断开，时间：" + TimeUtils.formatCurrentDate("yyyy-MM-dd HH:mm:ss"), LogLevel.WARN);
                     return false;
                 }
             }
             return false;
         } catch (Exception e) {
-            Logcat.type(clazz, "网络异常，时间：" + TextUtil.getCurrentTime() + "，异常：" + e.getMessage(), LogLevel.ERROR);
+            Logcat.type(clazz, "网络异常，时间：" + TimeUtils.formatCurrentDate("yyyy-MM-dd HH:mm:ss") + "，异常：" + e.getMessage(), LogLevel.ERROR);
             return false;
         }
     }

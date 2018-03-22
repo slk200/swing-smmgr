@@ -1,13 +1,13 @@
 package org.tizzer.smmgr.system;
 
 import com.alee.laf.rootpane.WebFrame;
-import org.tizzer.smmgr.system.constant.RuntimeConstants;
-import org.tizzer.smmgr.system.constant.SystemConstants;
 import org.tizzer.smmgr.system.constant.IconManager;
+import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.util.SwingUtil;
 import org.tizzer.smmgr.system.view.LoginBoundary;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -22,10 +22,10 @@ public class Launcher extends WebFrame {
         this.getContentPane().add(loginBoundary);
         this.setTitle("超市管家");
         this.setIconImage(IconManager._ICON_TASKBAR);
-        this.setPreferredSize(SystemConstants._DEFAULT_SIZE);
-        this.setMinimumSize(SystemConstants._DEFAULT_SIZE);
+        this.setPreferredSize(new Dimension(1280, 800));
+        this.setMinimumSize(this.getPreferredSize());
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(WebFrame.DO_NOTHING_ON_CLOSE);
         this.setVisible(true);
         this.addWindowListener(new WindowAdapter() {
             @Override

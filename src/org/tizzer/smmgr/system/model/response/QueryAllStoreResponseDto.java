@@ -1,14 +1,17 @@
 package org.tizzer.smmgr.system.model.response;
 
+import com.alee.utils.TimeUtils;
+
+import java.util.Date;
+
 public class QueryAllStoreResponseDto extends ResultResponse {
     private DataSet[] data;
     private Integer pageCount;
     private Integer currentPage;
-    private Long total;
 
     public Object[][] getData() {
         if (data != null) {
-            Object[][] tBody = new Object[data.length][3];
+            Object[][] tBody = new Object[data.length][4];
             for (int i = 0; i < data.length; i++) {
                 DataSet dataSet = data[i];
                 tBody[i] = dataSet.getData();
@@ -38,19 +41,12 @@ public class QueryAllStoreResponseDto extends ResultResponse {
         this.currentPage = currentPage;
     }
 
-    public Long getTotal() {
-        return total;
-    }
-
-    public void setTotal(Long total) {
-        this.total = total;
-    }
-
     static class DataSet {
 
         private Long id;
         private String name;
         private String address;
+        private Date foundDate;
 
         public void setId(Long id) {
             this.id = id;
@@ -64,8 +60,12 @@ public class QueryAllStoreResponseDto extends ResultResponse {
             this.address = address;
         }
 
+        public void setFoundDate(Date foundDate) {
+            this.foundDate = foundDate;
+        }
+
         Object[] getData() {
-            return new Object[]{id, name, address};
+            return new Object[]{id, name, address, TimeUtils.formatDate("yyyy-MM-dd HH:mm:ss",foundDate)};
         }
 
     }

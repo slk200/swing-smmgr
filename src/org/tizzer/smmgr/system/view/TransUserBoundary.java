@@ -4,13 +4,13 @@ import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebFrame;
+import com.alee.utils.TimeUtils;
 import org.tizzer.smmgr.system.component.WebInfoCard;
-import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
+import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.util.NPatchUtil;
 import org.tizzer.smmgr.system.util.SwingUtil;
-import org.tizzer.smmgr.system.util.TextUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +23,7 @@ import java.awt.event.WindowEvent;
  * @author tizzer
  * @version 1.0
  */
-public class TransUserBoundary extends WebPanel implements ActionListener {
+public class TransUserBoundary extends WebPanel {
 
     private WebButton backButton;
     private WebPanel employeeCard;
@@ -36,7 +36,7 @@ public class TransUserBoundary extends WebPanel implements ActionListener {
     public TransUserBoundary() {
         backButton = createBootstrapButton(null, IconManager._ICON_BACK, "transparent.xml");
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        employeeCard = createInfoCard("收银员：", RuntimeConstants.login_account + "（工号：" + RuntimeConstants.login_account + "）");
+        employeeCard = createInfoCard("收银员：", RuntimeConstants.loginAccount + "（工号：" + RuntimeConstants.loginAccount + "）");
         cashCard = createInfoCard("应有现金：", "30");
         salesCard = createInfoCard("总销售额：", "30");
         insiderCard = createInfoCard("会员充值：", "30");
@@ -44,29 +44,43 @@ public class TransUserBoundary extends WebPanel implements ActionListener {
         logoutButton = createBootstrapButton("交接班并登出", null, "recred.xml");
         logoutButton.setFontSize(20);
 
-        backButton.addActionListener(this);
-        logoutButton.addActionListener(this);
-
         this.add(createTitlePanel(), BorderLayout.NORTH);
         this.add(createInfoPanel(), BorderLayout.CENTER);
+        this.initListener();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(backButton)) {
-            WebFrame root = (WebFrame) getRootPane().getParent();
-            root.getGlassPane().setVisible(false);
-            return;
-        }
+    private void initListener() {
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                WebFrame root = RuntimeConstants.root;
+                root.getGlassPane().setVisible(false);
+            }
+        });
 
-        WebFrame root = (WebFrame) getRootPane().getParent();
-        root.getContentPane().removeAll();
-        root.getContentPane().add(new LoginBoundary());
-        root.getContentPane().validate();
-        root.getContentPane().repaint();
-        root.getGlassPane().setVisible(false);
-        updateRuntimeParam();
-        this.setClosingOperation();
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                WebFrame root = RuntimeConstants.root;
+                root.getContentPane().removeAll();
+                root.getContentPane().add(new LoginBoundary());
+                root.getContentPane().validate();
+                root.getContentPane().repaint();
+                root.getGlassPane().setVisible(false);
+                setClosingOperation();
+            }
+        });
+    }
+
+    private void setClosingOperation() {
+        WebFrame root = RuntimeConstants.root;
+        root.removeWindowListener(root.getWindowListeners()[0]);
+        root.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
     }
 
     @Override
@@ -109,7 +123,7 @@ public class TransUserBoundary extends WebPanel implements ActionListener {
         webLabel.setForeground(ColorManager._187_141_89);
         webLabel.setBoldFont(true);
         webLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        webLabel.setText(RuntimeConstants.login_at + " / " + TextUtil.getCurrentTime());
+        webLabel.setText(RuntimeConstants.loginAt + " / " + TimeUtils.formatCurrentDate("yyyy-MM-dd HH:mm:ss"));
         return webLabel;
     }
 
@@ -148,21 +162,5 @@ public class TransUserBoundary extends WebPanel implements ActionListener {
         SwingUtil.setupComponent(webPanel, createTimeLabel(), 0, 3, 2, 1);
         SwingUtil.setupComponent(webPanel, logoutButton, 0, 4, 2, 1);
         return webPanel;
-    }
-
-    private void updateRuntimeParam() {
-        RuntimeConstants.isLogin = false;
-        RuntimeConstants.login_at = null;
-    }
-
-    private void setClosingOperation() {
-        WebFrame root = RuntimeConstants.root;
-        root.removeWindowListener(root.getWindowListeners()[0]);
-        root.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
     }
 }

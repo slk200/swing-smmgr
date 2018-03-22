@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -88,13 +89,12 @@ public class TextUtil {
         return param;
     }
 
-    /**
-     * 获取当前时间
-     *
-     * @return
-     */
-    public static String getCurrentTime() {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return df.format(new Date());
+    public static Date startOfDay(String date) {
+        return new SimpleDateFormat("yyyy-MM-dd").parse(date, new ParsePosition(0));
     }
+
+    public static Date endOfDay(String date) {
+        return new SimpleDateFormat("yyyy-MM-dd").parse(date, new ParsePosition(0));
+    }
+
 }

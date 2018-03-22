@@ -1,29 +1,14 @@
 package org.tizzer.smmgr.system.view;
 
-import org.tizzer.smmgr.system.template.Initialization;
+import com.alee.laf.panel.WebPanel;
 
 /**
  * @author tizzer
  * @version 1.0
  */
-public class ReportLossBoundary extends Initialization {
-    @Override
-    public void initProp() {
+public class ReportLossBoundary extends WebPanel {
 
-    }
-
-    @Override
-    public void initVal() {
-
-    }
-
-    @Override
-    public void initView() {
-
-    }
-
-    @Override
-    public void initAction() {
+    public ReportLossBoundary() {
 
     }
 }

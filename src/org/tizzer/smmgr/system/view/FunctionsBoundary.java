@@ -19,59 +19,90 @@ import java.awt.event.MouseEvent;
  */
 public class FunctionsBoundary extends WebPanel implements NavigationListener {
 
-    private WebLabel[] items;
+    private WebLabel transUserLabel;
+    private WebLabel addInsiderLabel;
+    private WebLabel billsLabel;
+    private WebLabel refundLabel;
+    private WebLabel transLabel;
+    private WebLabel purchaseLabel;
+    private WebLabel orderLabel;
+    private WebLabel lossLabel;
+    private WebLabel editLabel;
+    private WebLabel helpLabel;
     private Container parent;
 
     public FunctionsBoundary(Container parent) {
-        super();
+        transUserLabel = createCardLabel("交接班", "label0");
+        addInsiderLabel = createCardLabel("新增会员", "label1");
+        editLabel = createCardLabel("商品编辑", "label2");
+        billsLabel = createCardLabel("销售单据", "label3");
+        refundLabel = createCardLabel("退货", "label4");
+        transLabel = createCardLabel("调货", "label5");
+        purchaseLabel = createCardLabel("进货", "label6");
+        orderLabel = createCardLabel("订货", "label7");
+        lossLabel = createCardLabel("报损", "label8");
+        helpLabel = createCardLabel("帮助", "label9");
         this.parent = parent;
+
+        this.setMargin(50, 0, 0, 0);
+        this.setLayout(new GridBagLayout());
+        this.setOpaque(false);
+        this.createMenuPanel();
+        this.initListener();
     }
 
-    public void initProp() {
-        setLayout(new GridBagLayout());
-        setMargin(50);
-        setOpaque(false);
+    private WebLabel createCardLabel(String text, String paintConfig) {
+        WebLabel webLabel = new WebLabel(text, WebLabel.CENTER);
+        webLabel.setPainter(new NPLabelPainter(NPatchUtil.getNinePatchIcon(paintConfig)));
+        webLabel.setForeground(Color.WHITE);
+        webLabel.setFontSize(18);
+        webLabel.setBoldFont(true);
+        webLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        webLabel.setPreferredSize(150, 100);
+        return webLabel;
     }
 
-    public void initVal() {
-        String[] keys = {"交接班", "新增会员", "销售单据", "退货", "调货", "进货", "订货", "报损", "商品编辑", "会员充值"};
-        items = new WebLabel[keys.length];
-        for (int i = 0; i < keys.length; i++) {
-            items[i] = new WebLabel(keys[i], WebLabel.CENTER);
-            items[i].setPainter(new NPLabelPainter(NPatchUtil.getNinePatchIcon(i % keys.length)));
-            items[i].setForeground(Color.WHITE);
-            items[i].setFontSize(18);
-            items[i].setBoldFont(true);
-            items[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
-            items[i].setPreferredSize(150, 100);
-        }
-    }
-
-    public void initView() {
-        for (int i = 0; i < items.length; i++) {
-            SwingUtil.setupComponent(this, items[i], i % 5, i / 5, 1, 1);
-        }
+    private void createMenuPanel() {
+        SwingUtil.setupComponent(this, transUserLabel, 0, 0, 1, 1);
+        SwingUtil.setupComponent(this, addInsiderLabel, 1, 0, 1, 1);
+        SwingUtil.setupComponent(this, billsLabel, 2, 0, 1, 1);
+        SwingUtil.setupComponent(this, refundLabel, 3, 0, 1, 1);
+        SwingUtil.setupComponent(this, transLabel, 4, 0, 1, 1);
+        SwingUtil.setupComponent(this, purchaseLabel, 0, 1, 1, 1);
+        SwingUtil.setupComponent(this, orderLabel, 1, 1, 1, 1);
+        SwingUtil.setupComponent(this, lossLabel, 2, 1, 1, 1);
+        SwingUtil.setupComponent(this, editLabel, 3, 1, 1, 1);
+        SwingUtil.setupComponent(this, helpLabel, 4, 1, 1, 1);
     }
 
     public void initListener() {
-        items[0].addMouseListener(new MouseAdapter() {
+        transUserLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 WebFrame root = (WebFrame) getRootPane().getParent();
                 root.setGlassPane(new TransUserBoundary());
+                root.getGlassPane().validate();
+                root.getGlassPane().repaint();
                 root.getGlassPane().setVisible(true);
             }
         });
-        items[1].addMouseListener(new MouseAdapter() {
+        addInsiderLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 parent.removeAll();
                 parent.add(new AddInsiderBoundary(FunctionsBoundary.this), "North");
                 parent.validate();
                 parent.repaint();
+                FunctionsBoundary.this.performChange(1);
             }
         });
-        items[2].addMouseListener(new MouseAdapter() {
+        editLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+            }
+        });
+        billsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 parent.removeAll();
@@ -81,43 +112,37 @@ public class FunctionsBoundary extends WebPanel implements NavigationListener {
                 FunctionsBoundary.this.performChange(2);
             }
         });
-        items[3].addMouseListener(new MouseAdapter() {
+        refundLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
             }
         });
-        items[4].addMouseListener(new MouseAdapter() {
+        transLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
             }
         });
-        items[5].addMouseListener(new MouseAdapter() {
+        purchaseLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
             }
         });
-        items[6].addMouseListener(new MouseAdapter() {
+        orderLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
             }
         });
-        items[7].addMouseListener(new MouseAdapter() {
+        lossLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
             }
         });
-        items[8].addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-            }
-        });
-        items[9].addMouseListener(new MouseAdapter() {
+        helpLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);

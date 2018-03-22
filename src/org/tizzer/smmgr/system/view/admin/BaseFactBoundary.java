@@ -1,34 +1,14 @@
 package org.tizzer.smmgr.system.view.admin;
 
-import org.tizzer.smmgr.system.template.Initialization;
+import com.alee.laf.panel.WebPanel;
 
 /**
  * @author tizzer
  * @version 1.0
  */
-public class BaseFactBoundary extends Initialization {
+public class BaseFactBoundary extends WebPanel {
 
     public BaseFactBoundary() {
-        super();
-    }
-
-    @Override
-    public void initProp() {
-
-    }
-
-    @Override
-    public void initVal() {
-
-    }
-
-    @Override
-    public void initView() {
-
-    }
-
-    @Override
-    public void initAction() {
 
     }
 
