@@ -15,11 +15,6 @@ public interface IconManager {
     ImageIcon _ICON_ACCOUNT = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/account.png"));
     ImageIcon _ICON_PASSWORD = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/password.png"));
     ImageIcon _ICON_SECURITY = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/security.png"));
-    ImageIcon _ICON_NETON = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/neton.png"));
-    ImageIcon _ICON_NETOFF = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/netoff.png"));
-    ImageIcon _ICON_NETRELOAD = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/netreload.png"));
-    ImageIcon _ICON_NOTICE = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/notice.png"));
-    ImageIcon _ICON_REMIND = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/remind.png"));
     ImageIcon _ICON_USER = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/user.png"));
     ImageIcon _ICON_TRANSUSER = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/transuser.png"));
     ImageIcon _ICON_HOME = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/home.png"));
@@ -40,4 +35,8 @@ public interface IconManager {
     ImageIcon _ICON_STANDARDTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/standard.png"));
     ImageIcon _ICON_USINGTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/using.png"));
     ImageIcon _ICON_STOP = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/stop.png"));
+    ImageIcon _ICON_GOODSEDIT = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/goodsedit.png"));
+    ImageIcon _ICON_RESET = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/reset.png"));
+    ImageIcon _ICON_INCOME = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/income.png"));
+    ImageIcon _ICON_REFUND = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/refund.png"));
 }

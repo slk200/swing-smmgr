@@ -43,12 +43,12 @@ public class QueryAllStoreResponseDto extends ResultResponse {
 
     static class DataSet {
 
-        private Long id;
+        private Integer id;
         private String name;
         private String address;
         private Date foundDate;
 
-        public void setId(Long id) {
+        public void setId(Integer id) {
             this.id = id;
         }
 
@@ -65,7 +65,7 @@ public class QueryAllStoreResponseDto extends ResultResponse {
         }
 
         Object[] getData() {
-            return new Object[]{id, name, address, TimeUtils.formatDate("yyyy-MM-dd HH:mm:ss",foundDate)};
+            return new Object[]{id, name, address, TimeUtils.formatDate("yyyy-MM-dd HH:mm:ss", foundDate)};
         }
 
     }

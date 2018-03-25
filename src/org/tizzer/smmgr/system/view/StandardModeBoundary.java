@@ -9,12 +9,12 @@ import com.alee.laf.rootpane.WebFrame;
 import com.alee.managers.popup.PopupStyle;
 import com.alee.managers.popup.WebPopup;
 import com.alee.utils.SwingUtils;
-import org.tizzer.smmgr.system.component.WebShadowBorder;
-import org.tizzer.smmgr.system.component.listener.NavigationListener;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
-import org.tizzer.smmgr.system.util.NPatchUtil;
+import org.tizzer.smmgr.system.utils.NPatchUtil;
+import org.tizzer.smmgr.system.view.component.WebShadowBorder;
+import org.tizzer.smmgr.system.view.listener.NavigationListener;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -50,7 +50,7 @@ public class StandardModeBoundary extends WebPanel implements NavigationListener
         logoutButton = createRolloverDecoratedButton(IconManager._ICON_TRANSUSER);
         handlePanel = new WebPanel();
         handlePanel.setBackground(Color.WHITE);
-        handlePanel.add(new TransactionBoundary());
+        handlePanel.add(new StandardTradeBoundary());
 
         this.add(createNavigationPanel(), BorderLayout.WEST);
         this.add(createHandlePanel(), BorderLayout.CENTER);
@@ -82,7 +82,7 @@ public class StandardModeBoundary extends WebPanel implements NavigationListener
             @Override
             public void mouseClicked(MouseEvent e) {
                 WebFrame root = RuntimeConstants.root;
-                root.setGlassPane(new TransUserBoundary());
+                root.setGlassPane(new StandardLogoutBoundary());
                 root.getGlassPane().validate();
                 root.getGlassPane().repaint();
                 root.getGlassPane().setVisible(true);
@@ -91,21 +91,21 @@ public class StandardModeBoundary extends WebPanel implements NavigationListener
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeView(new TransactionBoundary(), "Center");
+                changeView(new StandardTradeBoundary(), "Center");
             }
         });
 
         insiderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeView(new AddInsiderBoundary(StandardModeBoundary.this), "North");
+                changeView(new StandardInsiderBoundary(StandardModeBoundary.this), "North");
             }
         });
 
         recordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeView(new SalesRecordBoundary(), "Center");
+                changeView(new StandardBillsBoundary(), "Center");
             }
         });
 
@@ -126,7 +126,7 @@ public class StandardModeBoundary extends WebPanel implements NavigationListener
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeView(new FunctionsBoundary(handlePanel), "North");
+                changeView(new StandardMenuBoundary(handlePanel), "North");
             }
         });
     }
@@ -150,7 +150,7 @@ public class StandardModeBoundary extends WebPanel implements NavigationListener
                 if (root.getGlassPane().isVisible()) {
                     return;
                 }
-                root.setGlassPane(new TransUserBoundary());
+                root.setGlassPane(new StandardLogoutBoundary());
                 root.getGlassPane().validate();
                 root.getGlassPane().repaint();
                 root.getGlassPane().setVisible(true);

@@ -2,7 +2,6 @@ package org.tizzer.smmgr.system.common;
 
 import com.alee.utils.TimeUtils;
 import org.apache.commons.lang.StringUtils;
-import org.tizzer.smmgr.system.util.TextUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;

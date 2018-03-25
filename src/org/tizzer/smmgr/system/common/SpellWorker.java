@@ -23,7 +23,7 @@ public class SpellWorker {
      * @param chinese 给定的汉字
      * @return
      */
-    public static String getFirstLetter(String chinese) {
+    private static String getFirstLetter(String chinese) {
         if (chinese == null || chinese.trim().length() == 0) {
             return "";
         }
@@ -49,7 +49,7 @@ public class SpellWorker {
                 chinese = chinese.substring(0, 1);
             }
         }
-        return chinese;
+        return chinese.toLowerCase();
     }
 
     /**
@@ -75,7 +75,7 @@ public class SpellWorker {
      * @param str 给定汉字串
      * @return
      */
-    public String getAllFirstLetter(String str) {
+    public static String getAllFirstLetter(String str) {
         if (str == null || str.trim().length() == 0) {
             return "";
         }

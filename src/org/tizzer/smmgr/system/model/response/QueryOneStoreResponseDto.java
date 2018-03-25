@@ -5,16 +5,16 @@ import com.alee.utils.TimeUtils;
 import java.util.Date;
 
 public class QueryOneStoreResponseDto extends ResultResponse {
-    private Long id;
+    private Integer id;
     private String name;
     private String address;
     private Date foundDate;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

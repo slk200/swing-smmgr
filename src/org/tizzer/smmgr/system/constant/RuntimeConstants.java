@@ -10,5 +10,5 @@ public class RuntimeConstants {
     public static WebFrame root = null;
     public static String loginAccount = "1001";
     public static String loginAt = null;
-    public static Long storeId = 1L;
+    public static Integer storeId = 1;
 }

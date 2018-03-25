@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class SaveInsiderRequestDto {
     private String cardNo;
-    private String password;
     private String name;
     private String phone;
     private String address;
@@ -18,14 +17,6 @@ public class SaveInsiderRequestDto {
 
     public void setCardNo(String cardNo) {
         this.cardNo = cardNo;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
@@ -79,7 +70,6 @@ public class SaveInsiderRequestDto {
     @Override
     public String toString() {
         String param = "cardNo=" + cardNo +
-                "&password=" + password +
                 "&name=" + name +
                 "&phone=" + phone +
                 "&address=" + address +

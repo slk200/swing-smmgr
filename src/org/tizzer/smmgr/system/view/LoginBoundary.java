@@ -12,12 +12,11 @@ import com.alee.laf.text.WebPasswordField;
 import com.alee.laf.text.WebTextField;
 import com.alee.utils.TimeUtils;
 import org.tizzer.smmgr.system.constant.*;
+import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.LoginRequestDto;
 import org.tizzer.smmgr.system.model.response.LoginResponseDto;
-import org.tizzer.smmgr.system.resolver.HttpResolver;
-import org.tizzer.smmgr.system.util.NPatchUtil;
-import org.tizzer.smmgr.system.util.SwingUtil;
-import org.tizzer.smmgr.system.view.admin.ManageModeBoundary;
+import org.tizzer.smmgr.system.utils.NPatchUtil;
+import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -150,7 +149,7 @@ public class LoginBoundary extends WebPanel {
             LoginRequestDto loginRequestDto = new LoginRequestDto();
             loginRequestDto.setStaffNo(staffNo);
             loginRequestDto.setPassword(password);
-            LoginResponseDto loginResponseDto = HttpResolver.post("/login", loginRequestDto.toString(), LoginResponseDto.class);
+            LoginResponseDto loginResponseDto = HttpHandler.post("/login", loginRequestDto.toString(), LoginResponseDto.class);
             if (loginResponseDto.getCode() == ResultCode.ERROR) {
                 securityButton.setText(getSecurityCode());
                 SwingUtil.showTip(loginButton, loginResponseDto.getMessage());
@@ -184,7 +183,7 @@ public class LoginBoundary extends WebPanel {
      * @param staffNo
      * @param storeId
      */
-    private void updateRuntimeParam(String staffNo, Long storeId) {
+    private void updateRuntimeParam(String staffNo, Integer storeId) {
         RuntimeConstants.loginAccount = staffNo;
         RuntimeConstants.storeId = storeId;
         RuntimeConstants.loginAt = TimeUtils.formatCurrentDate("yyyy-MM-dd HH:mm:ss");
@@ -240,6 +239,7 @@ public class LoginBoundary extends WebPanel {
 
     private WebButton createBootstrapButton(String text) {
         WebButton webButton = new WebButton(text);
+        webButton.setBoldFont(true);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());

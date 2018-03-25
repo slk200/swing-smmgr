@@ -19,6 +19,39 @@ public class QueryAllInsiderTypeResponseDto extends ResultResponse {
         this.data = data;
     }
 
+    public Integer[] getId() {
+        if (data != null) {
+            Integer[] id = new Integer[data.length];
+            for (int i = 0; i < data.length; i++) {
+                id[i] = data[i].getId();
+            }
+            return id;
+        }
+        return null;
+    }
+
+    public String[] getName() {
+        if (data != null) {
+            String[] name = new String[data.length];
+            for (int i = 0; i < data.length; i++) {
+                name[i] = data[i].getName();
+            }
+            return name;
+        }
+        return null;
+    }
+
+    public Integer[] getDiscount() {
+        if (data != null) {
+            Integer[] discount = new Integer[data.length];
+            for (int i = 0; i < data.length; i++) {
+                discount[i] = data[i].getDiscount();
+            }
+            return discount;
+        }
+        return null;
+    }
+
     static class DataSet {
         private Integer id;
         private String name;

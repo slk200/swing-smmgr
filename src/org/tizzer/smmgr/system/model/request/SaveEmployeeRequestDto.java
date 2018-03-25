@@ -7,7 +7,7 @@ public class SaveEmployeeRequestDto {
     private String phone;
     private String address;
     private Boolean admin;
-    private Long storeId;
+    private Integer storeId;
 
     public String getStaffNo() {
         return staffNo;
@@ -57,11 +57,11 @@ public class SaveEmployeeRequestDto {
         this.admin = admin;
     }
 
-    public Long getStoreId() {
+    public Integer getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(Long storeId) {
+    public void setStoreId(Integer storeId) {
         this.storeId = storeId;
     }
 

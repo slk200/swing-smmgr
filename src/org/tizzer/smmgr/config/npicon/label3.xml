@@ -1,3 +1,3 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/label/3.9.png"
-              className="org.tizzer.smmgr.system.util.NPatchUtil"/>
+              className="org.tizzer.smmgr.system.utils.NPatchUtil"/>

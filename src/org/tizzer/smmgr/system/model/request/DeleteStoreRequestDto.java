@@ -3,13 +3,13 @@ package org.tizzer.smmgr.system.model.request;
 import java.util.Vector;
 
 public class DeleteStoreRequestDto {
-    private Vector<Long> id;
+    private Vector<Integer> id;
 
-    public Vector<Long> getId() {
+    public Vector<Integer> getId() {
         return id;
     }
 
-    public void setId(Vector<Long> id) {
+    public void setId(Vector<Integer> id) {
         this.id = id;
     }
 
@@ -19,7 +19,7 @@ public class DeleteStoreRequestDto {
         for (int i = 0; i < id.size() - 1; i++) {
             param += "id=" + id.get(i) + "&";
         }
-        param += "id=" + id.get(id.size()-1);
+        param += "id=" + id.get(id.size() - 1);
         return param;
     }
 }

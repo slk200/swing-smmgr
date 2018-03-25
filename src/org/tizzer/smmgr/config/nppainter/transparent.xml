@@ -3,26 +3,26 @@
     <entry>
         <string>normal</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/off.9.png"
-                      className="org.tizzer.smmgr.system.util.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
     </entry>
     <entry>
         <string>focused</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/off.9.png"
-                      className="org.tizzer.smmgr.system.util.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
     </entry>
     <entry>
         <string>pressed</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/off.9.png"
-                      className="org.tizzer.smmgr.system.util.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
     </entry>
     <entry>
         <string>selected</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/off.9.png"
-                      className="org.tizzer.smmgr.system.util.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
     </entry>
     <entry>
         <string>disabled</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/off.9.png"
-                      className="org.tizzer.smmgr.system.util.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
     </entry>
 </ResourceMap>

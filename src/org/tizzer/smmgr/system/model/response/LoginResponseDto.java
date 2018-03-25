@@ -6,14 +6,14 @@ package org.tizzer.smmgr.system.model.response;
  */
 public class LoginResponseDto extends ResultResponse {
 
-    private Long storeId;
+    private Integer storeId;
     private Boolean admin;
 
-    public Long getStoreId() {
+    public Integer getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(Long storeId) {
+    public void setStoreId(Integer storeId) {
         this.storeId = storeId;
     }
 
