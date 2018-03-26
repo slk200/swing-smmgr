@@ -27,6 +27,7 @@ public class TextUtil {
                     closeable.close();
                 } catch (IOException e) {
                     Logcat.type(clazz, "文件读取异常：" + e.getMessage(), LogLevel.ERROR);
+                    e.printStackTrace();
                 }
             }
         }
@@ -48,6 +49,7 @@ public class TextUtil {
             }
         } catch (IOException e) {
             Logcat.type(clazz, "文件读取异常：" + e.getMessage(), LogLevel.ERROR);
+            e.printStackTrace();
         }
         return result;
     }
@@ -89,10 +91,22 @@ public class TextUtil {
         return param;
     }
 
+    /**
+     * 一天的起始时间
+     *
+     * @param date
+     * @return
+     */
     public static Date startOfDay(String date) {
         return new SimpleDateFormat("yyyy-MM-dd").parse(date, new ParsePosition(0));
     }
 
+    /**
+     * 一天的结束时间
+     *
+     * @param date
+     * @return
+     */
     public static Date endOfDay(String date) {
         return new SimpleDateFormat("yyyy-MM-dd").parse(date, new ParsePosition(0));
     }

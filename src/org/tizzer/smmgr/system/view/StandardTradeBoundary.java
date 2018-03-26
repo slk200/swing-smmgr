@@ -118,6 +118,7 @@ public class StandardTradeBoundary extends WebPanel {
             public void actionPerformed(ActionEvent e) {
                 if (table.getSelectedRow() == -1) {
                     SwingUtil.showTip(delButton, "请至少选中表格中的一个商品");
+                    return;
                 }
                 int[] rows = table.getSelectedRows();
                 for (int i = rows.length; i > 0; i--) {
@@ -331,7 +332,7 @@ public class StandardTradeBoundary extends WebPanel {
 
     //更新结算按钮的text
     private void setCheckoutButton(String text) {
-        checkoutButton.setText("<html><font face='Microsoft YaHei' color=white size=5>收款&nbsp;&nbsp;&nbsp;&nbsp;￥" + text + "</font></html>");
+        checkoutButton.setText("<html><font face='Microsoft YaHei' color=white size=5>收款&nbsp;&nbsp;&nbsp;￥" + text + "</font></html>");
     }
 
     private WebTable createTransactionTable() {
