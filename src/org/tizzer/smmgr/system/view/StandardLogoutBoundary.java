@@ -36,7 +36,7 @@ public class StandardLogoutBoundary extends WebPanel {
     public StandardLogoutBoundary() {
         backButton = createBootstrapButton(null, IconManager._ICON_BACK, "transparent.xml");
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        employeeCard = createInfoCard("收银员：", RuntimeConstants.loginAccount + "（工号：" + RuntimeConstants.loginAccount + "）");
+        employeeCard = createInfoCard("收银员：", RuntimeConstants.staffNo + "（工号：" + RuntimeConstants.staffNo + "）");
         cashCard = createInfoCard("应有现金：", "30");
         salesCard = createInfoCard("总销售额：", "30");
         insiderCard = createInfoCard("会员充值：", "30");

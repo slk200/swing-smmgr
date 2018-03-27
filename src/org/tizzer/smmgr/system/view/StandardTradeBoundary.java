@@ -205,7 +205,8 @@ public class StandardTradeBoundary extends WebPanel {
         checkoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(cCost);
+                String staffNo = RuntimeConstants.staffNo;
+
             }
         });
     }

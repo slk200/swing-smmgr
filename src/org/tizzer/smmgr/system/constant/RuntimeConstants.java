@@ -8,7 +8,7 @@ import com.alee.laf.rootpane.WebFrame;
  */
 public class RuntimeConstants {
     public static WebFrame root = null;
-    public static String loginAccount = "1001";
+    public static String staffNo = "1001";
     public static String loginAt = null;
     public static Integer storeId = 1;
 }

@@ -184,7 +184,7 @@ public class LoginBoundary extends WebPanel {
      * @param storeId
      */
     private void updateRuntimeParam(String staffNo, Integer storeId) {
-        RuntimeConstants.loginAccount = staffNo;
+        RuntimeConstants.staffNo = staffNo;
         RuntimeConstants.storeId = storeId;
         RuntimeConstants.loginAt = TimeUtils.formatCurrentDate("yyyy-MM-dd HH:mm:ss");
     }
