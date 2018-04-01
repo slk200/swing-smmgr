@@ -10,32 +10,29 @@ import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.DeleteStoreRequestDto;
-import org.tizzer.smmgr.system.model.request.QueryAllStoreRequestDto;
 import org.tizzer.smmgr.system.model.request.QueryOneStoreRequestDto;
-import org.tizzer.smmgr.system.model.request.QuerySomeStoreRequestDto;
+import org.tizzer.smmgr.system.model.request.QueryStoreRequestDto;
 import org.tizzer.smmgr.system.model.response.DeleteStoreResponseDto;
-import org.tizzer.smmgr.system.model.response.QueryAllStoreResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryOneStoreResponseDto;
-import org.tizzer.smmgr.system.model.response.QuerySomeStoreResponseDto;
+import org.tizzer.smmgr.system.model.response.QueryStoreResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
 import org.tizzer.smmgr.system.view.component.WebPageView;
 import org.tizzer.smmgr.system.view.dialog.AddStoreDialog;
 import org.tizzer.smmgr.system.view.dialog.UpdateStoreDialog;
-import org.tizzer.smmgr.system.view.listener.DataChangeListener;
+import org.tizzer.smmgr.system.view.listener.PageListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 import java.util.Vector;
 
 /**
  * @author tizzer
  * @version 1.0
  */
-public class ManageStoreBoundary extends WebPanel implements DataChangeListener {
+public class ManageStoreBoundary extends WebPanel implements PageListener {
 
     private final static Class clazz = ManageStoreBoundary.class;
     private final static Object[] tableHead = {"序号", "门店名", "地址", "录入时间"};
@@ -51,12 +48,12 @@ public class ManageStoreBoundary extends WebPanel implements DataChangeListener 
         editButton = createBootstrapButton("编辑");
         delButton = createBootstrapButton("删除");
 
+        this.prepareData();
+        this.setOpaque(false);
         this.setMargin(5, 10, 5, 5);
-        this.setBackground(ColorManager._241_246_253);
-        this.add(pageView, BorderLayout.CENTER);
-        this.add(createRightPanel(), BorderLayout.EAST);
+        this.add(pageView, "Center");
+        this.add(createRightPanel(), "East");
         this.initListener();
-        this.initData();
     }
 
     private void initListener() {
@@ -104,6 +101,12 @@ public class ManageStoreBoundary extends WebPanel implements DataChangeListener 
         });
     }
 
+    @Override
+    public void pagePerformed(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
+        QueryStoreResponseDto queryStoreResponseDto = queryStore(startDate, endDate, keyword, pageSize, currentPage);
+        refreshData(queryStoreResponseDto);
+    }
+
     private boolean deleteStore(Vector<Integer> id) {
         DeleteStoreResponseDto deleteStoreResponseDto = new DeleteStoreResponseDto();
         try {
@@ -122,52 +125,38 @@ public class ManageStoreBoundary extends WebPanel implements DataChangeListener 
         try {
             QueryOneStoreRequestDto queryOneStoreRequestDto = new QueryOneStoreRequestDto();
             queryOneStoreRequestDto.setId(RuntimeConstants.storeId);
-            queryOneStoreResponseDto = HttpHandler.post("/query/store/one", queryOneStoreRequestDto.toString(), QueryOneStoreResponseDto.class);
+            queryOneStoreResponseDto = HttpHandler.get("/query/store/one?" + queryOneStoreRequestDto.toString(), QueryOneStoreResponseDto.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return queryOneStoreResponseDto;
     }
 
-    private void initData() {
-        QueryAllStoreResponseDto queryAllStoreResponseDto = prepareData();
-        pageView.prepareData(tableHead, queryAllStoreResponseDto.getData(), queryAllStoreResponseDto.getPageCount());
-    }
-
-    private QueryAllStoreResponseDto prepareData() {
-        QueryAllStoreResponseDto queryAllStoreResponseDto = new QueryAllStoreResponseDto();
+    private QueryStoreResponseDto queryStore(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
+        QueryStoreResponseDto queryStoreResponseDto = new QueryStoreResponseDto();
         try {
-            QueryAllStoreRequestDto queryAllStoreRequestDto = new QueryAllStoreRequestDto();
-            queryAllStoreRequestDto.setPageSize(pageView.getPageSize());
-            queryAllStoreRequestDto.setCurrentPage(pageView.getCurrentPage() - 1);
-            queryAllStoreResponseDto = HttpHandler.post("/query/store/all", queryAllStoreRequestDto.toString(), QueryAllStoreResponseDto.class);
+            QueryStoreRequestDto queryStoreRequestDto = new QueryStoreRequestDto();
+            queryStoreRequestDto.setStartDate(startDate);
+            queryStoreRequestDto.setEndDate(endDate);
+            queryStoreRequestDto.setKeyword(keyword);
+            queryStoreRequestDto.setPageSize(pageSize);
+            queryStoreRequestDto.setCurrentPage(currentPage - 1);
+            queryStoreResponseDto = HttpHandler.get("/query/store?" + queryStoreRequestDto.toString(), QueryStoreResponseDto.class);
         } catch (Exception e) {
             Logcat.type(clazz, e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
-        return queryAllStoreResponseDto;
+        return queryStoreResponseDto;
     }
 
-    @Override
-    public void dataChanged(Date startDate, Date endDate, String keyword, int pageSize, int currentPage) {
-        try {
-            QuerySomeStoreRequestDto querySomeStoreRequestDto = new QuerySomeStoreRequestDto();
-            querySomeStoreRequestDto.setStartDate(startDate);
-            querySomeStoreRequestDto.setEndDate(endDate);
-            querySomeStoreRequestDto.setKeyWord(keyword);
-            querySomeStoreRequestDto.setPageSize(pageSize);
-            querySomeStoreRequestDto.setCurrentPage(currentPage - 1);
-            QuerySomeStoreResponseDto querySomeStoreResponseDto = HttpHandler.post("/query/store/some", querySomeStoreRequestDto.toString(), QuerySomeStoreResponseDto.class);
-            refreshData(querySomeStoreResponseDto);
-        } catch (Exception e) {
-            Logcat.type(clazz, e.getMessage(), LogLevel.ERROR);
-            e.printStackTrace();
-        }
+    private void refreshData(QueryStoreResponseDto queryStoreResponseDto) {
+        pageView.setTableBody(queryStoreResponseDto.getData());
+        pageView.setPageIndicator(queryStoreResponseDto.getPageCount());
     }
 
-    private void refreshData(QuerySomeStoreResponseDto querySomeStoreResponseDto) {
-        pageView.setTableBody(querySomeStoreResponseDto.getData());
-        pageView.setPageIndicator(querySomeStoreResponseDto.getPageCount());
+    private void prepareData() {
+        QueryStoreResponseDto queryStoreResponseDto = queryStore(null, null, "", 30, 1);
+        pageView.prepareData(tableHead, queryStoreResponseDto.getData(), queryStoreResponseDto.getPageCount());
     }
 
     private WebPanel createRightPanel() {

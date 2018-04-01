@@ -1,26 +1,26 @@
 package org.tizzer.smmgr.system.view;
 
-import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.laf.button.WebButton;
-import com.alee.laf.button.WebToggleButton;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
 import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
-import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryOneInsiderRequestDto;
 import org.tizzer.smmgr.system.model.request.QueryTradeGoodsRequestDto;
+import org.tizzer.smmgr.system.model.request.SaveTradeGoodsRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryOneInsiderResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryTradeGoodsResponseDto;
+import org.tizzer.smmgr.system.model.response.SaveTradeGoodsResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
 import org.tizzer.smmgr.system.view.dialog.AddGoodsDialog;
+import org.tizzer.smmgr.system.view.dialog.CheckoutDialog;
 import org.tizzer.smmgr.system.view.dialog.ChooseGoodsDialog;
 import org.tizzer.smmgr.system.view.dialog.UpdateInsiderDialog;
 import org.tizzer.smmgr.system.view.listener.TableCellListener;
@@ -29,7 +29,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author tizzer
@@ -40,103 +41,117 @@ public class StandardTradeBoundary extends WebPanel {
     private final static Object[] tableHead = {"商品条码", "商品名称", "原价", "折扣(%)", "现价", "数量", "小计"};
 
     private DefaultTableModel tableModel;
-    private WebTable table;
-    private WebButton addButton;
-    private WebButton resetButton;
-    private WebButton delButton;
-    private WebTextField scanField;
-    private WebButton insiderButton;
-    private WebTextField insiderField;
+    private WebTable tradeGoodsTable;
+    private WebButton addGoodsButton;
+    private WebButton resetTradeButton;
+    private WebButton deleteRowButton;
+    private WebButton seeInsiderButton;
+    private WebButton cancelInsiderButton;
+    private WebTextField searchGoodsField;
+    private WebTextField searchInsiderField;
     private WebButton checkoutButton;
 
     private Object[][] tradeGoodsCache;
     private Object[] insiderCache;
     private int discount = 100;
-    private double cCost = 0;
+    private double currentCost = 0;
 
     public StandardTradeBoundary() {
-        table = createTransactionTable();
-        addButton = createBootstrapButton("新增商品", IconManager._ICON_ADDGOODS, "brown.xml");
-        resetButton = createBootstrapButton("重置收银", IconManager._ICON_RESET, "brown.xml");
-        delButton = createBootstrapButton("删除记录", IconManager._ICON_DELETE, "brown.xml");
-        scanField = createTrailingField("条码/名称/拼音码", null);
-        insiderButton = createBootstrapButton("详情", null, "default.xml");
-        insiderField = createTrailingField("会员号/手机号", insiderButton);
+        tradeGoodsTable = createTransactionTable();
+        addGoodsButton = createBootstrapButton("新增商品", IconManager.ADDGOODS, "brown.xml");
+        resetTradeButton = createBootstrapButton("清理台面", IconManager.RESETDESK, "brown.xml");
+        deleteRowButton = createBootstrapButton("删除记录", IconManager.DELETERECORD, "brown.xml");
+        searchGoodsField = createTrailingField("条码/名称/拼音码", null, null);
+        seeInsiderButton = createBootstrapButton("查看", null, "default.xml");
+        cancelInsiderButton = createBootstrapButton("取消", null, "default.xml");
+        searchInsiderField = createTrailingField("会员号/手机号", seeInsiderButton, cancelInsiderButton);
         checkoutButton = createCheckoutButton();
         this.setCheckoutButton("0.0");
 
         this.setOpaque(false);
-        this.add(new WebScrollPane(table), BorderLayout.CENTER);
-        this.add(createBottomPanel(), BorderLayout.SOUTH);
+        this.add(new WebScrollPane(tradeGoodsTable), "Center");
+        this.add(createCheckoutPane(), "South");
         this.initListener();
     }
 
     private void initListener() {
-        new TableCellListener(table, new AbstractAction() {
+        new TableCellListener(tradeGoodsTable, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TableCellListener tcl = (TableCellListener) e.getSource();
                 String value = tcl.getNewValue() + "";
                 if (value.matches("[1-9]([0-9]?)*")) {
                     //新数量
-                    int newValue = Integer.parseInt(table.getValueAt(tcl.getRow(), 5) + "");
-                    //现价
-                    double pCost = (double) table.getValueAt(tcl.getRow(), 4);
-                    //更新小计
-                    table.setValueAt((double) Math.round(pCost * newValue * 100) / 100, tcl.getRow(), 6);
+                    int newValue = Integer.parseInt(tradeGoodsTable.getValueAt(tcl.getRow(), 5) + "");
                     //旧数量
                     int oldValue = Integer.parseInt(tcl.getOldValue() + "");
-                    //更新当前消费总额
-                    cCost += (newValue - oldValue) * pCost;
-                    cCost = (double) Math.round(cCost * 100) / 100;
-                    setCheckoutButton(cCost + "");
-                } else {
-                    table.setValueAt(tcl.getOldValue(), tcl.getRow(), tcl.getColumn());
+                    if (newValue != oldValue) {
+                        //现价
+                        double presentCost = (double) tradeGoodsTable.getValueAt(tcl.getRow(), 4);
+                        //更新小计
+                        tradeGoodsTable.setValueAt((double) Math.round(presentCost * newValue * 100) / 100, tcl.getRow(), 6);
+                        //更新当前消费总额
+                        currentCost += (newValue - oldValue) * presentCost;
+                        currentCost = (double) Math.round(currentCost * 100) / 100;
+                        setCheckoutButton(currentCost + "");
+                        return;
+                    }
                 }
+                tradeGoodsTable.setValueAt(tcl.getOldValue(), tcl.getRow(), tcl.getColumn());
             }
         });
 
-        addButton.addActionListener(new ActionListener() {
+        addGoodsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddGoodsDialog.newInstance();
             }
         });
 
-        resetButton.addActionListener(new ActionListener() {
+        resetTradeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要重置收银吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
                 if (operation == JOptionPane.YES_OPTION) {
                     reset();
                 }
             }
         });
 
-        delButton.addActionListener(new ActionListener() {
+        deleteRowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (table.getSelectedRow() == -1) {
-                    SwingUtil.showTip(delButton, "请至少选中表格中的一个商品");
+                if (tradeGoodsTable.getSelectedRow() == -1) {
+                    SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
                     return;
                 }
-                int[] rows = table.getSelectedRows();
+                int[] rows = tradeGoodsTable.getSelectedRows();
                 for (int i = rows.length; i > 0; i--) {
                     //小计
-                    double cost = (double) table.getValueAt(rows[i - 1], 6);
+                    double cost = (double) tradeGoodsTable.getValueAt(rows[i - 1], 6);
                     //更新当前消费总额
-                    cCost -= cost;
+                    currentCost -= cost;
                     tableModel.removeRow(rows[i - 1]);
                 }
-                cCost = (double) Math.round(cCost * 100) / 100;
-                setCheckoutButton(cCost + "");
+                currentCost = (double) Math.round(currentCost * 100) / 100;
+                setCheckoutButton(currentCost + "");
+                //后续台面校验
+                if (tradeGoodsTable.getRowCount() == 0 && discount != 100) {
+                    int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空交易区，是否要退出会员？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+                    if (operation == JOptionPane.YES_OPTION) {
+                        discount = 100;
+                        insiderCache = null;
+                        searchInsiderField.setText(null);
+                        searchInsiderField.setEditable(true);
+                    }
+                }
             }
         });
 
-        scanField.addActionListener(new ActionListener() {
+        searchGoodsField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String keyword = scanField.getText().trim();
+                String keyword = searchGoodsField.getText().trim();
                 if (!keyword.equals("")) {
                     QueryTradeGoodsResponseDto queryTradeGoodsResponseDto = queryTradeGoods(keyword);
                     if (queryTradeGoodsResponseDto.getData() != null) {
@@ -150,50 +165,37 @@ public class StandardTradeBoundary extends WebPanel {
             }
         });
 
-        insiderField.addActionListener(new ActionListener() {
+        searchInsiderField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String keyword = insiderField.getText().trim();
+                String keyword = searchInsiderField.getText().trim();
                 if (!keyword.equals("")) {
                     QueryOneInsiderResponseDto queryOneInsiderResponseDto = queryOneInsider(keyword);
                     if (queryOneInsiderResponseDto.getCode() != ResultCode.OK) {
-                        SwingUtil.showTip(insiderField, queryOneInsiderResponseDto.getMessage());
+                        SwingUtil.showTip(searchInsiderField, queryOneInsiderResponseDto.getMessage());
                     } else {
+                        //缓存会员信息
                         insiderCache = queryOneInsiderResponseDto.getData();
+                        //记录会员折扣
                         discount = queryOneInsiderResponseDto.getDiscount();
+                        //刷新表格数据和当前总额
                         refreshTable(discount);
-                    }
-                }
-            }
-        });
-        insiderField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (discount != 100) {
-                    insiderField.setSelectionStart(0);
-                    insiderField.setSelectionEnd(insiderField.getText().length());
-                }
-            }
-        });
-        insiderField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (discount != 100) {
-                    if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                        discount = 100;
-                        refreshTable(discount);
+                        //锁定会员的组件
+                        searchInsiderField.setEditable(false);
                     }
                 }
             }
         });
 
-        insiderButton.addActionListener(new ActionListener() {
+        seeInsiderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (insiderCache == null) {
                     return;
                 }
+                //打开会员详情对话框
                 int newDiscount = UpdateInsiderDialog.newInstance(insiderCache);
+                //对比会员折扣是否修改了
                 if (discount != newDiscount) {
                     QueryOneInsiderResponseDto queryOneInsiderResponseDto = queryOneInsider(insiderCache[0].toString());
                     insiderCache = queryOneInsiderResponseDto.getData();
@@ -202,11 +204,44 @@ public class StandardTradeBoundary extends WebPanel {
             }
         });
 
+        cancelInsiderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //修改折扣
+                discount = 100;
+                //清理会员数据缓存
+                insiderCache = null;
+                //刷新表格数据和当前总额
+                refreshTable(discount);
+                //恢复会员的组件的初始态
+                searchInsiderField.setText(null);
+                searchInsiderField.setEditable(true);
+            }
+        });
+
         checkoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String staffNo = RuntimeConstants.staffNo;
-
+                if (currentCost == 0) {
+                    return;
+                }
+                //付款方式
+                Object payType = CheckoutDialog.newInstance(currentCost);
+                if (payType != null) {
+                    Object cardNo = null;
+                    Object phone = null;
+                    if (discount != 100) {
+                        //会员参数
+                        cardNo = insiderCache[0];
+                        phone = insiderCache[2];
+                    }
+                    SaveTradeGoodsResponseDto saveTradeGoodsResponseDto = tradeGoods(payType, cardNo, phone);
+                    if (saveTradeGoodsResponseDto.getCode() != ResultCode.OK) {
+                        SwingUtil.showTip(checkoutButton, saveTradeGoodsResponseDto.getMessage());
+                    } else {
+                        reset();
+                    }
+                }
             }
         });
     }
@@ -222,7 +257,7 @@ public class StandardTradeBoundary extends WebPanel {
         try {
             QueryTradeGoodsRequestDto queryTradeGoodsRequestDto = new QueryTradeGoodsRequestDto();
             queryTradeGoodsRequestDto.setKeyword(keyword);
-            queryTradeGoodsResponseDto = HttpHandler.post("/query/goods/trade", queryTradeGoodsRequestDto.toString(), QueryTradeGoodsResponseDto.class);
+            queryTradeGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryTradeGoodsResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
@@ -241,12 +276,52 @@ public class StandardTradeBoundary extends WebPanel {
         try {
             QueryOneInsiderRequestDto queryOneInsiderRequestDto = new QueryOneInsiderRequestDto();
             queryOneInsiderRequestDto.setKeyword(keyword);
-            queryOneInsiderResponseDto = HttpHandler.post("/query/insider/one", queryOneInsiderRequestDto.toString(), QueryOneInsiderResponseDto.class);
+            queryOneInsiderResponseDto = HttpHandler.get("/query/insider/one?" + queryOneInsiderRequestDto.toString(), QueryOneInsiderResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryOneInsiderResponseDto;
+    }
+
+    private SaveTradeGoodsResponseDto tradeGoods(Object payType, Object cardNo, Object phone) {
+        SaveTradeGoodsResponseDto saveTradeGoodsResponseDto = new SaveTradeGoodsResponseDto();
+        try {
+            //从表格获取商品参数
+            int rowCount = tradeGoodsTable.getRowCount();
+            Object[] upc = new Object[rowCount];
+            Object[] name = new Object[rowCount];
+            Object[] primeCost = new Object[rowCount];
+            Object[] presentCost = new Object[rowCount];
+            Object[] quantity = new Object[rowCount];
+            for (int i = 0; i < rowCount; i++) {
+                upc[i] = tradeGoodsTable.getValueAt(i, 0);
+                name[i] = tradeGoodsTable.getValueAt(i, 1);
+                primeCost[i] = tradeGoodsTable.getValueAt(i, 2);
+                presentCost[i] = tradeGoodsTable.getValueAt(i, 4);
+                quantity[i] = tradeGoodsTable.getValueAt(i, 5);
+            }
+            //参数设置
+            SaveTradeGoodsRequestDto saveTradeGoodsRequestDto = new SaveTradeGoodsRequestDto();
+            saveTradeGoodsRequestDto.setStaffNo(RuntimeConstants.staffNo);
+            saveTradeGoodsRequestDto.setDiscount(discount);
+            saveTradeGoodsRequestDto.setPayType(payType);
+            saveTradeGoodsRequestDto.setCardNo(cardNo);
+            saveTradeGoodsRequestDto.setPhone(phone);
+            saveTradeGoodsRequestDto.setUpc(upc);
+            saveTradeGoodsRequestDto.setName(name);
+            saveTradeGoodsRequestDto.setPrimeCost(primeCost);
+            saveTradeGoodsRequestDto.setPresentCost(presentCost);
+            saveTradeGoodsRequestDto.setQuantity(quantity);
+            saveTradeGoodsRequestDto.setCost(currentCost);
+            saveTradeGoodsRequestDto.setType(true);
+            saveTradeGoodsRequestDto.setSerialNo(null);
+            saveTradeGoodsResponseDto = HttpHandler.post("/save/trade/record", saveTradeGoodsRequestDto.toString(), SaveTradeGoodsResponseDto.class);
+        } catch (Exception e) {
+            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            e.printStackTrace();
+        }
+        return saveTradeGoodsResponseDto;
     }
 
     /**
@@ -255,39 +330,39 @@ public class StandardTradeBoundary extends WebPanel {
     private void refreshTable() {
         if (tradeGoodsCache != null) {
             String upc = (String) tradeGoodsCache[0][0];
-            for (int i = 0; i < table.getRowCount(); i++) {
-                if (upc.equals(table.getValueAt(i, 0))) {
+            for (int i = 0; i < tradeGoodsTable.getRowCount(); i++) {
+                if (upc.equals(tradeGoodsTable.getValueAt(i, 0))) {
                     //现价
-                    double pCost = (double) table.getValueAt(i, 4);
+                    double presentCost = (double) tradeGoodsTable.getValueAt(i, 4);
                     //当前数量
-                    int num = Integer.parseInt(table.getValueAt(i, 5) + "");
+                    int num = Integer.parseInt(tradeGoodsTable.getValueAt(i, 5) + "");
                     //当前小计
-                    double cost = (double) table.getValueAt(i, 6);
+                    double cost = (double) tradeGoodsTable.getValueAt(i, 6);
                     //现在小计
-                    cost = (double) Math.round((pCost + cost) * 100) / 100;
+                    cost = (double) Math.round((presentCost + cost) * 100) / 100;
                     //更新数量
-                    table.setValueAt(num + 1, i, 5);
+                    tradeGoodsTable.setValueAt(num + 1, i, 5);
                     //更新小计
-                    table.setValueAt(cost, i, 6);
+                    tradeGoodsTable.setValueAt(cost, i, 6);
                     //更新当前花费总额
-                    cCost = (double) Math.round((cCost + pCost) * 100) / 100;
-                    setCheckoutButton(cCost + "");
-                    scanField.setText(null);
+                    currentCost = (double) Math.round((currentCost + presentCost) * 100) / 100;
+                    setCheckoutButton(currentCost + "");
+                    searchGoodsField.setText(null);
                     return;
                 }
             }
             //售价
-            double oCost = (double) tradeGoodsCache[0][2];
+            double primeCost = (double) tradeGoodsCache[0][2];
             //现价
-            double pCost = (double) Math.round(oCost * discount) / 100;
+            double presentCost = (double) Math.round(primeCost * discount) / 100;
             //增加行数据
-            Object[] row = {upc, tradeGoodsCache[0][1], oCost, discount, pCost, 1, pCost};
+            Object[] row = {upc, tradeGoodsCache[0][1], primeCost, discount, presentCost, 1, presentCost};
             tableModel.addRow(row);
             //更新当前消费总额
-            cCost = (double) Math.round((cCost + pCost) * 100) / 100;
-            setCheckoutButton(cCost + "");
+            currentCost = (double) Math.round((currentCost + presentCost) * 100) / 100;
+            setCheckoutButton(currentCost + "");
         }
-        scanField.setText(null);
+        searchGoodsField.setText(null);
     }
 
     /**
@@ -296,44 +371,45 @@ public class StandardTradeBoundary extends WebPanel {
      * @param discount
      */
     private void refreshTable(int discount) {
-        cCost = 0;
-        for (int i = 0; i < table.getRowCount(); i++) {
+        currentCost = 0;
+        for (int i = 0; i < tradeGoodsTable.getRowCount(); i++) {
             //现价
-            double pCost = (double) Math.round((double) table.getValueAt(i, 2) * discount) / 100;
+            double presentCost = (double) Math.round((double) tradeGoodsTable.getValueAt(i, 2) * discount) / 100;
             //小计
-            double total = (double) Math.round(pCost * Integer.parseInt(table.getValueAt(i, 5) + "") * 100) / 100;
+            double total = (double) Math.round(presentCost * Integer.parseInt(tradeGoodsTable.getValueAt(i, 5) + "") * 100) / 100;
             //更新折扣
-            table.setValueAt(discount, i, 3);
+            tradeGoodsTable.setValueAt(discount, i, 3);
             //更新现价
-            table.setValueAt(pCost, i, 4);
+            tradeGoodsTable.setValueAt(presentCost, i, 4);
             //更新小计
-            table.setValueAt(total, i, 6);
+            tradeGoodsTable.setValueAt(total, i, 6);
             //更新当前消费总额
-            cCost += total;
+            currentCost += total;
         }
-        cCost = (double) Math.round(cCost * 100) / 100;
-        setCheckoutButton(cCost + "");
+        currentCost = (double) Math.round(currentCost * 100) / 100;
+        setCheckoutButton(currentCost + "");
     }
 
     /**
-     * 重置收银数据<br/>
-     * 初始化为登录状态
+     * 清理台面数据
      */
     private void reset() {
         insiderCache = null;
         tradeGoodsCache = null;
         discount = 100;
-        cCost = 0;
+        currentCost = 0;
         setCheckoutButton("0.0");
         tableModel.setDataVector(null, tableHead);
-        scanField.setText(null);
-        insiderField.setText(null);
-        insiderField.setEditable(true);
+        searchGoodsField.setText(null);
+        searchInsiderField.setText(null);
+        searchInsiderField.setEditable(true);
     }
 
-    //更新结算按钮的text
+    /**
+     * 更新结算按钮的text
+     */
     private void setCheckoutButton(String text) {
-        checkoutButton.setText("<html><font face='Microsoft YaHei' color=white size=5>收款&nbsp;&nbsp;&nbsp;￥" + text + "</font></html>");
+        checkoutButton.setText("<html><font face='Microsoft YaHei' color=white size=6><b>收款</b>&nbsp;&nbsp;&nbsp;￥" + text + "</font></html>");
     }
 
     private WebTable createTransactionTable() {
@@ -349,26 +425,19 @@ public class StandardTradeBoundary extends WebPanel {
         webTable.setDefaultRenderer(Object.class, tableCellRenderer);
         webTable.setShowVerticalLines(false);
         webTable.setRowHeight(30);
+        webTable.setVisibleRowCount(4);
         webTable.getTableHeader().setReorderingAllowed(false);
         webTable.getTableHeader().setResizingAllowed(false);
         return webTable;
     }
 
-    private WebTextField createTrailingField(String inputPrompt, JComponent trailingComponent) {
-        WebTextField webTextField = new WebTextField();
+    private WebTextField createTrailingField(String inputPrompt, JComponent leadingComponent, JComponent trailingComponent) {
+        WebTextField webTextField = new WebTextField(15);
         webTextField.setInputPrompt(inputPrompt);
         webTextField.setMargin(5);
+        webTextField.setLeadingComponent(leadingComponent);
         webTextField.setTrailingComponent(trailingComponent);
         return webTextField;
-    }
-
-    private WebToggleButton createTrailingButton() {
-        WebToggleButton webToggleButton = new WebToggleButton("无码");
-        webToggleButton.setForeground(Color.WHITE);
-        webToggleButton.setSelectedForeground(Color.WHITE);
-        webToggleButton.setCursor(Cursor.getDefaultCursor());
-        webToggleButton.setPainter(NPatchUtil.getNinePatchPainter("toggle.xml"));
-        return webToggleButton;
     }
 
     private WebButton createBootstrapButton(String text, ImageIcon icon, String colorConfig) {
@@ -388,30 +457,33 @@ public class StandardTradeBoundary extends WebPanel {
         return webButton;
     }
 
-    private WebPanel createBottomPanel() {
+    private WebPanel createFunctionPane() {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
-        webPanel.setLayout(new VerticalFlowLayout());
-        webPanel.add(createFunctionPanel());
-        webPanel.add(createCheckoutPanel());
+        webPanel.setLayout(new GridBagLayout());
+        SwingUtil.setupComponent(webPanel, addGoodsButton, 0, 0, 1, 1);
+        SwingUtil.setupComponent(webPanel, resetTradeButton, 1, 0, 1, 1);
+        SwingUtil.setupComponent(webPanel, deleteRowButton, 2, 0, 1, 1);
+        SwingUtil.setupComponent(webPanel, checkoutButton, 0, 1, 3, 1);
         return webPanel;
     }
 
-    private WebPanel createFunctionPanel() {
+    private WebPanel createFieldPane() {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
-        webPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        webPanel.add(addButton, resetButton, delButton);
+        webPanel.setMargin(15, 10, 10, 0);
+        webPanel.setLayout(new GridLayout(2, 1, 0, 15));
+        webPanel.add(searchGoodsField);
+        webPanel.add(searchInsiderField);
         return webPanel;
     }
 
-    private WebPanel createCheckoutPanel() {
+    private WebPanel createCheckoutPane() {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
         webPanel.setMargin(0, 10, 10, 10);
-        webPanel.setLayout(new GridLayout(1, 3, 5, 5));
-        webPanel.setBackground(ColorManager._242_242_242);
-        webPanel.add(scanField, insiderField, checkoutButton);
+        webPanel.add(createFieldPane(), "West");
+        webPanel.add(createFunctionPane(), "East");
         return webPanel;
     }
 }

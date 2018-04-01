@@ -21,7 +21,7 @@ public class SmmgrApplication extends WebFrame {
         LoginBoundary loginBoundary = new LoginBoundary();
         this.getContentPane().add(loginBoundary);
         this.setTitle("超市管家");
-        this.setIconImage(IconManager._ICON_TASKBAR);
+        this.setIconImage(IconManager.TASKBAR);
         this.setPreferredSize(new Dimension(1280, 800));
         this.setMinimumSize(this.getPreferredSize());
         this.setLocationRelativeTo(null);

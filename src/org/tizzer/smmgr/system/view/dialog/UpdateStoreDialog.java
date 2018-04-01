@@ -36,7 +36,7 @@ public class UpdateStoreDialog extends WebDialog {
     private Object[] dataCache;
 
     public UpdateStoreDialog() {
-        super(RuntimeConstants.root, "修改门店信息", true);
+        super(RuntimeConstants.root, "编辑门店信息", true);
         idField = createDisabledTextField();
         nameField = createInfoTextField();
         addressField = createInfoTextField();

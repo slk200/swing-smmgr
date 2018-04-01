@@ -2,7 +2,6 @@ package org.tizzer.smmgr.system.utils;
 
 import com.alee.extended.painter.NinePatchStatePainter;
 import com.alee.utils.NinePatchUtils;
-import com.alee.utils.ninepatch.NinePatchIcon;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,22 +12,7 @@ import java.util.Map;
  */
 public class NPatchUtil {
 
-    private static Map<String, NinePatchIcon> ninePatchIconCache = new HashMap<>();
     private static Map<String, NinePatchStatePainter> ninePatchStatePainterCache = new HashMap<>();
-
-    /**
-     * 点9图
-     *
-     * @param paintConfig
-     * @return
-     */
-    public static NinePatchIcon getNinePatchIcon(String paintConfig) {
-        if (!ninePatchIconCache.containsKey(paintConfig)) {
-            ninePatchIconCache.put(paintConfig, NinePatchUtils.loadNinePatchIcon(
-                    NPatchUtil.class.getResource("/org/tizzer/smmgr/config/npicon/" + paintConfig + ".xml")));
-        }
-        return ninePatchIconCache.get(paintConfig);
-    }
 
     /**
      * 点9状态图

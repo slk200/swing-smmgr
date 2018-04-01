@@ -21,7 +21,6 @@ import org.tizzer.smmgr.system.model.response.QueryAllGoodsTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveGoodsResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.utils.TextUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -136,7 +135,7 @@ public class AddGoodsDialog extends WebDialog {
             saveGoodsRequestDto.setjPrice((Double) jPriceSpinner.getValue());
             saveGoodsRequestDto.setsPrice((Double) sPriceSpinner.getValue());
             saveGoodsRequestDto.setInvention((Integer) inventorySpinner.getValue());
-            saveGoodsRequestDto.setScDate(TextUtil.startOfDay(scDateField.getText()));
+            saveGoodsRequestDto.setScDate(scDateField.getText());
             saveGoodsRequestDto.setBzDate((Integer) bzDateSpinner.getValue());
             saveGoodsRequestDto.setType(type);
             saveGoodsRequestDto.setId(chooseId);

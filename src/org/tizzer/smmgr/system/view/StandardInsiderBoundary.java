@@ -16,7 +16,6 @@ import org.tizzer.smmgr.system.model.response.QueryAllInsiderTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveInsiderResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.utils.TextUtil;
 import org.tizzer.smmgr.system.view.listener.NavigationListener;
 
 import javax.swing.*;
@@ -56,9 +55,9 @@ public class StandardInsiderBoundary extends WebPanel {
         saveInsiderButton = createBootstrapButton("保存会员");
 
         this.prepareData();
+        this.setOpaque(false);
         this.setMargin(50, 0, 0, 0);
         this.setLayout(new GridBagLayout());
-        this.setBackground(Color.WHITE);
         this.createInsiderPanel();
         this.initListener();
         this.navigationListener = navigationListener;
@@ -115,7 +114,7 @@ public class StandardInsiderBoundary extends WebPanel {
             saveInsiderRequestDto.setAddress(addressField.getText().trim());
             saveInsiderRequestDto.setNote(noteArea.getText().trim());
             saveInsiderRequestDto.setType(idCache[typeComboBox.getSelectedIndex()]);
-            saveInsiderRequestDto.setBirth(TextUtil.startOfDay(birthField.getText()));
+            saveInsiderRequestDto.setBirth(birthField.getText());
             saveInsiderResponseDto = HttpHandler.post("/save/insider", saveInsiderRequestDto.toString(), SaveInsiderResponseDto.class);
             if (saveInsiderResponseDto.getCode() == ResultCode.OK) {
                 int option = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>会员保存成功！</h3><p>是否离开此界面？</p></html>", "询问", JOptionPane.YES_NO_OPTION);

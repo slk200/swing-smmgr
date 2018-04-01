@@ -5,10 +5,6 @@ import java.util.Vector;
 public class DeleteStoreRequestDto {
     private Vector<Integer> id;
 
-    public Vector<Integer> getId() {
-        return id;
-    }
-
     public void setId(Vector<Integer> id) {
         this.id = id;
     }

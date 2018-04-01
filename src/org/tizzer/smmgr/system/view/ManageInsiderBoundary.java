@@ -7,25 +7,22 @@ import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.handler.HttpHandler;
-import org.tizzer.smmgr.system.model.request.QueryAllInsiderRequestDto;
-import org.tizzer.smmgr.system.model.request.QuerySomeInsiderRequestDto;
-import org.tizzer.smmgr.system.model.response.QueryAllInsiderResponseDto;
-import org.tizzer.smmgr.system.model.response.QuerySomeInsiderResponseDto;
+import org.tizzer.smmgr.system.model.request.QueryInsiderRequestDto;
+import org.tizzer.smmgr.system.model.response.QueryInsiderResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.view.component.WebPageView;
 import org.tizzer.smmgr.system.view.dialog.UpdateInsiderTypeDialog;
-import org.tizzer.smmgr.system.view.listener.DataChangeListener;
+import org.tizzer.smmgr.system.view.listener.PageListener;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 
 /**
  * @author tizzer
  * @version 1.0
  */
-public class ManageInsiderBoundary extends WebPanel implements DataChangeListener {
+public class ManageInsiderBoundary extends WebPanel implements PageListener {
 
     private final static Class clazz = ManageStoreBoundary.class;
     private final static Object[] tableHead = {"会员卡号", "会员姓名", "会员电话", "会员地址", "会员类型", "备注", "会员生日", "录入时间"};
@@ -37,12 +34,12 @@ public class ManageInsiderBoundary extends WebPanel implements DataChangeListene
         pageView = createPageView();
         setButton = createBootstrapButton();
 
+        this.prepareData();
+        this.setOpaque(false);
         this.setMargin(5, 10, 5, 5);
-        this.setBackground(ColorManager._241_246_253);
-        this.add(pageView, BorderLayout.CENTER);
-        this.add(createRightPanel(), BorderLayout.EAST);
+        this.add(pageView, "Center");
+        this.add(createRightPanel(), "East");
         this.initListener();
-        this.initData();
     }
 
     private void initListener() {
@@ -56,45 +53,37 @@ public class ManageInsiderBoundary extends WebPanel implements DataChangeListene
         });
     }
 
-    private void initData() {
-        QueryAllInsiderResponseDto queryAllStoreResponseDto = prepareData();
-        pageView.prepareData(tableHead, queryAllStoreResponseDto.getData(), queryAllStoreResponseDto.getPageCount());
-    }
-
-    private QueryAllInsiderResponseDto prepareData() {
-        QueryAllInsiderResponseDto queryAllInsiderResponseDto = new QueryAllInsiderResponseDto();
-        try {
-            QueryAllInsiderRequestDto queryAllStoreRequestDto = new QueryAllInsiderRequestDto();
-            queryAllStoreRequestDto.setPageSize(pageView.getPageSize());
-            queryAllStoreRequestDto.setCurrentPage(pageView.getCurrentPage() - 1);
-            queryAllInsiderResponseDto = HttpHandler.post("/query/insider/all", queryAllStoreRequestDto.toString(), QueryAllInsiderResponseDto.class);
-        } catch (Exception e) {
-            Logcat.type(clazz, e.getMessage(), LogLevel.ERROR);
-            e.printStackTrace();
-        }
-        return queryAllInsiderResponseDto;
-    }
-
     @Override
-    public void dataChanged(Date startDate, Date endDate, String keyword, int pageSize, int currentPage) {
+    public void pagePerformed(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
+        QueryInsiderResponseDto queryInsiderResponseDto = queryInsider(startDate, endDate, keyword, pageSize, currentPage);
+        refreshData(queryInsiderResponseDto);
+    }
+
+    private QueryInsiderResponseDto queryInsider(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
+        QueryInsiderResponseDto querySomeStoreResponseDto = new QueryInsiderResponseDto();
         try {
-            QuerySomeInsiderRequestDto querySomeInsiderRequestDto = new QuerySomeInsiderRequestDto();
-            querySomeInsiderRequestDto.setStartDate(startDate);
-            querySomeInsiderRequestDto.setEndDate(endDate);
-            querySomeInsiderRequestDto.setKeyWord(keyword);
-            querySomeInsiderRequestDto.setPageSize(pageSize);
-            querySomeInsiderRequestDto.setCurrentPage(currentPage - 1);
-            QuerySomeInsiderResponseDto querySomeStoreResponseDto = HttpHandler.post("/query/insider/some", querySomeInsiderRequestDto.toString(), QuerySomeInsiderResponseDto.class);
-            refreshData(querySomeStoreResponseDto);
+            QueryInsiderRequestDto queryInsiderRequestDto = new QueryInsiderRequestDto();
+            queryInsiderRequestDto.setStartDate(startDate);
+            queryInsiderRequestDto.setEndDate(endDate);
+            queryInsiderRequestDto.setKeyword(keyword);
+            queryInsiderRequestDto.setPageSize(pageSize);
+            queryInsiderRequestDto.setCurrentPage(currentPage - 1);
+            querySomeStoreResponseDto = HttpHandler.get("/query/insider?" + queryInsiderRequestDto.toString(), QueryInsiderResponseDto.class);
         } catch (Exception e) {
             Logcat.type(clazz, e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
+        return querySomeStoreResponseDto;
     }
 
-    private void refreshData(QuerySomeInsiderResponseDto querySomeStoreResponseDto) {
+    private void refreshData(QueryInsiderResponseDto querySomeStoreResponseDto) {
         pageView.setTableBody(querySomeStoreResponseDto.getData());
         pageView.setPageIndicator(querySomeStoreResponseDto.getPageCount());
+    }
+
+    private void prepareData() {
+        QueryInsiderResponseDto queryInsiderResponseDto = queryInsider(null, null, "", 30, 1);
+        pageView.prepareData(tableHead, queryInsiderResponseDto.getData(), queryInsiderResponseDto.getPageCount());
     }
 
     private WebPanel createRightPanel() {

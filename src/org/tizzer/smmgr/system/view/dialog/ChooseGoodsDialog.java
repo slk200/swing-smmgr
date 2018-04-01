@@ -140,9 +140,9 @@ public class ChooseGoodsDialog extends WebDialog {
         WebPanel webPanel = new WebPanel();
         webPanel.setMargin(10);
         webPanel.setBackground(ColorManager._241_246_253);
-        webPanel.add(searchField, BorderLayout.NORTH);
-        webPanel.add(new WebScrollPane(table), BorderLayout.CENTER);
-        webPanel.add(createButtonPane(), BorderLayout.SOUTH);
+        webPanel.add(searchField, "North");
+        webPanel.add(new WebScrollPane(table), "Center");
+        webPanel.add(createButtonPane(), "South");
         return webPanel;
     }
 
@@ -156,7 +156,7 @@ public class ChooseGoodsDialog extends WebDialog {
     }
 
     private WebButton createTrailingComponent() {
-        WebButton webButton = WebButton.createIconWebButton(IconManager._ICON_SEARCH, true);
+        WebButton webButton = WebButton.createIconWebButton(IconManager.SEARCH, true);
         webButton.setFocusable(false);
         webButton.setShadeWidth(0);
         webButton.setMoveIconOnPress(false);

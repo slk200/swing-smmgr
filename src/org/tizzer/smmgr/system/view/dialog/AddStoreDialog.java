@@ -105,7 +105,7 @@ public class AddStoreDialog extends WebDialog {
         List<Container> containerList = Arrays.asList(nameField, addressField);
         for (int i = 0; i < stringList.size(); i++) {
             SwingUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
-            SwingUtil.setupComponent(webPanel, containerList.get(i), 0, i, 1, 1);
+            SwingUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
         }
         SwingUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
         return webPanel;

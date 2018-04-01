@@ -15,7 +15,7 @@ public class AuthorityRenderer implements TableCellRenderer {
         label.setOpaque(true);
         label.setBackground(Color.WHITE);
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setIcon((boolean) value ? IconManager._ICON_ADMINTAG : IconManager._ICON_STANDARDTAG);
+        label.setIcon((boolean) value ? IconManager.ADMINTAG : IconManager.STANDARDTAG);
         if (isSelected) {
             label.setBackground(ColorManager._59_115_175);
         }

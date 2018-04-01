@@ -14,7 +14,7 @@ public class StateRenderer implements TableCellRenderer {
         label.setOpaque(true);
         label.setBackground(Color.WHITE);
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setIcon((boolean) value ? IconManager._ICON_USINGTAG : IconManager._ICON_STOP);
+        label.setIcon((boolean) value ? IconManager.USINGTAG : IconManager.STOPTAG);
         if (isSelected) {
             label.setBackground(ColorManager._59_115_175);
         }

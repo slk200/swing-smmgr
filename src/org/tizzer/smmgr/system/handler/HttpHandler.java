@@ -1,7 +1,7 @@
 package org.tizzer.smmgr.system.handler;
 
 import com.alibaba.fastjson.JSONObject;
-import org.tizzer.smmgr.system.utils.TextUtil;
+import org.tizzer.smmgr.system.utils.StreamUtil;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -47,7 +47,7 @@ public class HttpHandler {
                 result += tempLine;
             }
         } finally {
-            TextUtil.close(reader, inputStreamReader, inputStream);
+            StreamUtil.close(reader, inputStreamReader, inputStream);
         }
         return result;
     }
@@ -92,7 +92,7 @@ public class HttpHandler {
                 result += tempLine;
             }
         } finally {
-            TextUtil.close(outputStreamWriter, outputStream, reader, inputStreamReader, inputStream);
+            StreamUtil.close(outputStreamWriter, outputStream, reader, inputStreamReader, inputStream);
         }
         return result;
     }

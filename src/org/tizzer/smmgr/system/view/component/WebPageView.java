@@ -10,8 +10,7 @@ import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
 import org.tizzer.smmgr.system.constant.IconManager;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.TextUtil;
-import org.tizzer.smmgr.system.view.listener.DataChangeListener;
+import org.tizzer.smmgr.system.view.listener.PageListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -23,7 +22,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Vector;
 
 public class WebPageView extends WebPanel {
@@ -32,19 +30,17 @@ public class WebPageView extends WebPanel {
      * params supplied for searching
      */
     private static final Object[] defaultPageSizeArray = {30, 50, 100};
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private String keyword = "";
     private int currentPage = 1;
     private int pageSize = 30;
     private int pageCount;
-
     /**
-     * the table's data
+     * cache the table's data
      */
     private Object[] tableHead;
     private Object[][] tableBody;
-
     /**
      * the components to make up the page view
      */
@@ -60,32 +56,28 @@ public class WebPageView extends WebPanel {
     private WebTextField specPageField;
     private WebButton gotoButton;
     private WebButton nextPageButton;
-
     /**
-     * monitor the param's change of the Component<br/>
-     * to override its inner methods in outer class
+     * to provide the interface for outer class
      */
-    private DataChangeListener dataChangeListener;
+    private PageListener pageListener;
 
     public WebPageView() {
-        startDateField = createDateField();
-        startDateField.setDateFormat(new SimpleDateFormat("yyyy-MM-dd 00:00:00"));
-        endDateField = createDateField();
-        endDateField.setDateFormat(new SimpleDateFormat("yyyy-MM-dd 23:59:59"));
+        startDateField = createDateField("yyyy-MM-dd 00:00:00");
+        endDateField = createDateField("yyyy-MM-dd 23:59:59");
         searchButton = createTrailingComponent();
         searchField = createSearchField();
-        pageSizeComboBox = new WebComboBox(defaultPageSizeArray);
+        pageSizeComboBox = createPageSizeComboBox();
         table = createPageTable();
         previousPageButton = createBootstrapButton("上一页");
-        pageIndicator = new WebLabel("--/--");
+        pageIndicator = createPageIndicator();
         specPageField = createSpecPageField();
         gotoButton = createBootstrapButton("转到");
         nextPageButton = createBootstrapButton("下一页");
 
         this.setOpaque(false);
-        this.add(createTopPanel(), "North");
-        this.add(createCenterPanel(), "Center");
-        this.add(createBottomPanel(), "South");
+        this.add(createTopPane(), "North");
+        this.add(new WebScrollPane(table), "Center");
+        this.add(createBottomPane(), "South");
         this.initListener();
     }
 
@@ -98,10 +90,10 @@ public class WebPageView extends WebPanel {
             public void actionPerformed(ActionEvent e) {
                 specPageField.setText(null);
                 currentPage = 1;
-                startDate = TextUtil.startOfDay(startDateField.getText());
-                endDate = TextUtil.endOfDay(endDateField.getText());
-                keyword = searchField.getText();
-                dataChangeListener.dataChanged(startDate, endDate, keyword, pageSize, currentPage);
+                startDate = startDateField.getText();
+                endDate = endDateField.getText();
+                keyword = searchField.getText().trim();
+                pageListener.pagePerformed(startDate, endDate, keyword, pageSize, currentPage);
             }
         });
         searchField.addActionListener(searchButton.getActionListeners()[0]);
@@ -112,7 +104,7 @@ public class WebPageView extends WebPanel {
                     specPageField.setText(null);
                     currentPage = 1;
                     pageSize = (int) e.getItem();
-                    dataChangeListener.dataChanged(startDate, endDate, keyword, pageSize, currentPage);
+                    pageListener.pagePerformed(startDate, endDate, keyword, pageSize, currentPage);
                 }
             }
         });
@@ -223,7 +215,7 @@ public class WebPageView extends WebPanel {
      * description:call it when updating or adding or delete
      */
     public void refresh() {
-        dataChangeListener.dataChanged(startDate, endDate, keyword, pageSize, currentPage);
+        pageListener.pagePerformed(startDate, endDate, keyword, pageSize, currentPage);
     }
 
     /**
@@ -325,10 +317,10 @@ public class WebPageView extends WebPanel {
      * add listener<br/>
      * description:monitor mouse event,change table's data and params for searching
      *
-     * @param dataChangeListener
+     * @param pageListener
      */
-    public void addDateChangeListener(DataChangeListener dataChangeListener) {
-        this.dataChangeListener = dataChangeListener;
+    public void addDateChangeListener(PageListener pageListener) {
+        this.pageListener = pageListener;
     }
 
     /**
@@ -342,7 +334,7 @@ public class WebPageView extends WebPanel {
                 if (currentPage > 1) {
                     specPageField.setText(null);
                     currentPage--;
-                    dataChangeListener.dataChanged(startDate, endDate, keyword, pageSize, currentPage);
+                    pageListener.pagePerformed(startDate, endDate, keyword, pageSize, currentPage);
                 }
                 break;
             case GOTO:
@@ -357,29 +349,45 @@ public class WebPageView extends WebPanel {
                     return;
                 }
                 currentPage = specPage;
-                dataChangeListener.dataChanged(startDate, endDate, keyword, pageSize, currentPage);
+                pageListener.pagePerformed(startDate, endDate, keyword, pageSize, currentPage);
                 break;
             case NEXT:
                 if (currentPage < pageCount) {
                     specPageField.setText(null);
                     currentPage++;
-                    dataChangeListener.dataChanged(startDate, endDate, keyword, pageSize, currentPage);
+                    pageListener.pagePerformed(startDate, endDate, keyword, pageSize, currentPage);
                 }
                 break;
             default:
         }
     }
 
-    private WebDateField createDateField() {
+    private WebPanel createTopPane() {
+        WebPanel webPanel = new WebPanel(new FlowLayout());
+        webPanel.setOpaque(false);
+        webPanel.add(new WebLabel("起止日期："), startDateField, new WebLabel(" — "), endDateField, createHSpace(), searchField, pageSizeComboBox);
+        return webPanel;
+    }
+
+    private WebPanel createBottomPane() {
+        WebPanel webPanel = new WebPanel();
+        webPanel.setOpaque(false);
+        webPanel.setLayout(new FlowLayout());
+        webPanel.add(previousPageButton, pageIndicator, specPageField, gotoButton, nextPageButton);
+        return webPanel;
+    }
+
+    private WebDateField createDateField(String pattern) {
         WebDateField webDateField = new WebDateField();
-        webDateField.setColumns(10);
+        webDateField.setDateFormat(new SimpleDateFormat(pattern));
+        webDateField.setColumns(15);
         webDateField.setMargin(2);
         webDateField.setEditable(false);
         return webDateField;
     }
 
     private WebButton createTrailingComponent() {
-        WebButton webButton = WebButton.createIconWebButton(IconManager._ICON_SEARCH, true);
+        WebButton webButton = WebButton.createIconWebButton(IconManager.SEARCH, true);
         webButton.setFocusable(false);
         webButton.setShadeWidth(0);
         webButton.setMoveIconOnPress(false);
@@ -394,6 +402,10 @@ public class WebPageView extends WebPanel {
         return webTextField;
     }
 
+    private WebComboBox createPageSizeComboBox() {
+        return new WebComboBox(defaultPageSizeArray);
+    }
+
     private WebTable createPageTable() {
         tableModel = new DefaultTableModel();
         WebTable webTable = new WebTable(tableModel) {
@@ -402,21 +414,27 @@ public class WebPageView extends WebPanel {
                 return false;
             }
         };
+        webTable.getTableHeader().setReorderingAllowed(false);
+        webTable.getTableHeader().setResizingAllowed(false);
         DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer();
         tableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         webTable.setDefaultRenderer(Object.class, tableCellRenderer);
+        webTable.setAutoResizeMode(WebTable.AUTO_RESIZE_ALL_COLUMNS);
         webTable.setShowVerticalLines(false);
         webTable.setRowHeight(30);
-        webTable.getTableHeader().setReorderingAllowed(false);
-        webTable.getTableHeader().setResizingAllowed(false);
         return webTable;
     }
 
     private WebButton createBootstrapButton(String text) {
         WebButton webButton = new WebButton(text);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
         webButton.setForeground(Color.WHITE);
+        webButton.setSelectedForeground(Color.WHITE);
+        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
         return webButton;
+    }
+
+    private WebLabel createPageIndicator() {
+        return new WebLabel("-- / --");
     }
 
     private WebTextField createSpecPageField() {
@@ -425,35 +443,8 @@ public class WebPageView extends WebPanel {
         return webTextField;
     }
 
-    private WebPanel createTopPanel() {
-        WebPanel webPanel = new WebPanel(new FlowLayout());
-        webPanel.setOpaque(false);
-        webPanel.add(new WebLabel("起始时间"));
-        webPanel.add(startDateField);
-        webPanel.add(new WebLabel("截止时间"));
-        webPanel.add(endDateField);
-        webPanel.add(Box.createHorizontalStrut(100));
-        webPanel.add(searchField);
-        webPanel.add(pageSizeComboBox);
-        return webPanel;
-    }
-
-    private WebPanel createCenterPanel() {
-        WebPanel webPanel = new WebPanel();
-        webPanel.add(new WebScrollPane(table));
-        return webPanel;
-    }
-
-    private WebPanel createBottomPanel() {
-        WebPanel webPanel = new WebPanel();
-        webPanel.setOpaque(false);
-        webPanel.setLayout(new FlowLayout());
-        webPanel.add(previousPageButton);
-        webPanel.add(pageIndicator);
-        webPanel.add(specPageField);
-        webPanel.add(gotoButton);
-        webPanel.add(nextPageButton);
-        return webPanel;
+    private Component createHSpace() {
+        return Box.createHorizontalStrut(100);
     }
 
     /**

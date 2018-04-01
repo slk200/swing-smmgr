@@ -48,7 +48,7 @@ public class UpdateInsiderTypeDialog extends WebDialog {
     private WebButton cancelButton;
 
     public UpdateInsiderTypeDialog() {
-        super(RuntimeConstants.root, "设置会员等级", true);
+        super(RuntimeConstants.root, "编辑会员等级", true);
         table = createInsiderTypeTable();
         nameField = createInsiderTypeNameField();
         discountField = createInsiderDiscountSpinner();
@@ -275,8 +275,8 @@ public class UpdateInsiderTypeDialog extends WebDialog {
         WebPanel webPanel = new WebPanel();
         webPanel.setMargin(20);
         webPanel.setBackground(ColorManager._241_246_253);
-        webPanel.add(new WebScrollPane(table), BorderLayout.CENTER);
-        webPanel.add(createInsiderTypeInfOperationPanel(), BorderLayout.SOUTH);
+        webPanel.add(new WebScrollPane(table), "Center");
+        webPanel.add(createInsiderTypeInfOperationPanel(), "South");
         return webPanel;
     }
 

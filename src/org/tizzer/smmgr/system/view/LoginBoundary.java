@@ -11,7 +11,10 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.text.WebPasswordField;
 import com.alee.laf.text.WebTextField;
 import com.alee.utils.TimeUtils;
-import org.tizzer.smmgr.system.constant.*;
+import org.tizzer.smmgr.system.constant.ColorManager;
+import org.tizzer.smmgr.system.constant.IconManager;
+import org.tizzer.smmgr.system.constant.ResultCode;
+import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.LoginRequestDto;
 import org.tizzer.smmgr.system.model.response.LoginResponseDto;
@@ -43,13 +46,13 @@ public class LoginBoundary extends WebPanel {
     private WebButton loginButton;
 
     public LoginBoundary() {
-        image1 = createPosterImage(IconManager._ICON_POSTER1);
-        image2 = createPosterImage(IconManager._ICON_POSTER2);
-        image3 = createPosterImage(IconManager._ICON_POSTER3);
+        image1 = createPosterImage(IconManager.POSTER1);
+        image2 = createPosterImage(IconManager.POSTER2);
+        image3 = createPosterImage(IconManager.POSTER3);
         animationComponent = createAnimationComponent();
-        staffNoField = createBootstrapField(15, "请输入员工号", new WebImage(IconManager._ICON_ACCOUNT));
-        passwordField = createBootstrapPasswordField(15, "请输入密码", new WebImage(IconManager._ICON_PASSWORD));
-        securityField = createBootstrapField(8, "请输入验证码", new WebImage(IconManager._ICON_SECURITY));
+        staffNoField = createBootstrapField(15, "请输入员工号", new WebImage(IconManager.ACCOUNT));
+        passwordField = createBootstrapPasswordField(new WebImage(IconManager.PASSWORD));
+        securityField = createBootstrapField(8, "请输入验证码", new WebImage(IconManager.SECURITY));
         securityButton = createBootstrapButton(getSecurityCode());
         loginButton = createBootstrapButton("登录");
 
@@ -172,7 +175,7 @@ public class LoginBoundary extends WebPanel {
     private void enter(boolean isAdmin) {
         Container parent = getParent();
         parent.removeAll();
-        parent.add(isAdmin ? new ManageModeBoundary() : new StandardModeBoundary());
+        parent.add(isAdmin ? new LaunchManageMode() : new LaunchStandardMode());
         parent.validate();
         parent.repaint();
     }
@@ -186,7 +189,7 @@ public class LoginBoundary extends WebPanel {
     private void updateRuntimeParam(String staffNo, Integer storeId) {
         RuntimeConstants.staffNo = staffNo;
         RuntimeConstants.storeId = storeId;
-        RuntimeConstants.loginAt = TimeUtils.formatCurrentDate("yyyy-MM-dd HH:mm:ss");
+        RuntimeConstants.loginAt = TimeUtils.formatCurrentDate("yy-MM-dd HH:mm:ss");
     }
 
     @Override
@@ -228,10 +231,10 @@ public class LoginBoundary extends WebPanel {
         return webTextField;
     }
 
-    private WebPasswordField createBootstrapPasswordField(int column, String inputPrompt, JComponent leadingComponent) {
-        WebPasswordField webPasswordField = new WebPasswordField(column);
+    private WebPasswordField createBootstrapPasswordField(JComponent leadingComponent) {
+        WebPasswordField webPasswordField = new WebPasswordField(15);
         webPasswordField.setFieldMargin(0, 6, 0, 0);
-        webPasswordField.setInputPrompt(inputPrompt);
+        webPasswordField.setInputPrompt("请输入密码");
         webPasswordField.setLeadingComponent(leadingComponent);
         webPasswordField.setPainter(NPatchUtil.getNinePatchPainter("androidstylefield.xml"));
         return webPasswordField;
@@ -251,7 +254,7 @@ public class LoginBoundary extends WebPanel {
         WebLabel webLabel = new WebLabel();
         webLabel.setHorizontalAlignment(WebLabel.CENTER);
         webLabel.setText("超市管家登录管理系统");
-        webLabel.setFont(FontManager._FONT_IMPORTANT);
+        webLabel.setFont(new Font("Microsoft YaHei", Font.BOLD, 20));
         webLabel.setForeground(ColorManager._28_102_220);
         return webLabel;
     }

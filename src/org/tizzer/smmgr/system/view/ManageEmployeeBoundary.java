@@ -7,16 +7,14 @@ import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.handler.HttpHandler;
-import org.tizzer.smmgr.system.model.request.QueryAllEmployeeRequestDto;
-import org.tizzer.smmgr.system.model.request.QuerySomeEmployeeRequestDto;
-import org.tizzer.smmgr.system.model.response.QueryAllEmployeeResponseDto;
-import org.tizzer.smmgr.system.model.response.QuerySomeEmployeeResponseDto;
+import org.tizzer.smmgr.system.model.request.QueryEmployeeRequestDto;
+import org.tizzer.smmgr.system.model.response.QueryEmployeeResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
 import org.tizzer.smmgr.system.view.component.WebPageView;
 import org.tizzer.smmgr.system.view.dialog.AddEmployeeDialog;
 import org.tizzer.smmgr.system.view.dialog.UpdateEmployeeDialog;
-import org.tizzer.smmgr.system.view.listener.DataChangeListener;
+import org.tizzer.smmgr.system.view.listener.PageListener;
 import org.tizzer.smmgr.system.view.renderer.AuthorityRenderer;
 import org.tizzer.smmgr.system.view.renderer.StateRenderer;
 
@@ -24,13 +22,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 
 /**
  * @author tizzer
  * @version 1.0
  */
-public class ManageEmployeeBoundary extends WebPanel implements DataChangeListener {
+public class ManageEmployeeBoundary extends WebPanel implements PageListener {
 
     private final static Class clazz = ManageEmployeeBoundary.class;
     private final static Object[] tableHead = {"员工号", "姓名", "电话", "地址", "所属门店", "注册时间", "权限", "状态"};
@@ -44,12 +41,12 @@ public class ManageEmployeeBoundary extends WebPanel implements DataChangeListen
         addButton = createBootstrapButton("新增");
         editButton = createBootstrapButton("编辑");
 
+        this.prepareData();
+        this.setOpaque(false);
         this.setMargin(5, 10, 5, 5);
-        this.setBackground(ColorManager._241_246_253);
-        this.add(pageView, BorderLayout.CENTER);
-        this.add(createRightPanel(), BorderLayout.EAST);
+        this.add(pageView, "Center");
+        this.add(createRightPanel(), "East");
         this.initListener();
-        this.initData();
     }
 
     private void initListener() {
@@ -76,45 +73,38 @@ public class ManageEmployeeBoundary extends WebPanel implements DataChangeListen
         });
     }
 
-    private void initData() {
-        QueryAllEmployeeResponseDto queryAllEmployeeResponseDto = prepareData();
-        pageView.prepareData(tableHead, queryAllEmployeeResponseDto.getData(), queryAllEmployeeResponseDto.getPageCount());
-        this.setRenderer();
-    }
-
-    private QueryAllEmployeeResponseDto prepareData() {
-        QueryAllEmployeeResponseDto queryAllEmployeeResponseDto = new QueryAllEmployeeResponseDto();
-        try {
-            QueryAllEmployeeRequestDto queryAllEmployeeRequestDto = new QueryAllEmployeeRequestDto();
-            queryAllEmployeeRequestDto.setPageSize(pageView.getPageSize());
-            queryAllEmployeeRequestDto.setCurrentPage(pageView.getCurrentPage() - 1);
-            queryAllEmployeeResponseDto = HttpHandler.post("/query/employee/all", queryAllEmployeeRequestDto.toString(), QueryAllEmployeeResponseDto.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return queryAllEmployeeResponseDto;
-    }
-
     @Override
-    public void dataChanged(Date startDate, Date endDate, String keyword, int pageSize, int currentPage) {
+    public void pagePerformed(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
+        QueryEmployeeResponseDto queryEmployeeResponseDto = queryEmployee(startDate, endDate, keyword, pageSize, currentPage);
+        refreshData(queryEmployeeResponseDto);
+    }
+
+    private QueryEmployeeResponseDto queryEmployee(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
+        QueryEmployeeResponseDto queryEmployeeResponseDto = new QueryEmployeeResponseDto();
         try {
-            QuerySomeEmployeeRequestDto querySomeEmployeeRequestDto = new QuerySomeEmployeeRequestDto();
-            querySomeEmployeeRequestDto.setStartDate(startDate);
-            querySomeEmployeeRequestDto.setEndDate(endDate);
-            querySomeEmployeeRequestDto.setKeyWord(keyword);
-            querySomeEmployeeRequestDto.setPageSize(pageSize);
-            querySomeEmployeeRequestDto.setCurrentPage(currentPage - 1);
-            QuerySomeEmployeeResponseDto querySomeEmployeeResponseDto = HttpHandler.post("/query/employee/some", querySomeEmployeeRequestDto.toString(), QuerySomeEmployeeResponseDto.class);
-            refreshData(querySomeEmployeeResponseDto);
+            QueryEmployeeRequestDto queryEmployeeRequestDto = new QueryEmployeeRequestDto();
+            queryEmployeeRequestDto.setStartDate(startDate);
+            queryEmployeeRequestDto.setEndDate(endDate);
+            queryEmployeeRequestDto.setKeyword(keyword);
+            queryEmployeeRequestDto.setPageSize(pageSize);
+            queryEmployeeRequestDto.setCurrentPage(currentPage - 1);
+            queryEmployeeResponseDto = HttpHandler.get("/query/employee?" + queryEmployeeRequestDto.toString(), QueryEmployeeResponseDto.class);
         } catch (Exception e) {
             Logcat.type(clazz, e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
+        return queryEmployeeResponseDto;
     }
 
-    private void refreshData(QuerySomeEmployeeResponseDto querySomeEmployeeResponseDto) {
-        pageView.setTableBody(querySomeEmployeeResponseDto.getData());
-        pageView.setPageIndicator(querySomeEmployeeResponseDto.getPageCount());
+    private void refreshData(QueryEmployeeResponseDto queryEmployeeResponseDto) {
+        pageView.setTableBody(queryEmployeeResponseDto.getData());
+        pageView.setPageIndicator(queryEmployeeResponseDto.getPageCount());
+        this.setRenderer();
+    }
+
+    private void prepareData() {
+        QueryEmployeeResponseDto queryEmployeeResponseDto = queryEmployee(null, null, "", 30, 1);
+        pageView.prepareData(tableHead, queryEmployeeResponseDto.getData(), queryEmployeeResponseDto.getPageCount());
         this.setRenderer();
     }
 
