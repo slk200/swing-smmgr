@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="External Libraries">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/commons-lang-2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/dom4j-2.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/fastjson-1.2.45.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/filters-2.0.235-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jcommon-1.0.24.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jfreechart-1.0.19.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/weblaf-complete-1.29.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
