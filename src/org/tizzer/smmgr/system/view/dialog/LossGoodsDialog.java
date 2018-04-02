@@ -129,7 +129,7 @@ public class LossGoodsDialog extends WebDialog {
         try {
             QueryTradeGoodsRequestDto queryTradeGoodsRequestDto = new QueryTradeGoodsRequestDto();
             queryTradeGoodsRequestDto.setKeyword(keyword);
-            queryLossGoodsResponseDto = HttpHandler.get("/query/goods/trade?" + queryTradeGoodsRequestDto.toString(), QueryLossGoodsResponseDto.class);
+            queryLossGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryLossGoodsResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();

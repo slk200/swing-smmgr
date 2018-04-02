@@ -16,7 +16,7 @@ import org.tizzer.smmgr.system.view.renderer.TradeRecordRenderer;
 import java.awt.*;
 import java.util.Objects;
 
-public class ManageRecordBoundary extends WebPanel implements RecordListener {
+public class ManageTradeBoundary extends WebPanel implements RecordListener {
 
     private static final Object[] tableHead = {"条码", "名称", "售价", "折扣价", "数量"};
 
@@ -28,7 +28,7 @@ public class ManageRecordBoundary extends WebPanel implements RecordListener {
 
     private Object serialNoCache;
 
-    public ManageRecordBoundary() {
+    public ManageTradeBoundary() {
         quantityLabel = createInfoLabel(getBoldBlackText(""));
         costLabel = createInfoLabel(getBoldOrangeText("", ""));
         cardNoLabel = createInfoLabel("会员：");
@@ -67,6 +67,19 @@ public class ManageRecordBoundary extends WebPanel implements RecordListener {
         }
     }
 
+    private QueryTradeSpecResponseDto queryTradeSpec(Object serialNo) {
+        QueryTradeSpecResponseDto queryTradeSpecResponseDto = new QueryTradeSpecResponseDto();
+        try {
+            QueryTradeSpecRequestDto queryTradeSpecRequestDto = new QueryTradeSpecRequestDto();
+            queryTradeSpecRequestDto.setSerialNo(serialNo);
+            queryTradeSpecResponseDto = HttpHandler.get("/query/trade/spec?" + queryTradeSpecRequestDto.toString(), QueryTradeSpecResponseDto.class);
+        } catch (Exception e) {
+            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            e.printStackTrace();
+        }
+        return queryTradeSpecResponseDto;
+    }
+
     private QueryTradeRecordResponseDto queryTradeRecord(String startDate, String endDate, String keyword, int curLoadIndex, int loadSize) {
         QueryTradeRecordResponseDto queryTradeRecordResponseDto = new QueryTradeRecordResponseDto();
         try {
@@ -83,19 +96,6 @@ public class ManageRecordBoundary extends WebPanel implements RecordListener {
             e.printStackTrace();
         }
         return queryTradeRecordResponseDto;
-    }
-
-    private QueryTradeSpecResponseDto queryTradeSpec(Object serialNo) {
-        QueryTradeSpecResponseDto queryTradeSpecResponseDto = new QueryTradeSpecResponseDto();
-        try {
-            QueryTradeSpecRequestDto queryTradeSpecRequestDto = new QueryTradeSpecRequestDto();
-            queryTradeSpecRequestDto.setSerialNo(serialNo);
-            queryTradeSpecResponseDto = HttpHandler.get("/query/trade/spec?" + queryTradeSpecRequestDto.toString(), QueryTradeSpecResponseDto.class);
-        } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
-            e.printStackTrace();
-        }
-        return queryTradeSpecResponseDto;
     }
 
     private String getBoldBlackText(String quantity) {

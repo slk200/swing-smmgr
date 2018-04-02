@@ -137,7 +137,7 @@ public class StandardInsiderBoundary extends WebPanel {
     private void backToSale() {
         Container parent = getParent();
         parent.removeAll();
-        parent.add(new StandardTradeBoundary());
+        parent.add(new StandardCollectionBoundary());
         parent.validate();
         parent.repaint();
         navigationListener.performChange(0);

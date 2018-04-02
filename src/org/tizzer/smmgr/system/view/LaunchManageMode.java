@@ -92,7 +92,7 @@ public class LaunchManageMode extends WebPanel {
         purchaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeView(new ManagePurchaseBoundary());
+                changeView(new ManageImportBoundary());
             }
         });
 
@@ -106,7 +106,7 @@ public class LaunchManageMode extends WebPanel {
         recordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeView(new ManageRecordBoundary());
+                changeView(new ManageTradeBoundary());
             }
         });
 

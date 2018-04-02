@@ -12,10 +12,12 @@ import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryTradeGoodsRequestDto;
+import org.tizzer.smmgr.system.model.request.SaveLossRecordRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryLossGoodsResponseDto;
+import org.tizzer.smmgr.system.model.response.SaveLossRecordResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.view.dialog.TradeGoodsDialog;
+import org.tizzer.smmgr.system.view.dialog.LossGoodsDialog;
 import org.tizzer.smmgr.system.view.listener.TableCellListener;
 
 import javax.swing.*;
@@ -70,7 +72,7 @@ public class StandardLossBoundary extends WebPanel {
                     int newValue = Integer.parseInt(value);
                     //旧数量
                     int oldValue = Integer.parseInt(tcl.getOldValue() + "");
-                    if (newValue < oldValue) {
+                    if (newValue != oldValue) {
                         //进价
                         double presentCost = (double) lossGoodsTable.getValueAt(tcl.getRow(), 2);
                         //更新小计
@@ -132,7 +134,7 @@ public class StandardLossBoundary extends WebPanel {
                     if (queryLossGoodsResponseDto.getCode() == ResultCode.OK) {
                         lossGoodsCache = queryLossGoodsResponseDto.getData();
                         if (lossGoodsCache.length > 1) {
-                            lossGoodsCache = TradeGoodsDialog.newInstance(lossGoodsCache);
+                            lossGoodsCache = LossGoodsDialog.newInstance(lossGoodsCache);
                         }
                         refreshTable();
                     }
@@ -143,10 +145,51 @@ public class StandardLossBoundary extends WebPanel {
         lossButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (currentLoss == 0) {
+                    return;
+                }
+                String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入报损备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
+                SaveLossRecordResponseDto saveLossRecordResponseDto = saveLossRecord(note);
+                if (saveLossRecordResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(lossButton, saveLossRecordResponseDto.getMessage());
+                } else {
+                    reset();
+                }
             }
 
         });
+    }
+
+    private SaveLossRecordResponseDto saveLossRecord(String note) {
+        SaveLossRecordResponseDto saveLossRecordResponseDto = new SaveLossRecordResponseDto();
+        try {
+            //从表格获取商品参数
+            int rowCount = lossGoodsTable.getRowCount();
+            Object[] upc = new Object[rowCount];
+            Object[] name = new Object[rowCount];
+            Object[] primeCost = new Object[rowCount];
+            Object[] quantity = new Object[rowCount];
+            for (int i = 0; i < rowCount; i++) {
+                upc[i] = lossGoodsTable.getValueAt(i, 0);
+                name[i] = lossGoodsTable.getValueAt(i, 1);
+                primeCost[i] = lossGoodsTable.getValueAt(i, 2);
+                quantity[i] = lossGoodsTable.getValueAt(i, 3);
+            }
+            //参数设置
+            SaveLossRecordRequestDto saveLossRecordRequestDto = new SaveLossRecordRequestDto();
+            saveLossRecordRequestDto.setStaffNo(RuntimeConstants.staffNo);
+            saveLossRecordRequestDto.setCost(currentLoss);
+            saveLossRecordRequestDto.setNote(note);
+            saveLossRecordRequestDto.setUpc(upc);
+            saveLossRecordRequestDto.setName(name);
+            saveLossRecordRequestDto.setPrimeCost(primeCost);
+            saveLossRecordRequestDto.setQuantity(quantity);
+            saveLossRecordResponseDto = HttpHandler.post("/save/loss/record", saveLossRecordRequestDto.toString(), SaveLossRecordResponseDto.class);
+        } catch (Exception e) {
+            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            e.printStackTrace();
+        }
+        return saveLossRecordResponseDto;
     }
 
     /**
@@ -160,7 +203,7 @@ public class StandardLossBoundary extends WebPanel {
         try {
             QueryTradeGoodsRequestDto queryTradeGoodsRequestDto = new QueryTradeGoodsRequestDto();
             queryTradeGoodsRequestDto.setKeyword(keyword);
-            queryLossGoodsResponseDto = HttpHandler.get("/query/goods/trade?" + queryTradeGoodsRequestDto.toString(), QueryLossGoodsResponseDto.class);
+            queryLossGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryLossGoodsResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
@@ -210,6 +253,7 @@ public class StandardLossBoundary extends WebPanel {
      * 清理台面数据
      */
     private void reset() {
+        lossGoodsCache = null;
         currentLoss = 0;
         setLossButton("0.0");
         tableModel.setDataVector(null, tableHead);

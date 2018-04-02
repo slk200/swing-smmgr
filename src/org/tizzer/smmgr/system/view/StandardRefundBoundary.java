@@ -13,9 +13,9 @@ import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryRefundRecordRequestDto;
-import org.tizzer.smmgr.system.model.request.SaveTradeGoodsRequestDto;
+import org.tizzer.smmgr.system.model.request.SaveTradeRecordRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryRefundRecordResponseDto;
-import org.tizzer.smmgr.system.model.response.SaveTradeGoodsResponseDto;
+import org.tizzer.smmgr.system.model.response.SaveTradeRecordResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
 import org.tizzer.smmgr.system.view.listener.TableCellListener;
@@ -156,9 +156,9 @@ public class StandardRefundBoundary extends WebPanel {
                 if (currentRefund == 0) {
                     return;
                 }
-                SaveTradeGoodsResponseDto saveTradeGoodsResponseDto = tradeGoods(currentSerialNo);
-                if (saveTradeGoodsResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(refundButton, saveTradeGoodsResponseDto.getMessage());
+                SaveTradeRecordResponseDto saveTradeRecordResponseDto = tradeGoods(currentSerialNo);
+                if (saveTradeRecordResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(refundButton, saveTradeRecordResponseDto.getMessage());
                 } else {
                     reset();
                 }
@@ -192,8 +192,8 @@ public class StandardRefundBoundary extends WebPanel {
      * @param originalSerialNo
      * @return
      */
-    private SaveTradeGoodsResponseDto tradeGoods(Object originalSerialNo) {
-        SaveTradeGoodsResponseDto saveTradeGoodsResponseDto = new SaveTradeGoodsResponseDto();
+    private SaveTradeRecordResponseDto tradeGoods(Object originalSerialNo) {
+        SaveTradeRecordResponseDto saveTradeRecordResponseDto = new SaveTradeRecordResponseDto();
         try {
             //从表格获取商品参数
             int rowCount = tradeGoodsTable.getRowCount();
@@ -210,26 +210,26 @@ public class StandardRefundBoundary extends WebPanel {
                 quantity[i] = "-" + tradeGoodsTable.getValueAt(i, 5);
             }
             //参数设置
-            SaveTradeGoodsRequestDto saveTradeGoodsRequestDto = new SaveTradeGoodsRequestDto();
-            saveTradeGoodsRequestDto.setStaffNo(RuntimeConstants.staffNo);
-            saveTradeGoodsRequestDto.setCardNo(recordCache[0]);
-            saveTradeGoodsRequestDto.setPhone(recordCache[1]);
-            saveTradeGoodsRequestDto.setPayType(recordCache[2]);
-            saveTradeGoodsRequestDto.setDiscount(recordCache[3]);
-            saveTradeGoodsRequestDto.setUpc(upc);
-            saveTradeGoodsRequestDto.setName(name);
-            saveTradeGoodsRequestDto.setPrimeCost(primeCost);
-            saveTradeGoodsRequestDto.setPresentCost(presentCost);
-            saveTradeGoodsRequestDto.setQuantity(quantity);
-            saveTradeGoodsRequestDto.setCost(-currentRefund);
-            saveTradeGoodsRequestDto.setType(false);
-            saveTradeGoodsRequestDto.setSerialNo(originalSerialNo);
-            saveTradeGoodsResponseDto = HttpHandler.post("/save/trade/record", saveTradeGoodsRequestDto.toString(), SaveTradeGoodsResponseDto.class);
+            SaveTradeRecordRequestDto saveTradeRecordRequestDto = new SaveTradeRecordRequestDto();
+            saveTradeRecordRequestDto.setStaffNo(RuntimeConstants.staffNo);
+            saveTradeRecordRequestDto.setCardNo(recordCache[0]);
+            saveTradeRecordRequestDto.setPhone(recordCache[1]);
+            saveTradeRecordRequestDto.setPayType(recordCache[2]);
+            saveTradeRecordRequestDto.setDiscount(recordCache[3]);
+            saveTradeRecordRequestDto.setUpc(upc);
+            saveTradeRecordRequestDto.setName(name);
+            saveTradeRecordRequestDto.setPrimeCost(primeCost);
+            saveTradeRecordRequestDto.setPresentCost(presentCost);
+            saveTradeRecordRequestDto.setQuantity(quantity);
+            saveTradeRecordRequestDto.setCost(-currentRefund);
+            saveTradeRecordRequestDto.setType(false);
+            saveTradeRecordRequestDto.setSerialNo(originalSerialNo);
+            saveTradeRecordResponseDto = HttpHandler.post("/save/trade/record", saveTradeRecordRequestDto.toString(), SaveTradeRecordResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
-        return saveTradeGoodsResponseDto;
+        return saveTradeRecordResponseDto;
     }
 
     /**

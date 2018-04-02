@@ -54,7 +54,7 @@ public class LaunchStandardMode extends WebPanel implements NavigationListener {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeView(new StandardTradeBoundary(), "Center");
+                changeView(new StandardCollectionBoundary(), "Center");
             }
         });
 
@@ -82,7 +82,7 @@ public class LaunchStandardMode extends WebPanel implements NavigationListener {
         recordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeView(new StandardRecordBoundary(), "Center");
+                changeView(new StandardTradeBoundary(), "Center");
             }
         });
 
@@ -162,7 +162,7 @@ public class LaunchStandardMode extends WebPanel implements NavigationListener {
     private WebPanel createHandlePanel() {
         WebPanel webPanel = new WebPanel();
         webPanel.setBackground(ColorManager._241_246_253);
-        webPanel.add(new StandardTradeBoundary());
+        webPanel.add(new StandardCollectionBoundary());
         return webPanel;
     }
 

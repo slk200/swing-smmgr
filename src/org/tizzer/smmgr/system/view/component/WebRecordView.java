@@ -7,6 +7,7 @@ import com.alee.laf.list.WebList;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollBar;
 import com.alee.laf.scroll.WebScrollPane;
+import com.alee.laf.splitpane.WebSplitPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
 import org.tizzer.smmgr.system.constant.IconManager;
@@ -241,11 +242,11 @@ public class WebRecordView extends WebPanel {
         return webPanel;
     }
 
-    private WebPanel createBottomPane() {
-        WebPanel webPanel = new WebPanel();
+    private WebSplitPane createBottomPane() {
+        WebSplitPane webPanel = new WebSplitPane(WebSplitPane.HORIZONTAL_SPLIT);
         webPanel.setOpaque(false);
-        webPanel.add(scrollPane, BorderLayout.WEST);
-        webPanel.add(customPane, BorderLayout.CENTER);
+        webPanel.setLeftComponent(scrollPane);
+        webPanel.setRightComponent(customPane);
         return webPanel;
     }
 
