@@ -152,20 +152,10 @@ public class LaunchManageMode extends WebPanel {
                     root.getContentPane().add(loginBoundary);
                     root.getContentPane().validate();
                     root.getContentPane().repaint();
+                    root.removeWindowListener(this);
+                    loginBoundary.setClosingOperation(root);
                     loginBoundary.setDefaultButton();
-                    changeClosingOperation();
                 }
-            }
-        });
-    }
-
-    private void changeClosingOperation() {
-        WebFrame root = RuntimeConstants.root;
-        root.removeWindowListener(root.getWindowListeners()[0]);
-        root.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
             }
         });
     }

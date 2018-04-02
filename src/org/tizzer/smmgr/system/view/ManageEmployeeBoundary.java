@@ -5,7 +5,6 @@ import com.alee.laf.button.WebButton;
 import com.alee.laf.panel.WebPanel;
 import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
-import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryEmployeeRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryEmployeeResponseDto;

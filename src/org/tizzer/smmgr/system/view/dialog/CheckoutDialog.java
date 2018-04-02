@@ -80,15 +80,28 @@ public class CheckoutDialog extends WebDialog {
         });
     }
 
-    private void prepareData() {
+    /**
+     * 查询付款方式
+     *
+     * @return
+     */
+    private QueryPayTypeResponseDto queryPayType() {
+        QueryPayTypeResponseDto queryPayTypeResponseDto = new QueryPayTypeResponseDto();
         try {
-            QueryPayTypeResponseDto queryPayTypeResponseDto = HttpHandler.get("/query/pay/type", QueryPayTypeResponseDto.class);
-            Object[] payTypes = queryPayTypeResponseDto.getData();
-            typeComboBox.setModel(new DefaultComboBoxModel(payTypes));
+            queryPayTypeResponseDto = HttpHandler.get("/query/pay/type", QueryPayTypeResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
+        return queryPayTypeResponseDto;
+    }
+
+    /**
+     * 准备数据
+     */
+    private void prepareData() {
+        QueryPayTypeResponseDto queryPayTypeResponseDto = queryPayType();
+        typeComboBox.setModel(new DefaultComboBoxModel(queryPayTypeResponseDto.getData()));
     }
 
     private WebPanel createContentPane() {

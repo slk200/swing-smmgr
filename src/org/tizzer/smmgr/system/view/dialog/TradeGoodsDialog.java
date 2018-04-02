@@ -26,7 +26,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ChooseGoodsDialog extends WebDialog {
+public class TradeGoodsDialog extends WebDialog {
 
     private final static Object[] tableHead = {"条码", "名称", "售价"};
 
@@ -36,10 +36,11 @@ public class ChooseGoodsDialog extends WebDialog {
     private WebTable table;
     private WebButton chooseButton;
     private WebButton cancelButton;
-    private Object[][] dataCache;
-    private boolean isHandle;
 
-    public ChooseGoodsDialog(Object[][] dataCache) {
+    private static Object[][] dataCache;
+    private static boolean isHandle;
+
+    public TradeGoodsDialog(Object[][] dataCache) {
         super(RuntimeConstants.root, "选择交易商品", true);
         searchButton = createTrailingComponent();
         searchField = createSearchField();
@@ -55,12 +56,12 @@ public class ChooseGoodsDialog extends WebDialog {
     }
 
     public static Object[][] newInstance(Object[][] dataCache) {
-        ChooseGoodsDialog chooseGoodsDialog = new ChooseGoodsDialog(dataCache);
-        chooseGoodsDialog.setVisible(true);
-        if (!chooseGoodsDialog.isHandle) {
-            chooseGoodsDialog.dataCache = null;
+        TradeGoodsDialog tradeGoodsDialog = new TradeGoodsDialog(dataCache);
+        tradeGoodsDialog.setVisible(true);
+        if (!isHandle) {
+            dataCache = null;
         }
-        return chooseGoodsDialog.dataCache;
+        return dataCache;
     }
 
     private void initListener() {
@@ -119,12 +120,18 @@ public class ChooseGoodsDialog extends WebDialog {
         });
     }
 
+    /**
+     * 查询交易商品
+     *
+     * @param keyword
+     * @return
+     */
     private QueryTradeGoodsResponseDto queryTradeGoods(String keyword) {
         QueryTradeGoodsResponseDto queryTradeGoodsResponseDto = new QueryTradeGoodsResponseDto();
         try {
             QueryTradeGoodsRequestDto queryTradeGoodsRequestDto = new QueryTradeGoodsRequestDto();
             queryTradeGoodsRequestDto.setKeyword(keyword);
-            queryTradeGoodsResponseDto = HttpHandler.post("/query/goods/trade", queryTradeGoodsRequestDto.toString(), QueryTradeGoodsResponseDto.class);
+            queryTradeGoodsResponseDto = HttpHandler.get("/query/goods/trade?" + queryTradeGoodsRequestDto.toString(), QueryTradeGoodsResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
@@ -132,6 +139,11 @@ public class ChooseGoodsDialog extends WebDialog {
         return queryTradeGoodsResponseDto;
     }
 
+    /**
+     * 刷新表格数据
+     *
+     * @param dataCache
+     */
     private void setTableData(Object[][] dataCache) {
         tableModel.setDataVector(dataCache, tableHead);
     }

@@ -1,6 +1,6 @@
 package org.tizzer.smmgr.system.model.response;
 
-public class QueryTradeGoodsResponseDto extends ResultResponse {
+public class QueryLossGoodsResponseDto extends ResultResponse {
     private DataSet[] data;
 
     public Object[][] getData() {
@@ -21,7 +21,7 @@ public class QueryTradeGoodsResponseDto extends ResultResponse {
     static class DataSet {
         private String upc;
         private String name;
-        private Double sPrice;
+        private Double jPrice;
 
         public String getUpc() {
             return upc;
@@ -39,16 +39,16 @@ public class QueryTradeGoodsResponseDto extends ResultResponse {
             this.name = name;
         }
 
-        public Double getsPrice() {
-            return sPrice;
+        public Double getjPrice() {
+            return jPrice;
         }
 
-        public void setsPrice(Double sPrice) {
-            this.sPrice = sPrice;
+        public void setjPrice(Double jPrice) {
+            this.jPrice = jPrice;
         }
 
         Object[] getData() {
-            return new Object[]{upc, name, sPrice};
+            return new Object[]{upc, name, jPrice};
         }
     }
 }

@@ -8,6 +8,7 @@ import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
+import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.text.WebPasswordField;
 import com.alee.laf.text.WebTextField;
 import com.alee.utils.TimeUtils;
@@ -25,6 +26,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -124,6 +127,15 @@ public class LoginBoundary extends WebPanel {
      */
     public void setDefaultButton() {
         getRootPane().setDefaultButton(loginButton);
+    }
+
+    public void setClosingOperation(WebFrame frame) {
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
     }
 
     /**

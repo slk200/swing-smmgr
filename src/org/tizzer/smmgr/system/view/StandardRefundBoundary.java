@@ -43,9 +43,12 @@ public class StandardRefundBoundary extends WebPanel {
     private WebTextField searchRecordField;
     private WebButton refundButton;
 
+    //被退单的缓存
     private Object[] recordCache;
+    //记录当前被退单号
     private Object currentSerialNo;
-    private double currentCost = 0;
+    //记录当前退款总额
+    private double currentRefund = 0;
 
     public StandardRefundBoundary() {
         tradeGoodsTable = createTransactionTable();
@@ -80,9 +83,9 @@ public class StandardRefundBoundary extends WebPanel {
                         //更新小计
                         tradeGoodsTable.setValueAt((double) Math.round(presentCost * newValue * 100) / 100, tcl.getRow(), 6);
                         //更新当前退款总额
-                        currentCost += (newValue - oldValue) * presentCost;
-                        currentCost = (double) Math.round(currentCost * 100) / 100;
-                        setRefundButton(currentCost + "");
+                        currentRefund += (newValue - oldValue) * presentCost;
+                        currentRefund = (double) Math.round(currentRefund * 100) / 100;
+                        setRefundButton(currentRefund + "");
                         return;
                     }
                 }
@@ -112,11 +115,11 @@ public class StandardRefundBoundary extends WebPanel {
                     //小计
                     double cost = (double) tradeGoodsTable.getValueAt(rows[i - 1], 6);
                     //更新当前消费总额
-                    currentCost -= cost;
+                    currentRefund -= cost;
                     tableModel.removeRow(rows[i - 1]);
                 }
-                currentCost = (double) Math.round(currentCost * 100) / 100;
-                setRefundButton(currentCost + "");
+                currentRefund = (double) Math.round(currentRefund * 100) / 100;
+                setRefundButton(currentRefund + "");
                 //后续台面校验
                 if (tradeGoodsTable.getRowCount() == 0) {
                     int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空退货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
@@ -138,7 +141,7 @@ public class StandardRefundBoundary extends WebPanel {
                     } else {
                         currentSerialNo = serialNo;
                         recordCache = queryRefundRecordResponseDto.getCache();
-                        currentCost = queryRefundRecordResponseDto.getCost();
+                        currentRefund = queryRefundRecordResponseDto.getCost();
                         tableModel.setDataVector(queryRefundRecordResponseDto.getData(), tableHead);
                         setRefundButton(queryRefundRecordResponseDto.getCost() + "");
                         setLabelText(serialNo);
@@ -150,7 +153,7 @@ public class StandardRefundBoundary extends WebPanel {
         refundButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (currentCost == 0) {
+                if (currentRefund == 0) {
                     return;
                 }
                 SaveTradeGoodsResponseDto saveTradeGoodsResponseDto = tradeGoods(currentSerialNo);
@@ -164,6 +167,12 @@ public class StandardRefundBoundary extends WebPanel {
         });
     }
 
+    /**
+     * 查询被退单的记录
+     *
+     * @param serialNo
+     * @return
+     */
     private QueryRefundRecordResponseDto queryRefundRecord(String serialNo) {
         QueryRefundRecordResponseDto queryRefundRecordResponseDto = new QueryRefundRecordResponseDto();
         try {
@@ -177,6 +186,12 @@ public class StandardRefundBoundary extends WebPanel {
         return queryRefundRecordResponseDto;
     }
 
+    /**
+     * 保存退单记录
+     *
+     * @param originalSerialNo
+     * @return
+     */
     private SaveTradeGoodsResponseDto tradeGoods(Object originalSerialNo) {
         SaveTradeGoodsResponseDto saveTradeGoodsResponseDto = new SaveTradeGoodsResponseDto();
         try {
@@ -206,7 +221,7 @@ public class StandardRefundBoundary extends WebPanel {
             saveTradeGoodsRequestDto.setPrimeCost(primeCost);
             saveTradeGoodsRequestDto.setPresentCost(presentCost);
             saveTradeGoodsRequestDto.setQuantity(quantity);
-            saveTradeGoodsRequestDto.setCost(-currentCost);
+            saveTradeGoodsRequestDto.setCost(-currentRefund);
             saveTradeGoodsRequestDto.setType(false);
             saveTradeGoodsRequestDto.setSerialNo(originalSerialNo);
             saveTradeGoodsResponseDto = HttpHandler.post("/save/trade/record", saveTradeGoodsRequestDto.toString(), SaveTradeGoodsResponseDto.class);
@@ -222,12 +237,17 @@ public class StandardRefundBoundary extends WebPanel {
      */
     private void reset() {
         recordCache = null;
-        currentCost = 0;
+        currentRefund = 0;
         setLabelText("");
         setRefundButton("0.0");
         tableModel.setDataVector(null, tableHead);
     }
 
+    /**
+     * 更新当前退单标签的text
+     *
+     * @param text
+     */
     private void setLabelText(String text) {
         currentRefundLabel.setText("当前退单：" + text);
     }
@@ -281,7 +301,6 @@ public class StandardRefundBoundary extends WebPanel {
         webTable.setDefaultRenderer(Object.class, tableCellRenderer);
         webTable.setShowVerticalLines(false);
         webTable.setRowHeight(30);
-        webTable.setVisibleRowCount(4);
         webTable.getTableHeader().setReorderingAllowed(false);
         webTable.getTableHeader().setResizingAllowed(false);
         return webTable;

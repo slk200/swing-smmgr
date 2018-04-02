@@ -34,6 +34,7 @@ import java.util.List;
 
 public class UpdateGoodsDialog extends WebDialog {
 
+    private static int flag = 0;
     private WebTextField upcField;
     private WebTextField nameField;
     private WebComboBox typeComboBox;
@@ -48,13 +49,6 @@ public class UpdateGoodsDialog extends WebDialog {
     private Integer[] idCache;
     private String[] nameCache;
     private Integer chooseId = -1;
-    private static int flag = 0;
-
-    public static int newInstance(Object upc) {
-        UpdateGoodsDialog updateGoodsDialog = new UpdateGoodsDialog(upc);
-        updateGoodsDialog.setVisible(true);
-        return flag;
-    }
 
     public UpdateGoodsDialog(Object upc) {
         super(RuntimeConstants.root, "编辑商品", true);
@@ -74,6 +68,12 @@ public class UpdateGoodsDialog extends WebDialog {
         this.pack();
         this.setLocationRelativeTo(RuntimeConstants.root);
         this.initListener();
+    }
+
+    public static int newInstance(Object upc) {
+        UpdateGoodsDialog updateGoodsDialog = new UpdateGoodsDialog(upc);
+        updateGoodsDialog.setVisible(true);
+        return flag;
     }
 
     private void initListener() {

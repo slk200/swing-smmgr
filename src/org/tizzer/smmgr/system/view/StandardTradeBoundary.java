@@ -21,7 +21,7 @@ import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
 import org.tizzer.smmgr.system.view.dialog.AddGoodsDialog;
 import org.tizzer.smmgr.system.view.dialog.CheckoutDialog;
-import org.tizzer.smmgr.system.view.dialog.ChooseGoodsDialog;
+import org.tizzer.smmgr.system.view.dialog.TradeGoodsDialog;
 import org.tizzer.smmgr.system.view.dialog.UpdateInsiderDialog;
 import org.tizzer.smmgr.system.view.listener.TableCellListener;
 
@@ -154,10 +154,10 @@ public class StandardTradeBoundary extends WebPanel {
                 String keyword = searchGoodsField.getText().trim();
                 if (!keyword.equals("")) {
                     QueryTradeGoodsResponseDto queryTradeGoodsResponseDto = queryTradeGoods(keyword);
-                    if (queryTradeGoodsResponseDto.getData() != null) {
+                    if (queryTradeGoodsResponseDto.getCode() == ResultCode.OK) {
                         tradeGoodsCache = queryTradeGoodsResponseDto.getData();
-                        if (tradeGoodsCache.length != 1) {
-                            tradeGoodsCache = ChooseGoodsDialog.newInstance(tradeGoodsCache);
+                        if (tradeGoodsCache.length > 1) {
+                            tradeGoodsCache = TradeGoodsDialog.newInstance(tradeGoodsCache);
                         }
                         refreshTable();
                     }

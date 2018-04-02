@@ -7,7 +7,7 @@ import java.awt.*;
  * @author tizzer
  * @version 1.0
  */
-public class WebCircleProgressBar extends JPanel {
+public class WebCircleProgress extends JPanel {
     /**
      * 最小进度值
      */
@@ -41,7 +41,7 @@ public class WebCircleProgressBar extends JPanel {
     /**
      * 创建一个圆形进度条对象
      */
-    public WebCircleProgressBar() {
+    public WebCircleProgress() {
         setMinimumProgress(0);
         setMaximumProgress(100);
         setProgress(0);

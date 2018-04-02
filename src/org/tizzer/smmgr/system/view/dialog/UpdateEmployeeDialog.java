@@ -32,6 +32,7 @@ public class UpdateEmployeeDialog extends WebDialog {
     private WebCheckBox enableBox;
     private WebButton updateButton;
     private WebButton cancelButton;
+
     private Object[] dataCache;
 
     public UpdateEmployeeDialog() {
@@ -90,7 +91,8 @@ public class UpdateEmployeeDialog extends WebDialog {
                     dispose();
                     return;
                 }
-                if (updateEmployee(phone, address)) {
+                UpdateEmployeeResponseDto updateEmployeeResponseDto = updateEmployee(phone, address);
+                if (updateEmployeeResponseDto.getCode() == ResultCode.OK) {
                     isRefresh = true;
                     dispose();
                 } else {
@@ -107,7 +109,14 @@ public class UpdateEmployeeDialog extends WebDialog {
         });
     }
 
-    private boolean updateEmployee(String phone, String address) {
+    /**
+     * 更新员工资料
+     *
+     * @param phone
+     * @param address
+     * @return
+     */
+    private UpdateEmployeeResponseDto updateEmployee(String phone, String address) {
         UpdateEmployeeResponseDto updateEmployeeResponseDto = new UpdateEmployeeResponseDto();
         try {
             UpdateEmployeeRequestDto updateEmployeeRequestDto = new UpdateEmployeeRequestDto();
@@ -120,7 +129,7 @@ public class UpdateEmployeeDialog extends WebDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return updateEmployeeResponseDto.getCode() == ResultCode.OK;
+        return updateEmployeeResponseDto;
     }
 
     private WebPanel createContentPane() {
