@@ -4,11 +4,13 @@ import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
+import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryLossRecordRequestDto;
 import org.tizzer.smmgr.system.model.request.QueryLossSpecRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryLossRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryLossSpecResponseDto;
+import org.tizzer.smmgr.system.utils.SwingUtil;
 import org.tizzer.smmgr.system.view.component.WebRecordView;
 import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.LossRecordRenderer;
@@ -46,26 +48,40 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
     @Override
     public void searchPerformed(String startDate, String endDate, String keyword, int curLoadIndex, int loadSize) {
         QueryLossRecordResponseDto queryLossRecordResponseDto = queryLossRecord(startDate, endDate, keyword, curLoadIndex, loadSize);
-        recordView.setListItem(queryLossRecordResponseDto.getData());
-        recordView.setLoadPage(queryLossRecordResponseDto.getPageCount());
+        if (queryLossRecordResponseDto.getCode() == ResultCode.OK) {
+            recordView.setListItem(queryLossRecordResponseDto.getData());
+            recordView.setLoadPage(queryLossRecordResponseDto.getPageCount());
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryLossRecordResponseDto.getMessage());
+        }
     }
 
     @Override
     public void loadPerformed(String startDate, String endDate, String keyword, int curLoadIndex, int loadSize) {
         QueryLossRecordResponseDto queryLossRecordResponseDto = queryLossRecord(startDate, endDate, keyword, curLoadIndex, loadSize);
-        recordView.addListItem(queryLossRecordResponseDto.getData());
+        if (queryLossRecordResponseDto.getCode() == ResultCode.OK) {
+            recordView.addListItem(queryLossRecordResponseDto.getData());
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryLossRecordResponseDto.getMessage());
+        }
     }
 
     @Override
     public void selectPerformed(int index) {
-        Object serialNo = ((Object[]) recordView.getSelectedListSource(index))[0];
-        if (!Objects.equals(serialNo, serialNoCache)) {
-            serialNoCache = serialNo;
-            QueryLossSpecResponseDto queryLossSpecResponseDto = queryLossSpec(serialNo);
-            recordView.setTableBody(queryLossSpecResponseDto.getData());
-            quantityLabel.setText(getBoldBlackText(queryLossSpecResponseDto.getQuantity()));
-            costLabel.setText(getBoldOrangeText(queryLossSpecResponseDto.getCost() + ""));
-            noteLabel.setText("备注：" + queryLossSpecResponseDto.getNote());
+        if (index != -1) {
+            Object serialNo = ((Object[]) recordView.getSelectedListSource(index))[0];
+            if (!Objects.equals(serialNo, serialNoCache)) {
+                serialNoCache = serialNo;
+                QueryLossSpecResponseDto queryLossSpecResponseDto = queryLossSpec(serialNo);
+                if (queryLossSpecResponseDto.getCode() == ResultCode.OK) {
+                    recordView.setTableBody(queryLossSpecResponseDto.getData());
+                    quantityLabel.setText(getBoldBlackText(queryLossSpecResponseDto.getQuantity()));
+                    costLabel.setText(getBoldOrangeText(queryLossSpecResponseDto.getCost() + ""));
+                    noteLabel.setText("备注：" + queryLossSpecResponseDto.getNote());
+                } else {
+                    SwingUtil.showNotification("访问出错，" + queryLossSpecResponseDto.getMessage());
+                }
+            }
         }
     }
 
@@ -140,8 +156,12 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
      */
     private void prepareData() {
         QueryLossRecordResponseDto queryLossRecordResponseDto = queryLossRecord(null, null, "", 1, 20);
-        recordView.addListItem(queryLossRecordResponseDto.getData());
-        recordView.setLoadPage(queryLossRecordResponseDto.getPageCount());
+        if (queryLossRecordResponseDto.getCode() == ResultCode.OK) {
+            recordView.addListItem(queryLossRecordResponseDto.getData());
+            recordView.setLoadPage(queryLossRecordResponseDto.getPageCount());
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryLossRecordResponseDto.getMessage());
+        }
     }
 
     private WebPanel createExternalPane() {

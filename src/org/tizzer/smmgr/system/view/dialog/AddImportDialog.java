@@ -1,23 +1,24 @@
-package org.tizzer.smmgr.system.view;
+package org.tizzer.smmgr.system.view.dialog;
 
 import com.alee.laf.button.WebButton;
 import com.alee.laf.panel.WebPanel;
+import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
 import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
+import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryTradeGoodsRequestDto;
-import org.tizzer.smmgr.system.model.request.SaveLossRecordRequestDto;
-import org.tizzer.smmgr.system.model.response.QueryLossGoodsResponseDto;
-import org.tizzer.smmgr.system.model.response.SaveLossRecordResponseDto;
+import org.tizzer.smmgr.system.model.request.SaveImportRecordRequestDto;
+import org.tizzer.smmgr.system.model.response.QueryImportGoodsResponseDto;
+import org.tizzer.smmgr.system.model.response.SaveImportRecordResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.view.dialog.ChooseGoodsDialog;
 import org.tizzer.smmgr.system.view.listener.TableCellListener;
 
 import javax.swing.*;
@@ -31,37 +32,48 @@ import java.awt.event.ActionListener;
  * @author tizzer
  * @version 1.0
  */
-public class StandardLossBoundary extends WebPanel {
+public class AddImportDialog extends WebDialog {
     private final static Object[] tableHead = {"商品条码", "商品名称", "进价", "数量", "小计"};
-
+    //是否刷新标志
+    private static boolean isRefresh;
     private DefaultTableModel tableModel;
-    private WebTable lossGoodsTable;
-    private WebButton resetLossButton;
+    private WebTable importGoodsTable;
+    private WebButton addGoodsButton;
+    private WebButton resetImportButton;
     private WebButton deleteRowButton;
     private WebTextField searchGoodsField;
-    private WebButton lossButton;
+    private WebButton importButton;
+    //进货商品缓存
+    private Object[][] importGoodsCache;
+    //记录当前进货总额
+    private double currentImport = 0;
 
-    //报损商品缓存
-    private Object[][] lossGoodsCache;
-    //记录当前亏损总额
-    private double currentLoss = 0;
-
-    public StandardLossBoundary() {
-        lossGoodsTable = createTransactionTable();
-        resetLossButton = createBootstrapButton("清理台面", IconManager.RESETDESK);
+    public AddImportDialog() {
+        super(RuntimeConstants.root, "进货", true);
+        importGoodsTable = createTransactionTable();
+        addGoodsButton = createBootstrapButton("新增商品", IconManager.ADDGOODS);
+        resetImportButton = createBootstrapButton("清理台面", IconManager.RESETDESK);
         deleteRowButton = createBootstrapButton("删除记录", IconManager.DELETERECORD);
         searchGoodsField = createTrailingField();
-        lossButton = createRefundButton();
-        this.setLossButton("0.0");
+        importButton = createRefundButton();
+        this.setImportButton("0.0");
 
-        this.setOpaque(false);
-        this.add(new WebScrollPane(lossGoodsTable), "Center");
+        this.setBackground(ColorManager._241_246_253);
+        this.add(new WebScrollPane(importGoodsTable), "Center");
         this.add(createRefundPane(), "South");
         this.initListener();
     }
 
+    public static boolean newInstance() {
+        AddImportDialog addImportDialog = new AddImportDialog();
+        addImportDialog.setSize(800, 600);
+        addImportDialog.setLocationRelativeTo(RuntimeConstants.root);
+        addImportDialog.setVisible(true);
+        return isRefresh;
+    }
+
     private void initListener() {
-        new TableCellListener(lossGoodsTable, new AbstractAction() {
+        new TableCellListener(importGoodsTable, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TableCellListener tcl = (TableCellListener) e.getSource();
@@ -73,21 +85,28 @@ public class StandardLossBoundary extends WebPanel {
                     int oldValue = Integer.parseInt(tcl.getOldValue() + "");
                     if (newValue != oldValue) {
                         //进价
-                        double presentCost = (double) lossGoodsTable.getValueAt(tcl.getRow(), 2);
+                        double presentCost = (double) importGoodsTable.getValueAt(tcl.getRow(), 2);
                         //更新小计
-                        lossGoodsTable.setValueAt((double) Math.round(presentCost * newValue * 100) / 100, tcl.getRow(), 4);
-                        //更新当前亏损总额
-                        currentLoss += (newValue - oldValue) * presentCost;
-                        currentLoss = (double) Math.round(currentLoss * 100) / 100;
-                        setLossButton(currentLoss + "");
+                        importGoodsTable.setValueAt((double) Math.round(presentCost * newValue * 100) / 100, tcl.getRow(), 4);
+                        //更新当前进货总额
+                        currentImport += (newValue - oldValue) * presentCost;
+                        currentImport = (double) Math.round(currentImport * 100) / 100;
+                        setImportButton(currentImport + "");
                         return;
                     }
                 }
-                lossGoodsTable.setValueAt(tcl.getOldValue(), tcl.getRow(), tcl.getColumn());
+                importGoodsTable.setValueAt(tcl.getOldValue(), tcl.getRow(), tcl.getColumn());
             }
         });
 
-        resetLossButton.addActionListener(new ActionListener() {
+        addGoodsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddGoodsDialog.newInstance();
+            }
+        });
+
+        resetImportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
@@ -100,23 +119,23 @@ public class StandardLossBoundary extends WebPanel {
         deleteRowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (lossGoodsTable.getSelectedRow() == -1) {
+                if (importGoodsTable.getSelectedRow() == -1) {
                     SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
                     return;
                 }
-                int[] rows = lossGoodsTable.getSelectedRows();
+                int[] rows = importGoodsTable.getSelectedRows();
                 for (int i = rows.length; i > 0; i--) {
                     //小计
-                    double cost = (double) lossGoodsTable.getValueAt(rows[i - 1], 4);
-                    //更新当前亏损总额
-                    currentLoss -= cost;
+                    double cost = (double) importGoodsTable.getValueAt(rows[i - 1], 4);
+                    //更新当前进货总额
+                    currentImport -= cost;
                     tableModel.removeRow(rows[i - 1]);
                 }
-                currentLoss = (double) Math.round(currentLoss * 100) / 100;
-                setLossButton(currentLoss + "");
+                currentImport = (double) Math.round(currentImport * 100) / 100;
+                setImportButton(currentImport + "");
                 //后续台面校验
-                if (lossGoodsTable.getRowCount() == 0) {
-                    int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空退货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+                if (importGoodsTable.getRowCount() == 0) {
+                    int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空进货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
                     if (operation == JOptionPane.YES_OPTION) {
                         reset();
                     }
@@ -129,11 +148,11 @@ public class StandardLossBoundary extends WebPanel {
             public void actionPerformed(ActionEvent e) {
                 String keyword = searchGoodsField.getText().trim();
                 if (!keyword.equals("")) {
-                    QueryLossGoodsResponseDto queryLossGoodsResponseDto = queryLossGoods(keyword);
-                    if (queryLossGoodsResponseDto.getCode() == ResultCode.OK) {
-                        lossGoodsCache = queryLossGoodsResponseDto.getData();
-                        if (lossGoodsCache.length > 1) {
-                            lossGoodsCache = ChooseGoodsDialog.newInstance(lossGoodsCache);
+                    QueryImportGoodsResponseDto queryImportGoodsResponseDto = queryImportGoods(keyword);
+                    if (queryImportGoodsResponseDto.getCode() == ResultCode.OK) {
+                        importGoodsCache = queryImportGoodsResponseDto.getData();
+                        if (importGoodsCache.length > 1) {
+                            importGoodsCache = ChooseGoodsDialog.newInstance(importGoodsCache);
                         }
                         refreshTable();
                     }
@@ -141,115 +160,114 @@ public class StandardLossBoundary extends WebPanel {
             }
         });
 
-        lossButton.addActionListener(new ActionListener() {
+        importButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (currentLoss == 0) {
+                if (currentImport == 0) {
                     return;
                 }
-                String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入报损备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
-                SaveLossRecordResponseDto saveLossRecordResponseDto = saveLossRecord(note);
-                if (saveLossRecordResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(lossButton, saveLossRecordResponseDto.getMessage());
+                String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入订购备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
+                SaveImportRecordResponseDto saveBookRecordResponseDto = saveImportRecord(note);
+                if (saveBookRecordResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(importButton, saveBookRecordResponseDto.getMessage());
                 } else {
-                    reset();
+                    isRefresh = true;
+                    dispose();
                 }
             }
-
         });
     }
 
     /**
-     * 保存报损记录
+     * 保存进货记录
      *
      * @param note
      * @return
      */
-    private SaveLossRecordResponseDto saveLossRecord(String note) {
-        SaveLossRecordResponseDto saveLossRecordResponseDto = new SaveLossRecordResponseDto();
+    private SaveImportRecordResponseDto saveImportRecord(String note) {
+        SaveImportRecordResponseDto saveImportRecordResponseDto = new SaveImportRecordResponseDto();
         try {
             //从表格获取商品参数
-            int rowCount = lossGoodsTable.getRowCount();
+            int rowCount = importGoodsTable.getRowCount();
             Object[] upc = new Object[rowCount];
             Object[] name = new Object[rowCount];
             Object[] primeCost = new Object[rowCount];
             Object[] quantity = new Object[rowCount];
             for (int i = 0; i < rowCount; i++) {
-                upc[i] = lossGoodsTable.getValueAt(i, 0);
-                name[i] = lossGoodsTable.getValueAt(i, 1);
-                primeCost[i] = lossGoodsTable.getValueAt(i, 2);
-                quantity[i] = lossGoodsTable.getValueAt(i, 3);
+                upc[i] = importGoodsTable.getValueAt(i, 0);
+                name[i] = importGoodsTable.getValueAt(i, 1);
+                primeCost[i] = importGoodsTable.getValueAt(i, 2);
+                quantity[i] = importGoodsTable.getValueAt(i, 3);
             }
             //参数设置
-            SaveLossRecordRequestDto saveLossRecordRequestDto = new SaveLossRecordRequestDto();
-            saveLossRecordRequestDto.setStaffNo(RuntimeConstants.staffNo);
-            saveLossRecordRequestDto.setCost(currentLoss);
-            saveLossRecordRequestDto.setNote(note);
-            saveLossRecordRequestDto.setUpc(upc);
-            saveLossRecordRequestDto.setName(name);
-            saveLossRecordRequestDto.setPrimeCost(primeCost);
-            saveLossRecordRequestDto.setQuantity(quantity);
-            saveLossRecordResponseDto = HttpHandler.post("/save/loss/record", saveLossRecordRequestDto.toString(), SaveLossRecordResponseDto.class);
+            SaveImportRecordRequestDto saveImportRecordRequestDto = new SaveImportRecordRequestDto();
+            saveImportRecordRequestDto.setCost(currentImport);
+            saveImportRecordRequestDto.setNote(note);
+            saveImportRecordRequestDto.setUpc(upc);
+            saveImportRecordRequestDto.setName(name);
+            saveImportRecordRequestDto.setPrimeCost(primeCost);
+            saveImportRecordRequestDto.setQuantity(quantity);
+            saveImportRecordResponseDto = HttpHandler.post("/save/import/record", saveImportRecordRequestDto.toString(), SaveImportRecordResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
-        return saveLossRecordResponseDto;
+        return saveImportRecordResponseDto;
     }
 
     /**
-     * 查询亏损商品
+     * 查询进货商品
      *
      * @param keyword
      * @return
      */
-    private QueryLossGoodsResponseDto queryLossGoods(String keyword) {
-        QueryLossGoodsResponseDto queryLossGoodsResponseDto = new QueryLossGoodsResponseDto();
+    private QueryImportGoodsResponseDto queryImportGoods(String keyword) {
+        QueryImportGoodsResponseDto queryImportGoodsResponseDto = new QueryImportGoodsResponseDto();
         try {
             QueryTradeGoodsRequestDto queryTradeGoodsRequestDto = new QueryTradeGoodsRequestDto();
             queryTradeGoodsRequestDto.setKeyword(keyword);
-            queryLossGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryLossGoodsResponseDto.class);
+            queryImportGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryImportGoodsResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
-        return queryLossGoodsResponseDto;
+        return queryImportGoodsResponseDto;
     }
 
     /**
      * 刷新台面
      */
     private void refreshTable() {
-        if (lossGoodsCache != null) {
-            String upc = (String) lossGoodsCache[0][0];
-            for (int i = 0; i < lossGoodsTable.getRowCount(); i++) {
-                if (upc.equals(lossGoodsTable.getValueAt(i, 0))) {
+        if (importGoodsCache != null) {
+            String upc = (String) importGoodsCache[0][0];
+            for (int i = 0; i < importGoodsTable.getRowCount(); i++) {
+                if (upc.equals(importGoodsTable.getValueAt(i, 0))) {
                     //进价
-                    double presentCost = (double) lossGoodsTable.getValueAt(i, 2);
+                    double presentCost = (double) importGoodsTable.getValueAt(i, 2);
                     //当前数量
-                    int num = Integer.parseInt(lossGoodsTable.getValueAt(i, 3) + "");
+                    int num = Integer.parseInt(importGoodsTable.getValueAt(i, 3) + "");
                     //当前小计
-                    double cost = (double) lossGoodsTable.getValueAt(i, 4);
+                    double cost = (double) importGoodsTable.getValueAt(i, 4);
                     //现在小计
                     cost = (double) Math.round((presentCost + cost) * 100) / 100;
                     //更新数量
-                    lossGoodsTable.setValueAt(num + 1, i, 3);
+                    importGoodsTable.setValueAt(num + 1, i, 3);
                     //更新小计
-                    lossGoodsTable.setValueAt(cost, i, 4);
-                    //更新当前亏损总额
-                    currentLoss = (double) Math.round((currentLoss + presentCost) * 100) / 100;
-                    setLossButton(currentLoss + "");
+                    importGoodsTable.setValueAt(cost, i, 4);
+                    //更新当前进货总额
+                    currentImport = (double) Math.round((currentImport + presentCost) * 100) / 100;
+                    setImportButton(currentImport + "");
                     searchGoodsField.setText(null);
                     return;
                 }
             }
-            double importPrice = (double) lossGoodsCache[0][2];
+            double importPrice = (double) importGoodsCache[0][2];
             //增加行数据
-            Object[] row = {upc, lossGoodsCache[0][1], importPrice, 1, importPrice};
+            Object[] row = {upc, importGoodsCache[0][1], importPrice, 1, importPrice};
             tableModel.addRow(row);
-            //更新当前亏损总额
-            currentLoss = (double) Math.round((currentLoss + importPrice) * 100) / 100;
-            setLossButton(currentLoss + "");
+            //更新当前进货总额
+            currentImport = (double) Math.round((currentImport + importPrice) * 100) / 100;
+            setImportButton(currentImport + "");
         }
         searchGoodsField.setText(null);
     }
@@ -258,17 +276,17 @@ public class StandardLossBoundary extends WebPanel {
      * 清理台面数据
      */
     private void reset() {
-        lossGoodsCache = null;
-        currentLoss = 0;
-        setLossButton("0.0");
+        importGoodsCache = null;
+        currentImport = 0;
+        setImportButton("0.0");
         tableModel.setDataVector(null, tableHead);
     }
 
     /**
      * 更新亏损按钮的text
      */
-    private void setLossButton(String text) {
-        lossButton.setText("<html><font face='Microsoft YaHei' color=white size=6><b>亏损</b>&nbsp;&nbsp;&nbsp;￥" + text + "</font></html>");
+    private void setImportButton(String text) {
+        importButton.setText("<html><font face='Microsoft YaHei' color=white size=6><b>进货</b>&nbsp;&nbsp;&nbsp;￥" + text + "</font></html>");
     }
 
     private WebPanel createRefundPane() {
@@ -294,9 +312,10 @@ public class StandardLossBoundary extends WebPanel {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
         webPanel.setLayout(new GridBagLayout());
-        SwingUtil.setupComponent(webPanel, resetLossButton, 0, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, lossButton, 0, 1, 2, 1);
+        SwingUtil.setupComponent(webPanel, addGoodsButton, 0, 0, 1, 1);
+        SwingUtil.setupComponent(webPanel, resetImportButton, 1, 0, 1, 1);
+        SwingUtil.setupComponent(webPanel, deleteRowButton, 2, 0, 1, 1);
+        SwingUtil.setupComponent(webPanel, importButton, 0, 1, 3, 1);
         return webPanel;
     }
 
@@ -329,7 +348,6 @@ public class StandardLossBoundary extends WebPanel {
         WebButton webButton = new WebButton(text, icon);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setCursor(Cursor.getDefaultCursor());
         webButton.setPainter(NPatchUtil.getNinePatchPainter("brown.xml"));
         return webButton;
     }

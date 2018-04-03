@@ -54,13 +54,13 @@ public class TradeGoodsDialog extends WebDialog {
         cancelButton = createBootstrapButton("取消");
 
         this.add(createContentPane());
-        this.pack();
-        this.setLocationRelativeTo(RuntimeConstants.root);
         this.initListener();
     }
 
     public static Object[][] newInstance(Object[][] dataCache) {
         TradeGoodsDialog tradeGoodsDialog = new TradeGoodsDialog(dataCache);
+        tradeGoodsDialog.setSize(400, 300);
+        tradeGoodsDialog.setLocationRelativeTo(RuntimeConstants.root);
         tradeGoodsDialog.setVisible(true);
         if (!isHandle) {
             dataCache = null;

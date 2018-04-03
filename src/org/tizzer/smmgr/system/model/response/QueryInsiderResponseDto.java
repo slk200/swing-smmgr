@@ -4,7 +4,7 @@ import com.alee.utils.TimeUtils;
 
 import java.util.Date;
 
-public class QueryInsiderResponseDto {
+public class QueryInsiderResponseDto extends ResultResponse {
     private DataSet[] data;
     private Integer pageCount;
 

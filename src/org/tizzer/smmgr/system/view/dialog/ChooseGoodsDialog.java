@@ -30,7 +30,7 @@ import java.awt.event.MouseEvent;
  * @author tizzer
  * @version 1.0
  */
-public class LossGoodsDialog extends WebDialog {
+public class ChooseGoodsDialog extends WebDialog {
     private final static Object[] tableHead = {"条码", "名称", "进价"};
 
     private WebButton searchButton;
@@ -44,7 +44,7 @@ public class LossGoodsDialog extends WebDialog {
     //是否变更标志
     private boolean isHandle;
 
-    public LossGoodsDialog(Object[][] dataCache) {
+    public ChooseGoodsDialog(Object[][] dataCache) {
         super(RuntimeConstants.root, "选择交易商品", true);
         searchButton = createTrailingComponent();
         searchField = createSearchField();
@@ -54,18 +54,18 @@ public class LossGoodsDialog extends WebDialog {
         cancelButton = createBootstrapButton("取消");
 
         this.add(createContentPane());
-        this.pack();
-        this.setLocationRelativeTo(RuntimeConstants.root);
         this.initListener();
     }
 
     public static Object[][] newInstance(Object[][] dataCache) {
-        LossGoodsDialog lossGoodsDialog = new LossGoodsDialog(dataCache);
-        lossGoodsDialog.setVisible(true);
-        if (!lossGoodsDialog.isHandle) {
-            lossGoodsDialog.dataCache = null;
+        ChooseGoodsDialog chooseGoodsDialog = new ChooseGoodsDialog(dataCache);
+        chooseGoodsDialog.setSize(400, 300);
+        chooseGoodsDialog.setLocationRelativeTo(RuntimeConstants.root);
+        chooseGoodsDialog.setVisible(true);
+        if (!chooseGoodsDialog.isHandle) {
+            chooseGoodsDialog.dataCache = null;
         }
-        return lossGoodsDialog.dataCache;
+        return chooseGoodsDialog.dataCache;
     }
 
     private void initListener() {

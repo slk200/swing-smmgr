@@ -4,11 +4,13 @@ import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
+import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryTradeRecordRequestDto;
 import org.tizzer.smmgr.system.model.request.QueryTradeSpecRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryTradeRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryTradeSpecResponseDto;
+import org.tizzer.smmgr.system.utils.SwingUtil;
 import org.tizzer.smmgr.system.view.component.WebRecordView;
 import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.TradeRecordRenderer;
@@ -48,27 +50,41 @@ public class ManageTradeBoundary extends WebPanel implements RecordListener {
     @Override
     public void searchPerformed(String startDate, String endDate, String keyword, int curLoadIndex, int loadSize) {
         QueryTradeRecordResponseDto queryTradeRecordResponseDto = queryTradeRecord(startDate, endDate, keyword, curLoadIndex, loadSize);
-        recordView.setListItem(queryTradeRecordResponseDto.getData());
-        recordView.setLoadPage(queryTradeRecordResponseDto.getPageCount());
+        if (queryTradeRecordResponseDto.getCode() == ResultCode.OK) {
+            recordView.setListItem(queryTradeRecordResponseDto.getData());
+            recordView.setLoadPage(queryTradeRecordResponseDto.getPageCount());
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryTradeRecordResponseDto.getMessage());
+        }
     }
 
     @Override
     public void loadPerformed(String startDate, String endDate, String keyword, int curLoadIndex, int loadSize) {
         QueryTradeRecordResponseDto queryTradeRecordResponseDto = queryTradeRecord(startDate, endDate, keyword, curLoadIndex, loadSize);
-        recordView.addListItem(queryTradeRecordResponseDto.getData());
+        if (queryTradeRecordResponseDto.getCode() == ResultCode.OK) {
+            recordView.addListItem(queryTradeRecordResponseDto.getData());
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryTradeRecordResponseDto.getMessage());
+        }
     }
 
     @Override
     public void selectPerformed(int index) {
-        Object serialNo = ((Object[]) recordView.getSelectedListSource(index))[0];
-        if (!Objects.equals(serialNo, serialNoCache)) {
-            serialNoCache = serialNo;
-            QueryTradeSpecResponseDto queryTradeSpecResponseDto = queryTradeSpec(serialNo);
-            recordView.setTableBody(queryTradeSpecResponseDto.getData());
-            quantityLabel.setText(getBoldBlackText(queryTradeSpecResponseDto.getQuantity()));
-            costLabel.setText(getBoldOrangeText(queryTradeSpecResponseDto.getCost() + "", queryTradeSpecResponseDto.getPayType()));
-            cardNoLabel.setText("会员：" + queryTradeSpecResponseDto.getCardNo());
-            phoneLabel.setText("电话：" + queryTradeSpecResponseDto.getPhone());
+        if (index != -1) {
+            Object serialNo = ((Object[]) recordView.getSelectedListSource(index))[0];
+            if (!Objects.equals(serialNo, serialNoCache)) {
+                serialNoCache = serialNo;
+                QueryTradeSpecResponseDto queryTradeSpecResponseDto = queryTradeSpec(serialNo);
+                if (queryTradeSpecResponseDto.getCode() == ResultCode.OK) {
+                    recordView.setTableBody(queryTradeSpecResponseDto.getData());
+                    quantityLabel.setText(getBoldBlackText(queryTradeSpecResponseDto.getQuantity()));
+                    costLabel.setText(getBoldOrangeText(queryTradeSpecResponseDto.getCost() + "", queryTradeSpecResponseDto.getPayType()));
+                    cardNoLabel.setText("会员：" + queryTradeSpecResponseDto.getCardNo());
+                    phoneLabel.setText("电话：" + queryTradeSpecResponseDto.getPhone());
+                } else {
+                    SwingUtil.showNotification("访问出错，" + queryTradeSpecResponseDto.getMessage());
+                }
+            }
         }
     }
 
@@ -145,8 +161,12 @@ public class ManageTradeBoundary extends WebPanel implements RecordListener {
      */
     private void prepareData() {
         QueryTradeRecordResponseDto queryTradeRecordResponseDto = queryTradeRecord(null, null, "", 1, 20);
-        recordView.addListItem(queryTradeRecordResponseDto.getData());
-        recordView.setLoadPage(queryTradeRecordResponseDto.getPageCount());
+        if (queryTradeRecordResponseDto.getCode() == ResultCode.OK) {
+            recordView.addListItem(queryTradeRecordResponseDto.getData());
+            recordView.setLoadPage(queryTradeRecordResponseDto.getPageCount());
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryTradeRecordResponseDto.getMessage());
+        }
     }
 
     private WebPanel createExternalPane() {

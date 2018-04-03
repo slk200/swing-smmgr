@@ -202,8 +202,12 @@ public class StandardCollectionBoundary extends WebPanel {
                 //对比会员折扣是否修改了
                 if (discount != newDiscount) {
                     QueryOneInsiderResponseDto queryOneInsiderResponseDto = queryOneInsider(insiderCache[0].toString());
-                    insiderCache = queryOneInsiderResponseDto.getData();
-                    refreshTable(discount);
+                    if (queryOneInsiderResponseDto.getCode() == ResultCode.OK) {
+                        insiderCache = queryOneInsiderResponseDto.getData();
+                        refreshTable(discount);
+                    } else {
+                        SwingUtil.showNotification("访问出错，" + queryOneInsiderResponseDto.getMessage());
+                    }
                 }
             }
         });

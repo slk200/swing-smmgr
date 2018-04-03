@@ -102,8 +102,12 @@ public class StandardInsiderBoundary extends WebPanel {
     private void prepareData() {
         try {
             QueryAllInsiderTypeResponseDto queryAllInsiderTypeResponseDto = HttpHandler.get("/query/insider/type", QueryAllInsiderTypeResponseDto.class);
-            this.idCache = queryAllInsiderTypeResponseDto.getId();
-            typeComboBox.setModel(new DefaultComboBoxModel(queryAllInsiderTypeResponseDto.getName()));
+            if (queryAllInsiderTypeResponseDto.getCode() == ResultCode.OK) {
+                this.idCache = queryAllInsiderTypeResponseDto.getId();
+                typeComboBox.setModel(new DefaultComboBoxModel(queryAllInsiderTypeResponseDto.getName()));
+            } else {
+                SwingUtil.showNotification("访问出错，" + queryAllInsiderTypeResponseDto.getMessage());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

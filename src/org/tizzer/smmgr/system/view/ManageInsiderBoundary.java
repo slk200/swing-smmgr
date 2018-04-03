@@ -5,10 +5,12 @@ import com.alee.laf.button.WebButton;
 import com.alee.laf.panel.WebPanel;
 import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
+import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryInsiderRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryInsiderResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
+import org.tizzer.smmgr.system.utils.SwingUtil;
 import org.tizzer.smmgr.system.view.component.WebPageView;
 import org.tizzer.smmgr.system.view.dialog.UpdateInsiderTypeDialog;
 import org.tizzer.smmgr.system.view.listener.PageListener;
@@ -55,7 +57,11 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
     @Override
     public void pagePerformed(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
         QueryInsiderResponseDto queryInsiderResponseDto = queryInsider(startDate, endDate, keyword, pageSize, currentPage);
-        refreshData(queryInsiderResponseDto);
+        if (queryInsiderResponseDto.getCode() == ResultCode.OK) {
+            refreshData(queryInsiderResponseDto);
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryInsiderResponseDto.getMessage());
+        }
     }
 
     /**
@@ -100,7 +106,11 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
      */
     private void prepareData() {
         QueryInsiderResponseDto queryInsiderResponseDto = queryInsider(null, null, "", 30, 1);
-        pageView.prepareData(tableHead, queryInsiderResponseDto.getData(), queryInsiderResponseDto.getPageCount());
+        if (queryInsiderResponseDto.getCode() == ResultCode.OK) {
+            pageView.prepareData(tableHead, queryInsiderResponseDto.getData(), queryInsiderResponseDto.getPageCount());
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryInsiderResponseDto.getMessage());
+        }
     }
 
     private WebPanel createRightPanel() {

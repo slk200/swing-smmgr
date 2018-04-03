@@ -128,6 +128,11 @@ public class LoginBoundary extends WebPanel {
         getRootPane().setDefaultButton(loginButton);
     }
 
+    /**
+     * 设置关闭前事件
+     *
+     * @param frame
+     */
     public void setClosingOperation(WebFrame frame) {
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -164,6 +169,9 @@ public class LoginBoundary extends WebPanel {
             loginRequestDto.setStaffNo(staffNo);
             loginRequestDto.setPassword(password);
             LoginResponseDto loginResponseDto = HttpHandler.post("/login", loginRequestDto.toString(), LoginResponseDto.class);
+            if (loginResponseDto == null) {
+                return;
+            }
             if (loginResponseDto.getCode() == ResultCode.ERROR) {
                 securityButton.setText(getSecurityCode());
                 SwingUtil.showTip(loginButton, loginResponseDto.getMessage());

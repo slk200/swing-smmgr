@@ -105,7 +105,11 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
     @Override
     public void pagePerformed(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
         QueryStoreResponseDto queryStoreResponseDto = queryStore(startDate, endDate, keyword, pageSize, currentPage);
-        refreshData(queryStoreResponseDto);
+        if (queryStoreResponseDto.getCode() == ResultCode.OK) {
+            refreshData(queryStoreResponseDto);
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryStoreResponseDto.getMessage());
+        }
     }
 
     /**
@@ -185,7 +189,11 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
      */
     private void prepareData() {
         QueryStoreResponseDto queryStoreResponseDto = queryStore(null, null, "", 30, 1);
-        pageView.prepareData(tableHead, queryStoreResponseDto.getData(), queryStoreResponseDto.getPageCount());
+        if (queryStoreResponseDto.getCode() == ResultCode.OK) {
+            pageView.prepareData(tableHead, queryStoreResponseDto.getData(), queryStoreResponseDto.getPageCount());
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryStoreResponseDto.getMessage());
+        }
     }
 
     private WebPanel createRightPanel() {

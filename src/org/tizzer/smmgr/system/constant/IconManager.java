@@ -8,26 +8,26 @@ import java.awt.*;
  * @version 1.0
  */
 public interface IconManager {
-    //taskbar 1
+    //taskbar
     Image TASKBAR = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/taskbar.png")).getImage();
 
-    //ad. 3
+    //ad.
     ImageIcon POSTER1 = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/poster1.png"));
     ImageIcon POSTER2 = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/poster2.png"));
     ImageIcon POSTER3 = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/poster3.png"));
 
-    //leading 3
+    //leading
     ImageIcon ACCOUNT = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/account.png"));
     ImageIcon PASSWORD = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/password.png"));
     ImageIcon SECURITY = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/security.png"));
 
-    //button 4
+    //button
     ImageIcon SEARCH = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/search.png"));
     ImageIcon RESETDESK = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/resetdesk.png"));
     ImageIcon ADDGOODS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/addgoods.png"));
     ImageIcon DELETERECORD = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/deleterecord.png"));
 
-    //navigation 13
+    //navigation
     ImageIcon HOME = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/home.png"));
     ImageIcon TRADERECORD = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/traderecord.png"));
     ImageIcon FACT = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/fact.png"));
@@ -39,14 +39,16 @@ public interface IconManager {
     ImageIcon GOODSLOSS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/goodsloss.png"));
     ImageIcon PURCHASEGOODS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/purchasegoods.png"));
     ImageIcon REFUNDGOODS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/refundgoods.png"));
+    ImageIcon TRANSGOODS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/transgoods.png"));
     ImageIcon SETUP = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/setup.png"));
     ImageIcon HELP = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/help.png"));
 
-    //tag 6
+    //tag
     ImageIcon ADMINTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/admintag.png"));
     ImageIcon STANDARDTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/standardtag.png"));
     ImageIcon USINGTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/usingtag.png"));
     ImageIcon STOPTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/stoptag.png"));
     ImageIcon INCOMETAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/incometag.png"));
     ImageIcon REFUNDTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/refundtag.png"));
+    ImageIcon BOOKTAG = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/booktag.png"));
 }

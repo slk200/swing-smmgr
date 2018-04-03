@@ -2,6 +2,7 @@ package org.tizzer.smmgr.system.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import org.tizzer.smmgr.system.utils.StreamUtil;
+import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -46,6 +47,8 @@ public class HttpHandler {
             while ((tempLine = reader.readLine()) != null) {
                 result += tempLine;
             }
+        } catch (Exception e) {
+            SwingUtil.showNotification("访问服务器异常，" + e.getMessage());
         } finally {
             StreamUtil.close(reader, inputStreamReader, inputStream);
         }
@@ -91,6 +94,8 @@ public class HttpHandler {
             while ((tempLine = reader.readLine()) != null) {
                 result += tempLine;
             }
+        } catch (Exception e) {
+            SwingUtil.showNotification("访问服务器异常，" + e.getMessage());
         } finally {
             StreamUtil.close(outputStreamWriter, outputStream, reader, inputStreamReader, inputStream);
         }

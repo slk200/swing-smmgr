@@ -5,6 +5,7 @@ import com.alee.laf.button.WebButton;
 import com.alee.laf.panel.WebPanel;
 import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
+import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryEmployeeRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryEmployeeResponseDto;
@@ -74,7 +75,11 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
     @Override
     public void pagePerformed(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
         QueryEmployeeResponseDto queryEmployeeResponseDto = queryEmployee(startDate, endDate, keyword, pageSize, currentPage);
-        refreshData(queryEmployeeResponseDto);
+        if (queryEmployeeResponseDto.getCode() == ResultCode.OK) {
+            refreshData(queryEmployeeResponseDto);
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryEmployeeResponseDto.getMessage());
+        }
     }
 
     /**
@@ -120,7 +125,11 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
      */
     private void prepareData() {
         QueryEmployeeResponseDto queryEmployeeResponseDto = queryEmployee(null, null, "", 30, 1);
-        pageView.prepareData(tableHead, queryEmployeeResponseDto.getData(), queryEmployeeResponseDto.getPageCount());
+        if (queryEmployeeResponseDto.getCode() == ResultCode.OK) {
+            pageView.prepareData(tableHead, queryEmployeeResponseDto.getData(), queryEmployeeResponseDto.getPageCount());
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryEmployeeResponseDto.getMessage());
+        }
         this.setRenderer();
     }
 

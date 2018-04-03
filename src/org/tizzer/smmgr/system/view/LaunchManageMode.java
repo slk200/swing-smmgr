@@ -29,7 +29,8 @@ public class LaunchManageMode extends WebPanel {
     private WebToggleButton insiderButton;
     private WebToggleButton goodsButton;
     private WebToggleButton recordButton;
-    private WebToggleButton purchaseButton;
+    private WebToggleButton importButton;
+    private WebToggleButton transButton;
     private WebToggleButton bookButton;
     private WebToggleButton lossButton;
     private WebToggleButton settingButton;
@@ -43,7 +44,8 @@ public class LaunchManageMode extends WebPanel {
         employeeButton = createNavigationButton("员工管理", IconManager.EMPLOYEE);
         insiderButton = createNavigationButton("会员管理", IconManager.INSIDER);
         goodsButton = createNavigationButton("商品管理", IconManager.GOODSEDIT);
-        purchaseButton = createNavigationButton("进货管理", IconManager.PURCHASEGOODS);
+        importButton = createNavigationButton("进货管理", IconManager.PURCHASEGOODS);
+        transButton = createNavigationButton("调货管理", IconManager.TRANSGOODS);
         bookButton = createNavigationButton("订货管理", IconManager.BOOKGOODS);
         recordButton = createNavigationButton("销售记录", IconManager.TRADERECORD);
         lossButton = createNavigationButton("报损记录", IconManager.GOODSLOSS);
@@ -93,10 +95,17 @@ public class LaunchManageMode extends WebPanel {
             }
         });
 
-        purchaseButton.addActionListener(new ActionListener() {
+        importButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 changeView(new ManageImportBoundary());
+            }
+        });
+
+        transButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeView(new ManageTransBoundary());
             }
         });
 
@@ -176,7 +185,7 @@ public class LaunchManageMode extends WebPanel {
         WebPanel webPanel = new WebPanel();
         webPanel.setBackground(ColorManager._31_31_31);
         webPanel.setLayout(new VerticalFlowLayout());
-        webPanel.add(factButton, storeButton, employeeButton, insiderButton, goodsButton, purchaseButton, bookButton, recordButton, lossButton, settingButton, helpButton);
+        webPanel.add(factButton, storeButton, employeeButton, insiderButton, goodsButton, importButton, transButton, bookButton, recordButton, lossButton, settingButton, helpButton);
         SwingUtils.groupButtons(webPanel);
         return webPanel;
     }

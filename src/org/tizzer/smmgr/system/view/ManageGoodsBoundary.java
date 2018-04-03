@@ -9,11 +9,13 @@ import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
 import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
+import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryGoodsRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryAllGoodsTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryGoodsResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
+import org.tizzer.smmgr.system.utils.SwingUtil;
 import org.tizzer.smmgr.system.view.dialog.UpdateGoodsDialog;
 import org.tizzer.smmgr.system.view.renderer.GoodsTypeRenderer;
 
@@ -73,12 +75,19 @@ public class ManageGoodsBoundary extends WebPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    typeId = typeIdCache[list.getSelectedIndex()];
-                    keyword = "";
-                    currentPage = 1;
-                    QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
-                    refreshTableData(queryGoodsResponseDto.getData());
-                    setPageIndicator(queryGoodsResponseDto.getPageCount());
+                    int index = list.getSelectedIndex();
+                    if (index != -1) {
+                        typeId = typeIdCache[index];
+                        keyword = "";
+                        currentPage = 1;
+                        QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
+                        if (queryGoodsResponseDto.getCode() == ResultCode.OK) {
+                            refreshTableData(queryGoodsResponseDto.getData());
+                            setPageIndicator(queryGoodsResponseDto.getPageCount());
+                        } else {
+                            SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                        }
+                    }
                 }
             }
         });
@@ -94,8 +103,12 @@ public class ManageGoodsBoundary extends WebPanel {
                         setListItem(queryAllGoodsTypeResponseDto.getName());
                     }
                     QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
-                    refreshTableData(queryGoodsResponseDto.getData());
-                    setPageIndicator(queryGoodsResponseDto.getPageCount());
+                    if (queryGoodsResponseDto.getCode() == ResultCode.OK) {
+                        refreshTableData(queryGoodsResponseDto.getData());
+                        setPageIndicator(queryGoodsResponseDto.getPageCount());
+                    } else {
+                        SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                    }
                 }
             }
         });
@@ -106,8 +119,12 @@ public class ManageGoodsBoundary extends WebPanel {
                 keyword = searchField.getText().trim();
                 currentPage = 1;
                 QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
-                refreshTableData(queryGoodsResponseDto.getData());
-                setPageIndicator(queryGoodsResponseDto.getPageCount());
+                if (queryGoodsResponseDto.getCode() == ResultCode.OK) {
+                    refreshTableData(queryGoodsResponseDto.getData());
+                    setPageIndicator(queryGoodsResponseDto.getPageCount());
+                } else {
+                    SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                }
             }
         });
 
@@ -117,8 +134,12 @@ public class ManageGoodsBoundary extends WebPanel {
                 if (currentPage > 1) {
                     currentPage--;
                     QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
-                    refreshTableData(queryGoodsResponseDto.getData());
-                    setPageIndicator(queryGoodsResponseDto.getPageCount());
+                    if (queryGoodsResponseDto.getCode() == ResultCode.OK) {
+                        refreshTableData(queryGoodsResponseDto.getData());
+                        setPageIndicator(queryGoodsResponseDto.getPageCount());
+                    } else {
+                        SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                    }
                 }
             }
         });
@@ -129,8 +150,12 @@ public class ManageGoodsBoundary extends WebPanel {
                 if (currentPage < pageCount) {
                     currentPage++;
                     QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
-                    refreshTableData(queryGoodsResponseDto.getData());
-                    setPageIndicator(queryGoodsResponseDto.getPageCount());
+                    if (queryGoodsResponseDto.getCode() == ResultCode.OK) {
+                        refreshTableData(queryGoodsResponseDto.getData());
+                        setPageIndicator(queryGoodsResponseDto.getPageCount());
+                    } else {
+                        SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                    }
                 }
             }
         });
@@ -181,13 +206,21 @@ public class ManageGoodsBoundary extends WebPanel {
      */
     private void prepareData() {
         QueryAllGoodsTypeResponseDto queryAllGoodsTypeResponseDto = queryAllGoodsType();
-        this.typeIdCache = queryAllGoodsTypeResponseDto.getId();
-        this.setListItem(queryAllGoodsTypeResponseDto.getName());
+        if (queryAllGoodsTypeResponseDto.getCode() == ResultCode.OK) {
+            this.typeIdCache = queryAllGoodsTypeResponseDto.getId();
+            this.setListItem(queryAllGoodsTypeResponseDto.getName());
+        } else {
+            SwingUtil.showNotification("访问出错，" + queryAllGoodsTypeResponseDto.getMessage());
+        }
         if (!listModel.isEmpty()) {
             typeId = typeIdCache[0];
             QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
-            refreshTableData(queryGoodsResponseDto.getData());
-            setPageIndicator(queryGoodsResponseDto.getPageCount());
+            if (queryGoodsResponseDto.getCode() == ResultCode.OK) {
+                refreshTableData(queryGoodsResponseDto.getData());
+                setPageIndicator(queryGoodsResponseDto.getPageCount());
+            } else {
+                SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+            }
         }
     }
 
