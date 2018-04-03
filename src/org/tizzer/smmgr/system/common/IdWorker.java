@@ -1,9 +1,5 @@
 package org.tizzer.smmgr.system.common;
 
-/**
- * @author tizzer
- * @version 1.0
- */
 public class IdWorker {
 
     private long workerId;

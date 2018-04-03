@@ -1,5 +1,9 @@
 package org.tizzer.smmgr.system.view.listener;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public interface PageListener {
 
     /**

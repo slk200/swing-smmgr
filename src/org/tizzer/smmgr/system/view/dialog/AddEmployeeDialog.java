@@ -21,8 +21,13 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class AddEmployeeDialog extends WebDialog {
 
+    //是否刷新标志
     private static boolean isRefresh;
     private WebTextField staffNoField;
     private WebTextField passwordField;
@@ -85,12 +90,12 @@ public class AddEmployeeDialog extends WebDialog {
                     SwingUtil.showTip(addressField, "地址不能为空");
                     return;
                 }
-                boolean result = saveEmployee(staffNo, password, name, phone, address);
-                if (result) {
+                SaveEmployeeResponseDto saveEmployeeResponseDto = saveEmployee(staffNo, password, name, phone, address);
+                if (saveEmployeeResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(addButton, saveEmployeeResponseDto.getMessage());
+                } else {
                     isRefresh = true;
                     dispose();
-                } else {
-                    SwingUtil.showTip(addButton, "保存失败");
                 }
             }
         });
@@ -103,7 +108,13 @@ public class AddEmployeeDialog extends WebDialog {
         });
     }
 
-    private boolean saveEmployee(String... value) {
+    /**
+     * 保存员工
+     *
+     * @param value
+     * @return
+     */
+    private SaveEmployeeResponseDto saveEmployee(String... value) {
         SaveEmployeeResponseDto saveEmployeeResponseDto = new SaveEmployeeResponseDto();
         try {
             SaveEmployeeRequestDto saveEmployeeRequestDto = new SaveEmployeeRequestDto();
@@ -114,12 +125,11 @@ public class AddEmployeeDialog extends WebDialog {
             saveEmployeeRequestDto.setAddress(value[4]);
             saveEmployeeRequestDto.setAdmin(adminBox.isSelected());
             saveEmployeeRequestDto.setStoreId(RuntimeConstants.storeId);
-            System.out.println(saveEmployeeRequestDto);
             saveEmployeeResponseDto = HttpHandler.post("/save/employee", saveEmployeeRequestDto.toString(), SaveEmployeeResponseDto.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return saveEmployeeResponseDto.getCode() == ResultCode.OK;
+        return saveEmployeeResponseDto;
     }
 
     private WebPanel createContentPane() {

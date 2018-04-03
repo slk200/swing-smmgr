@@ -8,10 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-/**
- * @author tizzer
- * @version 1.0
- */
 public class InternetWorker {
 
     private static final Class clazz = InternetWorker.class;

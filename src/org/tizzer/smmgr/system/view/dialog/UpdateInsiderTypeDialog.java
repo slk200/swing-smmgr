@@ -33,11 +33,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class UpdateInsiderTypeDialog extends WebDialog {
 
     private final static Object[] tableHead = {"序号", "会员等级", "会员折扣"};
+    //是否需要刷新标志
     private static boolean isRefresh;
-
     private DefaultTableModel tableModel;
     private WebTable table;
     private WebTextField nameField;
@@ -173,6 +177,12 @@ public class UpdateInsiderTypeDialog extends WebDialog {
         });
     }
 
+    /**
+     * 删除会员类型
+     *
+     * @param id
+     * @return
+     */
     private DeleteInsiderTypeResponseDto deleteInsiderType(Vector<Integer> id) {
         DeleteInsiderTypeResponseDto deleteInsiderTypeResponseDto = new DeleteInsiderTypeResponseDto();
         try {
@@ -186,6 +196,12 @@ public class UpdateInsiderTypeDialog extends WebDialog {
         return deleteInsiderTypeResponseDto;
     }
 
+    /**
+     * 保存会员类型
+     *
+     * @param name
+     * @return
+     */
     private SaveInsiderTypeResponseDto saveInsiderType(String name) {
         SaveInsiderTypeResponseDto saveInsiderTypeResponseDto = new SaveInsiderTypeResponseDto();
         try {
@@ -200,6 +216,12 @@ public class UpdateInsiderTypeDialog extends WebDialog {
         return saveInsiderTypeResponseDto;
     }
 
+    /**
+     * 更新会员类型
+     *
+     * @param name
+     * @return
+     */
     private UpdateInsiderTypeResponseDto updateInsiderType(String name) {
         UpdateInsiderTypeResponseDto updateInsiderTypeResponseDto = new UpdateInsiderTypeResponseDto();
         try {
@@ -215,6 +237,9 @@ public class UpdateInsiderTypeDialog extends WebDialog {
         return updateInsiderTypeResponseDto;
     }
 
+    /**
+     * 刷新数据
+     */
     private void refreshData() {
         try {
             QueryAllInsiderTypeResponseDto queryAllInsiderTypeResponseDto = HttpHandler.get("/query/insider/type", QueryAllInsiderTypeResponseDto.class);

@@ -33,6 +33,9 @@ import java.awt.event.MouseEvent;
 public class ManageGoodsBoundary extends WebPanel {
     private final static Object[] tableHead = {"条码", "名称", "进价", "售价", "库存"};
 
+    /**
+     * 查询参数缓存
+     */
     private int typeId = 0;
     private int currentPage = 1;
     private String keyword = "";
@@ -47,6 +50,7 @@ public class ManageGoodsBoundary extends WebPanel {
     private WebLabel pageIndicator;
     private WebButton nextButton;
 
+    //商品类型缓存
     private Integer[] typeIdCache;
 
     public ManageGoodsBoundary() {
@@ -82,18 +86,16 @@ public class ManageGoodsBoundary extends WebPanel {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int flag = UpdateGoodsDialog.newInstance(table.getValueAt(table.getSelectedRow(), 0));
-                    if (flag != 0) {
-                        if (flag == 2) {
-                            QueryAllGoodsTypeResponseDto queryAllGoodsTypeResponseDto = queryAllGoodsType();
-                            typeIdCache = queryAllGoodsTypeResponseDto.getId();
-                            setListItem(queryAllGoodsTypeResponseDto.getName());
-                        }
-                        QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
-                        refreshTableData(queryGoodsResponseDto.getData());
-                        setPageIndicator(queryGoodsResponseDto.getPageCount());
+                int flag = UpdateGoodsDialog.newInstance(table.getValueAt(table.getSelectedRow(), 0));
+                if (flag != 0) {
+                    if (flag == 2) {
+                        QueryAllGoodsTypeResponseDto queryAllGoodsTypeResponseDto = queryAllGoodsType();
+                        typeIdCache = queryAllGoodsTypeResponseDto.getId();
+                        setListItem(queryAllGoodsTypeResponseDto.getName());
                     }
+                    QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
+                    refreshTableData(queryGoodsResponseDto.getData());
+                    setPageIndicator(queryGoodsResponseDto.getPageCount());
                 }
             }
         });
@@ -134,6 +136,14 @@ public class ManageGoodsBoundary extends WebPanel {
         });
     }
 
+    /**
+     * 查询满足条件的所有商品
+     *
+     * @param typeId
+     * @param keyword
+     * @param currentPage
+     * @return
+     */
     private QueryGoodsResponseDto queryGoods(int typeId, String keyword, int currentPage) {
         QueryGoodsResponseDto queryGoodsResponseDto = new QueryGoodsResponseDto();
         try {
@@ -150,6 +160,11 @@ public class ManageGoodsBoundary extends WebPanel {
         return queryGoodsResponseDto;
     }
 
+    /**
+     * 查询所有商品类型
+     *
+     * @return
+     */
     private QueryAllGoodsTypeResponseDto queryAllGoodsType() {
         QueryAllGoodsTypeResponseDto queryAllGoodsTypeResponseDto = new QueryAllGoodsTypeResponseDto();
         try {
@@ -161,6 +176,9 @@ public class ManageGoodsBoundary extends WebPanel {
         return queryAllGoodsTypeResponseDto;
     }
 
+    /**
+     * 准备数据
+     */
     private void prepareData() {
         QueryAllGoodsTypeResponseDto queryAllGoodsTypeResponseDto = queryAllGoodsType();
         this.typeIdCache = queryAllGoodsTypeResponseDto.getId();
@@ -173,6 +191,11 @@ public class ManageGoodsBoundary extends WebPanel {
         }
     }
 
+    /**
+     * 刷新列表数据
+     *
+     * @param types
+     */
     private void setListItem(String[] types) {
         if (types != null && types.length > 0) {
             listModel.removeAllElements();
@@ -183,10 +206,20 @@ public class ManageGoodsBoundary extends WebPanel {
         }
     }
 
+    /**
+     * 刷新表格数据
+     *
+     * @param tableBody
+     */
     private void refreshTableData(Object[][] tableBody) {
         tableModel.setDataVector(tableBody, tableHead);
     }
 
+    /**
+     * 设置页面指示器
+     *
+     * @param pageCount
+     */
     private void setPageIndicator(int pageCount) {
         this.pageCount = pageCount;
         pageIndicator.setText(currentPage + " / " + pageCount);

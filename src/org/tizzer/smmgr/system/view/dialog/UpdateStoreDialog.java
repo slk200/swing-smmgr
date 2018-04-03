@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class UpdateStoreDialog extends WebDialog {
 
+    //是否刷新标志
     private static boolean isRefresh;
     private WebTextField idField;
     private WebTextField nameField;
@@ -33,6 +34,7 @@ public class UpdateStoreDialog extends WebDialog {
     private WebTextField dateField;
     private WebButton updateButton;
     private WebButton cancelButton;
+    //传入参数缓存
     private Object[] dataCache;
 
     public UpdateStoreDialog() {
@@ -75,12 +77,12 @@ public class UpdateStoreDialog extends WebDialog {
                     dispose();
                     return;
                 }
-                boolean result = updateStore(name, address);
-                if (result) {
+                UpdateStoreResponseDto updateStoreResponseDto = updateStore(name, address);
+                if (updateStoreResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(updateButton, updateStoreResponseDto.getMessage());
+                } else {
                     isRefresh = true;
                     dispose();
-                } else {
-                    SwingUtil.showTip(updateButton, "修改失败！");
                 }
             }
         });
@@ -93,6 +95,11 @@ public class UpdateStoreDialog extends WebDialog {
         });
     }
 
+    /**
+     * 初始化数据
+     *
+     * @param dataCache
+     */
     private void setDataCache(Object[] dataCache) {
         this.dataCache = dataCache;
         idField.setText(dataCache[0].toString());
@@ -101,7 +108,14 @@ public class UpdateStoreDialog extends WebDialog {
         dateField.setText(dataCache[3].toString());
     }
 
-    private boolean updateStore(String name, String address) {
+    /**
+     * 修改分店资料
+     *
+     * @param name
+     * @param address
+     * @return
+     */
+    private UpdateStoreResponseDto updateStore(String name, String address) {
         UpdateStoreResponseDto updateStoreResponseDto = new UpdateStoreResponseDto();
         try {
             UpdateStoreRequestDto updateStoreRequestDto = new UpdateStoreRequestDto();
@@ -112,7 +126,7 @@ public class UpdateStoreDialog extends WebDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return updateStoreResponseDto.getCode() == ResultCode.OK;
+        return updateStoreResponseDto;
     }
 
     private WebPanel createContentPane() {

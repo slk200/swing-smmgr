@@ -58,6 +58,16 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
         refreshData(queryInsiderResponseDto);
     }
 
+    /**
+     * 查询满足条件的所有会员
+     *
+     * @param startDate
+     * @param endDate
+     * @param keyword
+     * @param pageSize
+     * @param currentPage
+     * @return
+     */
     private QueryInsiderResponseDto queryInsider(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
         QueryInsiderResponseDto querySomeStoreResponseDto = new QueryInsiderResponseDto();
         try {
@@ -75,11 +85,19 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
         return querySomeStoreResponseDto;
     }
 
+    /**
+     * 刷新数据
+     *
+     * @param querySomeStoreResponseDto
+     */
     private void refreshData(QueryInsiderResponseDto querySomeStoreResponseDto) {
         pageView.setTableBody(querySomeStoreResponseDto.getData());
         pageView.setPageIndicator(querySomeStoreResponseDto.getPageCount());
     }
 
+    /**
+     * 准备数据
+     */
     private void prepareData() {
         QueryInsiderResponseDto queryInsiderResponseDto = queryInsider(null, null, "", 30, 1);
         pageView.prepareData(tableHead, queryInsiderResponseDto.getData(), queryInsiderResponseDto.getPageCount());

@@ -3,10 +3,6 @@ package org.tizzer.smmgr.system.view.component;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * @author tizzer
- * @version 1.0
- */
 public class WebCircleProgress extends JPanel {
     /**
      * 最小进度值

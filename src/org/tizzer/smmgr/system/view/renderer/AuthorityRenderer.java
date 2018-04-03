@@ -7,6 +7,10 @@ import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class AuthorityRenderer implements TableCellRenderer {
 
     @Override

@@ -6,13 +6,20 @@ import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryLossRecordRequestDto;
+import org.tizzer.smmgr.system.model.request.QueryLossSpecRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryLossRecordResponseDto;
+import org.tizzer.smmgr.system.model.response.QueryLossSpecResponseDto;
 import org.tizzer.smmgr.system.view.component.WebRecordView;
 import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.LossRecordRenderer;
 
 import java.awt.*;
+import java.util.Objects;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class ManageLossBoundary extends WebPanel implements RecordListener {
 
     private static final Object[] tableHead = {"条码", "名称", "进价", "数量"};
@@ -22,6 +29,7 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
     private WebLabel noteLabel;
     private WebRecordView recordView;
 
+    //当前选中单号缓存
     private Object serialNoCache;
 
     public ManageLossBoundary() {
@@ -50,9 +58,46 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
 
     @Override
     public void selectPerformed(int index) {
-
+        Object serialNo = ((Object[]) recordView.getSelectedListSource(index))[0];
+        if (!Objects.equals(serialNo, serialNoCache)) {
+            serialNoCache = serialNo;
+            QueryLossSpecResponseDto queryLossSpecResponseDto = queryLossSpec(serialNo);
+            recordView.setTableBody(queryLossSpecResponseDto.getData());
+            quantityLabel.setText(getBoldBlackText(queryLossSpecResponseDto.getQuantity()));
+            costLabel.setText(getBoldOrangeText(queryLossSpecResponseDto.getCost() + ""));
+            noteLabel.setText("备注：" + queryLossSpecResponseDto.getNote());
+        }
     }
 
+    /**
+     * 查询报损详情
+     *
+     * @param id
+     * @return
+     */
+    private QueryLossSpecResponseDto queryLossSpec(Object id) {
+        QueryLossSpecResponseDto queryLossSpecResponseDto = new QueryLossSpecResponseDto();
+        try {
+            QueryLossSpecRequestDto queryLossSpecRequestDto = new QueryLossSpecRequestDto();
+            queryLossSpecRequestDto.setId(id);
+            queryLossSpecResponseDto = HttpHandler.get("/query/loss/spec?" + queryLossSpecRequestDto.toString(), QueryLossSpecResponseDto.class);
+        } catch (Exception e) {
+            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            e.printStackTrace();
+        }
+        return queryLossSpecResponseDto;
+    }
+
+    /**
+     * 查询报损记录
+     *
+     * @param startDate
+     * @param endDate
+     * @param keyword
+     * @param curLoadIndex
+     * @param loadSize
+     * @return
+     */
     private QueryLossRecordResponseDto queryLossRecord(String startDate, String endDate, String keyword, int curLoadIndex, int loadSize) {
         QueryLossRecordResponseDto queryTradeRecordResponseDto = new QueryLossRecordResponseDto();
         try {
@@ -70,14 +115,29 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
         return queryTradeRecordResponseDto;
     }
 
+    /**
+     * 设置黑色粗体字
+     *
+     * @param quantity
+     * @return
+     */
     private String getBoldBlackText(String quantity) {
         return "<html><font face='Microsoft YaHei' color=black><b>件数：" + quantity + "</b></html>";
     }
 
+    /**
+     * 设置橙色粗体字
+     *
+     * @param cost
+     * @return
+     */
     private String getBoldOrangeText(String cost) {
         return "<html><font face='Microsoft YaHei' color=orange><b>总额：" + cost + "</b></html>";
     }
 
+    /**
+     * 准备数据
+     */
     private void prepareData() {
         QueryLossRecordResponseDto queryLossRecordResponseDto = queryLossRecord(null, null, "", 1, 20);
         recordView.addListItem(queryLossRecordResponseDto.getData());

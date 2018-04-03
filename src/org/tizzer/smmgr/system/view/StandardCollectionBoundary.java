@@ -51,9 +51,13 @@ public class StandardCollectionBoundary extends WebPanel {
     private WebTextField searchInsiderField;
     private WebButton checkoutButton;
 
+    //查询的交易商品缓存
     private Object[][] tradeGoodsCache;
+    //会员信息缓存
     private Object[] insiderCache;
+    //折扣
     private int discount = 100;
+    //当前消费总额
     private double currentCost = 0;
 
     public StandardCollectionBoundary() {
@@ -284,6 +288,14 @@ public class StandardCollectionBoundary extends WebPanel {
         return queryOneInsiderResponseDto;
     }
 
+    /**
+     * 保存交易记录
+     *
+     * @param payType
+     * @param cardNo
+     * @param phone
+     * @return
+     */
     private SaveTradeRecordResponseDto saveTradeRecord(Object payType, Object cardNo, Object phone) {
         SaveTradeRecordResponseDto saveTradeRecordResponseDto = new SaveTradeRecordResponseDto();
         try {

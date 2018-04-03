@@ -10,6 +10,10 @@ import com.alee.managers.tooltip.TooltipManager;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class SwingUtil {
     /**
      * 设置weblaf外观

@@ -33,7 +33,6 @@ import java.util.Vector;
  */
 public class ManageStoreBoundary extends WebPanel implements PageListener {
 
-    private final static Class clazz = ManageStoreBoundary.class;
     private final static Object[] tableHead = {"序号", "门店名", "地址", "录入时间"};
 
     private WebPageView pageView;
@@ -93,7 +92,10 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
                         return;
                     }
                 }
-                if (deleteStore(id)) {
+                DeleteStoreResponseDto deleteStoreResponseDto = deleteStore(id);
+                if (deleteStoreResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(delButton, deleteStoreResponseDto.getMessage());
+                } else {
                     pageView.refresh();
                 }
             }
@@ -106,19 +108,29 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
         refreshData(queryStoreResponseDto);
     }
 
-    private boolean deleteStore(Vector<Integer> id) {
+    /**
+     * 删除分店信息
+     *
+     * @param id
+     * @return
+     */
+    private DeleteStoreResponseDto deleteStore(Vector<Integer> id) {
         DeleteStoreResponseDto deleteStoreResponseDto = new DeleteStoreResponseDto();
         try {
             DeleteStoreRequestDto deleteStoreRequestDto = new DeleteStoreRequestDto();
             deleteStoreRequestDto.setId(id);
-            System.out.println(deleteStoreRequestDto);
             deleteStoreResponseDto = HttpHandler.post("/delete/store", deleteStoreRequestDto.toString(), DeleteStoreResponseDto.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return deleteStoreResponseDto.getCode() == ResultCode.OK;
+        return deleteStoreResponseDto;
     }
 
+    /**
+     * 查询具体分店
+     *
+     * @return
+     */
     private QueryOneStoreResponseDto getCurrentStore() {
         QueryOneStoreResponseDto queryOneStoreResponseDto = new QueryOneStoreResponseDto();
         try {
@@ -131,6 +143,16 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
         return queryOneStoreResponseDto;
     }
 
+    /**
+     * 查询满足条件的所有分店
+     *
+     * @param startDate
+     * @param endDate
+     * @param keyword
+     * @param pageSize
+     * @param currentPage
+     * @return
+     */
     private QueryStoreResponseDto queryStore(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
         QueryStoreResponseDto queryStoreResponseDto = new QueryStoreResponseDto();
         try {
@@ -142,17 +164,25 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
             queryStoreRequestDto.setCurrentPage(currentPage - 1);
             queryStoreResponseDto = HttpHandler.get("/query/store?" + queryStoreRequestDto.toString(), QueryStoreResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(clazz, e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryStoreResponseDto;
     }
 
+    /**
+     * 刷新数据
+     *
+     * @param queryStoreResponseDto
+     */
     private void refreshData(QueryStoreResponseDto queryStoreResponseDto) {
         pageView.setTableBody(queryStoreResponseDto.getData());
         pageView.setPageIndicator(queryStoreResponseDto.getPageCount());
     }
 
+    /**
+     * 准备数据
+     */
     private void prepareData() {
         QueryStoreResponseDto queryStoreResponseDto = queryStore(null, null, "", 30, 1);
         pageView.prepareData(tableHead, queryStoreResponseDto.getData(), queryStoreResponseDto.getPageCount());

@@ -32,8 +32,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class UpdateGoodsDialog extends WebDialog {
 
+    //操作标记
     private static int flag = 0;
     private WebTextField upcField;
     private WebTextField nameField;
@@ -45,9 +50,10 @@ public class UpdateGoodsDialog extends WebDialog {
     private WebSpinner bzDateSpinner;
     private WebButton updateButton;
     private WebButton cancelButton;
-
+    //商品类型缓存
     private Integer[] idCache;
     private String[] nameCache;
+    //类型选择的索引
     private Integer chooseId = -1;
 
     public UpdateGoodsDialog(Object upc) {
@@ -114,6 +120,13 @@ public class UpdateGoodsDialog extends WebDialog {
         });
     }
 
+    /**
+     * 修改商品信息
+     *
+     * @param name
+     * @param type
+     * @return
+     */
     private SaveGoodsResponseDto saveGoods(String name, String type) {
         SaveGoodsResponseDto saveGoodsResponseDto = new SaveGoodsResponseDto();
         try {
@@ -137,6 +150,12 @@ public class UpdateGoodsDialog extends WebDialog {
         return saveGoodsResponseDto;
     }
 
+    /**
+     * 查询具体商品
+     *
+     * @param upc
+     * @return
+     */
     private QueryOneGoodsResponseDto queryOneGoods(Object upc) {
         QueryOneGoodsResponseDto queryOneGoodsResponseDto = new QueryOneGoodsResponseDto();
         try {
@@ -150,6 +169,11 @@ public class UpdateGoodsDialog extends WebDialog {
         return queryOneGoodsResponseDto;
     }
 
+    /**
+     * 查询满足条件的所有商品
+     *
+     * @return
+     */
     private QueryAllGoodsTypeResponseDto queryAllGoodsType() {
         QueryAllGoodsTypeResponseDto queryAllGoodsTypeResponseDto = new QueryAllGoodsTypeResponseDto();
         try {
@@ -161,6 +185,11 @@ public class UpdateGoodsDialog extends WebDialog {
         return queryAllGoodsTypeResponseDto;
     }
 
+    /**
+     * 准备数据
+     *
+     * @param upc
+     */
     private void prepareData(Object upc) {
         QueryAllGoodsTypeResponseDto queryAllGoodsTypeResponseDto = queryAllGoodsType();
         this.idCache = queryAllGoodsTypeResponseDto.getId();

@@ -20,6 +20,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class WebRecordView extends WebPanel {
     /**
      * params for load new data

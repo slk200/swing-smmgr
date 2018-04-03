@@ -9,6 +9,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class StreamUtil {
     private static final Class clazz = StreamUtil.class;
 

@@ -28,7 +28,6 @@ import java.awt.event.ActionListener;
  */
 public class ManageEmployeeBoundary extends WebPanel implements PageListener {
 
-    private final static Class clazz = ManageEmployeeBoundary.class;
     private final static Object[] tableHead = {"员工号", "姓名", "电话", "地址", "所属门店", "注册时间", "权限", "状态"};
 
     private WebPageView pageView;
@@ -78,6 +77,16 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
         refreshData(queryEmployeeResponseDto);
     }
 
+    /**
+     * 查询满足条件的所有员工
+     *
+     * @param startDate
+     * @param endDate
+     * @param keyword
+     * @param pageSize
+     * @param currentPage
+     * @return
+     */
     private QueryEmployeeResponseDto queryEmployee(String startDate, String endDate, String keyword, int pageSize, int currentPage) {
         QueryEmployeeResponseDto queryEmployeeResponseDto = new QueryEmployeeResponseDto();
         try {
@@ -89,24 +98,35 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
             queryEmployeeRequestDto.setCurrentPage(currentPage - 1);
             queryEmployeeResponseDto = HttpHandler.get("/query/employee?" + queryEmployeeRequestDto.toString(), QueryEmployeeResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(clazz, e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryEmployeeResponseDto;
     }
 
+    /**
+     * 刷新数据
+     *
+     * @param queryEmployeeResponseDto
+     */
     private void refreshData(QueryEmployeeResponseDto queryEmployeeResponseDto) {
         pageView.setTableBody(queryEmployeeResponseDto.getData());
         pageView.setPageIndicator(queryEmployeeResponseDto.getPageCount());
         this.setRenderer();
     }
 
+    /**
+     * 准备数据
+     */
     private void prepareData() {
         QueryEmployeeResponseDto queryEmployeeResponseDto = queryEmployee(null, null, "", 30, 1);
         pageView.prepareData(tableHead, queryEmployeeResponseDto.getData(), queryEmployeeResponseDto.getPageCount());
         this.setRenderer();
     }
 
+    /**
+     * 设置指定列的渲染器
+     */
     private void setRenderer() {
         pageView.setColumnCellRenderer(6, new AuthorityRenderer());
         pageView.setColumnCellRenderer(7, new StateRenderer());

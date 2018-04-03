@@ -24,6 +24,10 @@ import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class WebPageView extends WebPanel {
 
     /**

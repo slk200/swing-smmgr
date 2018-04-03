@@ -26,6 +26,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class LossGoodsDialog extends WebDialog {
     private final static Object[] tableHead = {"条码", "名称", "进价"};
 
@@ -35,7 +39,9 @@ public class LossGoodsDialog extends WebDialog {
     private WebTable table;
     private WebButton chooseButton;
     private WebButton cancelButton;
+    //传入参数缓存
     private Object[][] dataCache;
+    //是否变更标志
     private boolean isHandle;
 
     public LossGoodsDialog(Object[][] dataCache) {

@@ -81,7 +81,6 @@ public class LoginBoundary extends WebPanel {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                enter(true);
                 String staffNo = staffNoField.getText();
                 if (staffNo.equals("")) {
                     SwingUtil.showTip(staffNoField, "账号不能为空");

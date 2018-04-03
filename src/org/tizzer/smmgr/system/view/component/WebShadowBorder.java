@@ -11,10 +11,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author tizzer
- * @version 1.0
- */
 public class WebShadowBorder implements Border {
 
     public static final int DEFAULT_SIZE = 4;

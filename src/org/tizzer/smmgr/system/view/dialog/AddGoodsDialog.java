@@ -31,6 +31,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class AddGoodsDialog extends WebDialog {
 
     private WebTextField upcField;
@@ -44,9 +48,10 @@ public class AddGoodsDialog extends WebDialog {
     private WebButton upcCreateButton;
     private WebButton addButton;
     private WebButton cancelButton;
-
+    //商品类型缓存
     private Integer[] idCache;
     private String[] nameCache;
+    //选择的索引
     private Integer chooseId = -1;
 
     public AddGoodsDialog() {
@@ -125,6 +130,14 @@ public class AddGoodsDialog extends WebDialog {
         });
     }
 
+    /**
+     * 保存商品
+     *
+     * @param upc
+     * @param name
+     * @param type
+     * @return
+     */
     private SaveGoodsResponseDto saveGoods(String upc, String name, String type) {
         SaveGoodsResponseDto saveGoodsResponseDto = new SaveGoodsResponseDto();
         try {
@@ -148,6 +161,9 @@ public class AddGoodsDialog extends WebDialog {
         return saveGoodsResponseDto;
     }
 
+    /**
+     * 准备数据
+     */
     private void prepareData() {
         try {
             QueryAllGoodsTypeResponseDto queryAllGoodsTypeResponseDto = new QueryAllGoodsTypeResponseDto();

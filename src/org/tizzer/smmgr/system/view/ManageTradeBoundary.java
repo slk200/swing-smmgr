@@ -16,6 +16,10 @@ import org.tizzer.smmgr.system.view.renderer.TradeRecordRenderer;
 import java.awt.*;
 import java.util.Objects;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class ManageTradeBoundary extends WebPanel implements RecordListener {
 
     private static final Object[] tableHead = {"条码", "名称", "售价", "折扣价", "数量"};
@@ -26,6 +30,7 @@ public class ManageTradeBoundary extends WebPanel implements RecordListener {
     private WebLabel phoneLabel;
     private WebRecordView recordView;
 
+    //当前选中单号缓存
     private Object serialNoCache;
 
     public ManageTradeBoundary() {
@@ -67,6 +72,12 @@ public class ManageTradeBoundary extends WebPanel implements RecordListener {
         }
     }
 
+    /**
+     * 查询交易详情
+     *
+     * @param serialNo
+     * @return
+     */
     private QueryTradeSpecResponseDto queryTradeSpec(Object serialNo) {
         QueryTradeSpecResponseDto queryTradeSpecResponseDto = new QueryTradeSpecResponseDto();
         try {
@@ -80,6 +91,16 @@ public class ManageTradeBoundary extends WebPanel implements RecordListener {
         return queryTradeSpecResponseDto;
     }
 
+    /**
+     * 查询交易记录
+     *
+     * @param startDate
+     * @param endDate
+     * @param keyword
+     * @param curLoadIndex
+     * @param loadSize
+     * @return
+     */
     private QueryTradeRecordResponseDto queryTradeRecord(String startDate, String endDate, String keyword, int curLoadIndex, int loadSize) {
         QueryTradeRecordResponseDto queryTradeRecordResponseDto = new QueryTradeRecordResponseDto();
         try {
@@ -98,14 +119,30 @@ public class ManageTradeBoundary extends WebPanel implements RecordListener {
         return queryTradeRecordResponseDto;
     }
 
+    /**
+     * 设置黑色粗体字
+     *
+     * @param quantity
+     * @return
+     */
     private String getBoldBlackText(String quantity) {
         return "<html><font face='Microsoft YaHei' color=black><b>件数：" + quantity + "</b></html>";
     }
 
+    /**
+     * 设置橙色粗体字
+     *
+     * @param cost
+     * @param payType
+     * @return
+     */
     private String getBoldOrangeText(String cost, String payType) {
         return "<html><font face='Microsoft YaHei' color=orange><b>总额：" + cost + "&nbsp;(付款方式：" + payType + ")</b></html>";
     }
 
+    /**
+     * 准备数据
+     */
     private void prepareData() {
         QueryTradeRecordResponseDto queryTradeRecordResponseDto = queryTradeRecord(null, null, "", 1, 20);
         recordView.addListItem(queryTradeRecordResponseDto.getData());

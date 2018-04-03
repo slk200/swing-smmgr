@@ -7,6 +7,10 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class TradeRecordRenderer implements ListCellRenderer {
 
     @Override

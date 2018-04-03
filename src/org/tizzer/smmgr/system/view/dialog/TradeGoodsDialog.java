@@ -26,19 +26,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class TradeGoodsDialog extends WebDialog {
 
     private final static Object[] tableHead = {"条码", "名称", "售价"};
-
+    //传入参数缓存
+    private static Object[][] dataCache;
+    //是否处理标志
+    private static boolean isHandle;
     private WebButton searchButton;
     private WebTextField searchField;
     private DefaultTableModel tableModel;
     private WebTable table;
     private WebButton chooseButton;
     private WebButton cancelButton;
-
-    private static Object[][] dataCache;
-    private static boolean isHandle;
 
     public TradeGoodsDialog(Object[][] dataCache) {
         super(RuntimeConstants.root, "选择交易商品", true);

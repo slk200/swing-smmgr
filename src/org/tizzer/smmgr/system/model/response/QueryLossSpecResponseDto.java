@@ -1,11 +1,10 @@
 package org.tizzer.smmgr.system.model.response;
 
-public class QueryTradeSpecResponseDto extends ResultResponse {
+public class QueryLossSpecResponseDto extends ResultResponse {
+
     private DataSet[] data;
     private Double cost;
-    private String cardNo;
-    private String phone;
-    private String payType;
+    private String note;
 
     public String getQuantity() {
         int sum = 0;
@@ -19,7 +18,7 @@ public class QueryTradeSpecResponseDto extends ResultResponse {
 
     public Object[][] getData() {
         if (data != null) {
-            Object[][] tableBody = new Object[data.length][5];
+            Object[][] tableBody = new Object[data.length][4];
             for (int i = 0; i < data.length; i++) {
                 tableBody[i] = data[i].getData();
             }
@@ -40,35 +39,18 @@ public class QueryTradeSpecResponseDto extends ResultResponse {
         this.cost = cost;
     }
 
-    public String getCardNo() {
-        return cardNo == null ? "" : cardNo;
+    public String getNote() {
+        return note == null ? "" : note;
     }
 
-    public void setCardNo(String cardNo) {
-        this.cardNo = cardNo;
-    }
-
-    public String getPhone() {
-        return phone == null ? "" : phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     static class DataSet {
         private String upc;
         private String name;
-        private double primeCost;
-        private double presentCost;
+        private Double primeCost;
         private Integer quantity;
 
         public String getUpc() {
@@ -87,20 +69,12 @@ public class QueryTradeSpecResponseDto extends ResultResponse {
             this.name = name;
         }
 
-        public double getPrimeCost() {
+        public Double getPrimeCost() {
             return primeCost;
         }
 
-        public void setPrimeCost(double primeCost) {
+        public void setPrimeCost(Double primeCost) {
             this.primeCost = primeCost;
-        }
-
-        public double getPresentCost() {
-            return presentCost;
-        }
-
-        public void setPresentCost(double presentCost) {
-            this.presentCost = presentCost;
         }
 
         public Integer getQuantity() {
@@ -112,7 +86,7 @@ public class QueryTradeSpecResponseDto extends ResultResponse {
         }
 
         Object[] getData() {
-            return new Object[]{upc, name, primeCost, presentCost, quantity};
+            return new Object[]{upc, name, primeCost, quantity};
         }
     }
 }

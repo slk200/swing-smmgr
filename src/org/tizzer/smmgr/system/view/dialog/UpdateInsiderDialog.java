@@ -28,8 +28,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class UpdateInsiderDialog extends WebDialog {
 
+    //记录新折扣
     private static int newDiscount;
     private WebTextField cardNoField;
     private WebTextField nameField;
@@ -40,7 +45,9 @@ public class UpdateInsiderDialog extends WebDialog {
     private WebDateField birthField;
     private WebButton updateButton;
     private WebButton cancelButton;
+    //传入参数缓存
     private Object[] dataCache;
+    //会员类型缓存
     private Integer[] idCache;
     private Integer[] discountCache;
 
@@ -87,7 +94,13 @@ public class UpdateInsiderDialog extends WebDialog {
                         SwingUtil.showTip(updateButton, "并没有修改信息");
                         return;
                     }
-                    updateInsider();
+                    UpdateInsiderResponseDto updateInsiderResponseDto = updateInsider();
+                    if (updateInsiderResponseDto.getCode() != ResultCode.OK) {
+                        SwingUtil.showTip(updateButton, updateInsiderResponseDto.getMessage());
+                    } else {
+                        newDiscount = discountCache[typeComboBox.getSelectedIndex()];
+                        dispose();
+                    }
                 }
             }
         });
@@ -100,7 +113,12 @@ public class UpdateInsiderDialog extends WebDialog {
         });
     }
 
-    private void updateInsider() {
+    /**
+     * 修改会员信息
+     *
+     * @return
+     */
+    private UpdateInsiderResponseDto updateInsider() {
         UpdateInsiderResponseDto updateInsiderResponseDto = new UpdateInsiderResponseDto();
         try {
             UpdateInsiderRequestDto updateInsiderRequestDto = new UpdateInsiderRequestDto();
@@ -108,18 +126,18 @@ public class UpdateInsiderDialog extends WebDialog {
             updateInsiderRequestDto.setId(idCache[typeComboBox.getSelectedIndex()]);
             updateInsiderRequestDto.setBirth(birthField.getText());
             updateInsiderResponseDto = HttpHandler.post("/update/insider", updateInsiderRequestDto.toString(), UpdateInsiderResponseDto.class);
-            if (updateInsiderResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(updateButton, updateInsiderResponseDto.getMessage());
-            } else {
-                newDiscount = discountCache[typeComboBox.getSelectedIndex()];
-                dispose();
-            }
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
+        return updateInsiderResponseDto;
     }
 
+    /**
+     * 初始化数据
+     *
+     * @param dataCache
+     */
     private void setDataCache(Object[] dataCache) {
         this.dataCache = dataCache;
         newDiscount = (int) dataCache[6];
@@ -135,6 +153,9 @@ public class UpdateInsiderDialog extends WebDialog {
         }
     }
 
+    /**
+     * 准备数据
+     */
     private void prepareData() {
         try {
             QueryAllInsiderTypeResponseDto queryAllInsiderTypeResponseDto = HttpHandler.get("/query/insider/type", QueryAllInsiderTypeResponseDto.class);

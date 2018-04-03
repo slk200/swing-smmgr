@@ -17,6 +17,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class LaunchManageMode extends WebPanel {
 
     private WebToggleButton factButton;
@@ -57,7 +61,7 @@ public class LaunchManageMode extends WebPanel {
         factButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeView(new ManageFactBoundary());
+                changeView(new ManageStateBoundary());
             }
         });
 
@@ -132,6 +136,11 @@ public class LaunchManageMode extends WebPanel {
         });
     }
 
+    /**
+     * 切换画面
+     *
+     * @param webPanel
+     */
     private void changeView(WebPanel webPanel) {
         handlePanel.removeAll();
         handlePanel.add(webPanel);
@@ -139,6 +148,9 @@ public class LaunchManageMode extends WebPanel {
         handlePanel.repaint();
     }
 
+    /**
+     * 设置关闭前事件
+     */
     private void setClosingOperation() {
         WebFrame root = RuntimeConstants.root;
         root.removeWindowListener(root.getWindowListeners()[0]);
@@ -183,7 +195,7 @@ public class LaunchManageMode extends WebPanel {
     private WebPanel createHandlePanel() {
         WebPanel webPanel = new WebPanel();
         webPanel.setBackground(ColorManager._241_246_253);
-        webPanel.add(new ManageFactBoundary());
+        webPanel.add(new ManageStateBoundary());
         return webPanel;
     }
 }

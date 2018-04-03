@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class AddStoreDialog extends WebDialog {
 
+    //是否刷新标志
     private static boolean isRefresh;
     private WebTextField nameField;
     private WebTextField addressField;
@@ -65,12 +66,12 @@ public class AddStoreDialog extends WebDialog {
                     SwingUtil.showTip(addressField, "地址不能为空");
                     return;
                 }
-                boolean result = saveStore(name, address);
-                if (result) {
+                SaveStoreResponseDto saveStoreResponseDto = saveStore(name, address);
+                if (saveStoreResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(addButton, saveStoreResponseDto.getMessage());
+                } else {
                     isRefresh = true;
                     dispose();
-                } else {
-                    SwingUtil.showTip(addButton, "保存失败");
                 }
             }
         });
@@ -83,7 +84,14 @@ public class AddStoreDialog extends WebDialog {
         });
     }
 
-    private boolean saveStore(String name, String address) {
+    /**
+     * 保存分店
+     *
+     * @param name
+     * @param address
+     * @return
+     */
+    private SaveStoreResponseDto saveStore(String name, String address) {
         SaveStoreResponseDto saveStoreResponseDto = new SaveStoreResponseDto();
         try {
             SaveStoreRequestDto saveStoreRequestDto = new SaveStoreRequestDto();
@@ -93,7 +101,7 @@ public class AddStoreDialog extends WebDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return saveStoreResponseDto.getCode() == ResultCode.OK;
+        return saveStoreResponseDto;
     }
 
     private WebPanel createContentPane() {

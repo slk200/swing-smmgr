@@ -19,8 +19,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class UpdateEmployeeDialog extends WebDialog {
 
+    //刷新标志
     private static boolean isRefresh;
     private WebTextField staffNoField;
     private WebTextField nameField;
@@ -32,7 +37,7 @@ public class UpdateEmployeeDialog extends WebDialog {
     private WebCheckBox enableBox;
     private WebButton updateButton;
     private WebButton cancelButton;
-
+    //传入参数缓存
     private Object[] dataCache;
 
     public UpdateEmployeeDialog() {
@@ -61,6 +66,9 @@ public class UpdateEmployeeDialog extends WebDialog {
         return isRefresh;
     }
 
+    /**
+     * 初始化数据
+     */
     private void setDataCache(Object[] editData) {
         this.dataCache = editData;
         staffNoField.setText(editData[0].toString());
@@ -92,11 +100,11 @@ public class UpdateEmployeeDialog extends WebDialog {
                     return;
                 }
                 UpdateEmployeeResponseDto updateEmployeeResponseDto = updateEmployee(phone, address);
-                if (updateEmployeeResponseDto.getCode() == ResultCode.OK) {
+                if (updateEmployeeResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(updateButton, updateEmployeeResponseDto.getMessage());
+                } else {
                     isRefresh = true;
                     dispose();
-                } else {
-                    SwingUtil.showTip(updateButton, "修改失败");
                 }
             }
         });

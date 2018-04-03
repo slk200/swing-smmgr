@@ -21,8 +21,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * @author tizzer
+ * @version 1.0
+ */
 public class CheckoutDialog extends WebDialog {
 
+    //付款类型
     private static Object payType;
     private WebLabel costLabel;
     private WebComboBox typeComboBox;
@@ -30,6 +35,7 @@ public class CheckoutDialog extends WebDialog {
     private WebTextField changeField;
     private WebButton confirmButton;
     private WebButton cancelButton;
+    //消费总额
     private double cost;
 
     public CheckoutDialog() {

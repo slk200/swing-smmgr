@@ -40,7 +40,9 @@ public class StandardInsiderBoundary extends WebPanel {
     private WebButton backToSaleButton;
     private WebButton saveInsiderButton;
 
+    //回掉函数
     private NavigationListener navigationListener;
+    //会员类型缓存
     private Integer[] idCache;
 
     public StandardInsiderBoundary(NavigationListener navigationListener) {
@@ -94,6 +96,9 @@ public class StandardInsiderBoundary extends WebPanel {
         });
     }
 
+    /**
+     * 准备数据
+     */
     private void prepareData() {
         try {
             QueryAllInsiderTypeResponseDto queryAllInsiderTypeResponseDto = HttpHandler.get("/query/insider/type", QueryAllInsiderTypeResponseDto.class);
@@ -104,6 +109,13 @@ public class StandardInsiderBoundary extends WebPanel {
         }
     }
 
+    /**
+     * 保存会员
+     *
+     * @param cardNo
+     * @param name
+     * @param phone
+     */
     private void saveInsider(String cardNo, String name, String phone) {
         SaveInsiderResponseDto saveInsiderResponseDto = new SaveInsiderResponseDto();
         try {
@@ -144,7 +156,7 @@ public class StandardInsiderBoundary extends WebPanel {
     }
 
     /**
-     * 重置界面
+     * 重置台面
      */
     private void reset() {
         Component[] components = getComponents();

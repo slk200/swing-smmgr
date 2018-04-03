@@ -101,6 +101,12 @@ public class LaunchStandardMode extends WebPanel implements NavigationListener {
         });
     }
 
+    /**
+     * 切换画面
+     *
+     * @param webPanel
+     * @param constrains
+     */
     private void changeView(WebPanel webPanel, String constrains) {
         handlePanel.removeAll();
         handlePanel.add(webPanel, constrains);
@@ -109,7 +115,7 @@ public class LaunchStandardMode extends WebPanel implements NavigationListener {
     }
 
     /**
-     * set closing operation for the context
+     * 设置关闭前事件
      */
     private void setClosingOperation() {
         WebFrame root = RuntimeConstants.root;

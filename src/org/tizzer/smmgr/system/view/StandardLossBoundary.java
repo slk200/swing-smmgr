@@ -160,6 +160,12 @@ public class StandardLossBoundary extends WebPanel {
         });
     }
 
+    /**
+     * 保存报损记录
+     *
+     * @param note
+     * @return
+     */
     private SaveLossRecordResponseDto saveLossRecord(String note) {
         SaveLossRecordResponseDto saveLossRecordResponseDto = new SaveLossRecordResponseDto();
         try {
