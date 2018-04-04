@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WebShadowBorder implements Border {
+public class JShadowBorder implements Border {
 
     public static final int DEFAULT_SIZE = 4;
     public static final Color DEFAULT_COLOR = Color.BLACK;
@@ -25,8 +25,8 @@ public class WebShadowBorder implements Border {
     private final Insets insetsMax, insetsActual;
     private BufferedImage[] shadows;
 
-    private WebShadowBorder(int size, Color color, float alpha,
-                            float paddingLeft, float paddingTop) {
+    private JShadowBorder(int size, Color color, float alpha,
+                          float paddingLeft, float paddingTop) {
 
         assert size > 0;
         assert color != null;
@@ -53,22 +53,22 @@ public class WebShadowBorder implements Border {
         insetsActual.bottom = dsize - insetsActual.top;
     }
 
-    public static WebShadowBorder newInstance() {
+    public static JShadowBorder newInstance() {
 
         return newInstance(DEFAULT_SIZE, DEFAULT_COLOR, DEFAULT_ALPHA);
     }
 
-    public static WebShadowBorder newInstance(int size) {
+    public static JShadowBorder newInstance(int size) {
 
         return newInstance(size, DEFAULT_COLOR, DEFAULT_ALPHA);
     }
 
-    public static WebShadowBorder newInstance(int size, Color c) {
+    public static JShadowBorder newInstance(int size, Color c) {
 
         return newInstance(size, c, DEFAULT_ALPHA);
     }
 
-    public static WebShadowBorder newInstance(int size, Color c, float alpha) {
+    public static JShadowBorder newInstance(int size, Color c, float alpha) {
 
         size = Math.max(size, 0);
         alpha = Math.max(alpha, 0f);
@@ -80,8 +80,8 @@ public class WebShadowBorder implements Border {
         return newInstance(size, c, alpha, DEFAULT_PADDING_TOP, DEFAULT_PADDING_LEFT);
     }
 
-    public static WebShadowBorder newInstance(int size, Color c, float alpha,
-                                              float paddingLeft, float paddingTop) {
+    public static JShadowBorder newInstance(int size, Color c, float alpha,
+                                            float paddingLeft, float paddingTop) {
 
         size = Math.max(size, 0);
         alpha = Math.max(alpha, 0f);
@@ -96,7 +96,7 @@ public class WebShadowBorder implements Border {
         if (c == null)
             c = DEFAULT_COLOR;
 
-        return new WebShadowBorder(size, c, alpha, paddingLeft, paddingTop);
+        return new JShadowBorder(size, c, alpha, paddingLeft, paddingTop);
     }
 
     public static Builder newBuilder() {
@@ -297,7 +297,7 @@ public class WebShadowBorder implements Border {
             }
 
             @Override
-            void fill(WebShadowBorder b, Graphics2D g, Rectangle r) {
+            void fill(JShadowBorder b, Graphics2D g, Rectangle r) {
 
                 BufferedImage image = b.getShadowPieces()[ordinal()];
 
@@ -372,7 +372,7 @@ public class WebShadowBorder implements Border {
             }
 
             @Override
-            void fill(WebShadowBorder b, Graphics2D g, Rectangle r) {
+            void fill(JShadowBorder b, Graphics2D g, Rectangle r) {
 
                 BufferedImage image = b.getShadowPieces()[ordinal()];
 
@@ -447,7 +447,7 @@ public class WebShadowBorder implements Border {
             }
 
             @Override
-            void fill(WebShadowBorder b, Graphics2D g, Rectangle r) {
+            void fill(JShadowBorder b, Graphics2D g, Rectangle r) {
 
                 BufferedImage image = b.getShadowPieces()[ordinal()];
 
@@ -522,7 +522,7 @@ public class WebShadowBorder implements Border {
             }
 
             @Override
-            void fill(WebShadowBorder b, Graphics2D g, Rectangle r) {
+            void fill(JShadowBorder b, Graphics2D g, Rectangle r) {
 
                 BufferedImage image = b.getShadowPieces()[ordinal()];
 
@@ -561,7 +561,7 @@ public class WebShadowBorder implements Border {
             r.height = height(b, i);
         }
 
-        void fill(WebShadowBorder b, Graphics2D g, Rectangle r) {
+        void fill(JShadowBorder b, Graphics2D g, Rectangle r) {
 
             BufferedImage image = b.getShadowPieces()[ordinal()];
 
@@ -588,7 +588,7 @@ public class WebShadowBorder implements Border {
         private float paddingLeft = DEFAULT_PADDING_LEFT;
         private float paddingTop = DEFAULT_PADDING_TOP;
 
-        // use static method WebShadowBorder.newBuilder().
+        // use static method JShadowBorder.newBuilder().
         private Builder() {
         }
 
@@ -682,9 +682,9 @@ public class WebShadowBorder implements Border {
             return paddingLeft(0.5f).paddingTop(0.5f);
         }
 
-        public WebShadowBorder build() {
+        public JShadowBorder build() {
 
-            return new WebShadowBorder(size, color, alpha,
+            return new JShadowBorder(size, color, alpha,
                     paddingLeft, paddingTop);
         }
     }

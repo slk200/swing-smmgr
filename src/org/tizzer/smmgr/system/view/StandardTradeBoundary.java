@@ -12,7 +12,7 @@ import org.tizzer.smmgr.system.model.request.QueryTradeSpecRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryTradeRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryTradeSpecResponseDto;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.view.component.WebRecordView;
+import org.tizzer.smmgr.system.view.component.JRecordView;
 import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.TradeRecordRenderer;
 
@@ -31,7 +31,7 @@ public class StandardTradeBoundary extends WebPanel implements RecordListener {
     private WebLabel costLabel;
     private WebLabel cardNoLabel;
     private WebLabel phoneLabel;
-    private WebRecordView recordView;
+    private JRecordView recordView;
 
     //当前选中单号缓存
     private Object serialNoCache;
@@ -175,14 +175,14 @@ public class StandardTradeBoundary extends WebPanel implements RecordListener {
         return webPanel;
     }
 
-    private WebRecordView createRecordView() {
-        WebRecordView webRecordView = new WebRecordView();
-        webRecordView.setInputPrompt("流水号");
-        webRecordView.setTableHead(tableHead);
-        webRecordView.setExternalComponent(createExternalPane());
-        webRecordView.setListCellRenderer(new TradeRecordRenderer());
-        webRecordView.addRecordListener(this);
-        return webRecordView;
+    private JRecordView createRecordView() {
+        JRecordView jRecordView = new JRecordView();
+        jRecordView.setInputPrompt("流水号");
+        jRecordView.setTableHead(tableHead);
+        jRecordView.setExternalComponent(createExternalPane());
+        jRecordView.setListCellRenderer(new TradeRecordRenderer());
+        jRecordView.addRecordListener(this);
+        return jRecordView;
     }
 
     private WebLabel createInfoLabel(String text) {

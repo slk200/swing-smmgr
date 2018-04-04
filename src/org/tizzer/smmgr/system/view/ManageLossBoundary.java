@@ -11,7 +11,7 @@ import org.tizzer.smmgr.system.model.request.QueryLossSpecRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryLossRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryLossSpecResponseDto;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.view.component.WebRecordView;
+import org.tizzer.smmgr.system.view.component.JRecordView;
 import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.LossRecordRenderer;
 
@@ -29,7 +29,7 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
     private WebLabel quantityLabel;
     private WebLabel costLabel;
     private WebLabel noteLabel;
-    private WebRecordView recordView;
+    private JRecordView recordView;
 
     //当前选中单号缓存
     private Object serialNoCache;
@@ -173,14 +173,14 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
         return webPanel;
     }
 
-    private WebRecordView createRecordView() {
-        WebRecordView webRecordView = new WebRecordView();
-        webRecordView.setInputPrompt("单号");
-        webRecordView.setTableHead(tableHead);
-        webRecordView.setExternalComponent(createExternalPane());
-        webRecordView.setListCellRenderer(new LossRecordRenderer());
-        webRecordView.addRecordListener(this);
-        return webRecordView;
+    private JRecordView createRecordView() {
+        JRecordView jRecordView = new JRecordView();
+        jRecordView.setInputPrompt("单号");
+        jRecordView.setTableHead(tableHead);
+        jRecordView.setExternalComponent(createExternalPane());
+        jRecordView.setListCellRenderer(new LossRecordRenderer());
+        jRecordView.addRecordListener(this);
+        return jRecordView;
     }
 
     private WebLabel createInfoLabel(String text) {

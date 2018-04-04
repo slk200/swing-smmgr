@@ -33,7 +33,6 @@ public class UpdateEmployeeDialog extends WebDialog {
     private WebTextField addressField;
     private WebTextField createAtField;
     private WebTextField storeField;
-    private WebCheckBox adminBox;
     private WebCheckBox enableBox;
     private WebButton updateButton;
     private WebButton cancelButton;
@@ -48,7 +47,6 @@ public class UpdateEmployeeDialog extends WebDialog {
         addressField = createInfoTextField();
         createAtField = createDisabledTextField();
         storeField = createDisabledTextField();
-        adminBox = createInfoBox("管理员");
         enableBox = createInfoBox("启用");
         updateButton = createBootstrapButton("修改");
         cancelButton = createBootstrapButton("取消");
@@ -77,7 +75,6 @@ public class UpdateEmployeeDialog extends WebDialog {
         addressField.setText(editData[3].toString());
         createAtField.setText(editData[5].toString());
         storeField.setText(editData[4].toString());
-        adminBox.setSelected((Boolean) editData[6]);
         enableBox.setSelected((Boolean) editData[7]);
     }
 
@@ -95,7 +92,7 @@ public class UpdateEmployeeDialog extends WebDialog {
                     SwingUtil.showTip(addressField, "地址不能为空");
                     return;
                 }
-                if (phone.equals(dataCache[2]) && address.equals(dataCache[3]) && dataCache[6].equals(adminBox.isSelected()) && dataCache[7].equals(enableBox.isSelected())) {
+                if (phone.equals(dataCache[2]) && address.equals(dataCache[3]) && dataCache[7].equals(enableBox.isSelected())) {
                     dispose();
                     return;
                 }
@@ -131,7 +128,7 @@ public class UpdateEmployeeDialog extends WebDialog {
             updateEmployeeRequestDto.setStaffNo(dataCache[0].toString());
             updateEmployeeRequestDto.setPhone(phone);
             updateEmployeeRequestDto.setAddress(address);
-            updateEmployeeRequestDto.setAdmin(adminBox.isSelected());
+            updateEmployeeRequestDto.setAdmin((Boolean) dataCache[6]);
             updateEmployeeRequestDto.setEnable(enableBox.isSelected());
             updateEmployeeResponseDto = HttpHandler.post("/update/employee", updateEmployeeRequestDto.toString(), UpdateEmployeeResponseDto.class);
         } catch (Exception e) {
@@ -157,11 +154,9 @@ public class UpdateEmployeeDialog extends WebDialog {
         SwingUtil.setupComponent(webPanel, createAtField, 1, 4, 1, 1);
         SwingUtil.setupComponent(webPanel, new WebLabel("所属门店："), 0, 5, 1, 1);
         SwingUtil.setupComponent(webPanel, storeField, 1, 5, 1, 1);
-        SwingUtil.setupComponent(webPanel, new WebLabel("权限："), 0, 6, 1, 1);
-        SwingUtil.setupComponent(webPanel, adminBox, 1, 6, 1, 1);
         SwingUtil.setupComponent(webPanel, new WebLabel("状态："), 0, 7, 1, 1);
-        SwingUtil.setupComponent(webPanel, enableBox, 1, 7, 1, 1);
-        SwingUtil.setupComponent(webPanel, createButtonPane(), 0, 8, 2, 1);
+        SwingUtil.setupComponent(webPanel, enableBox, 1, 6, 1, 1);
+        SwingUtil.setupComponent(webPanel, createButtonPane(), 0, 7, 2, 1);
         return webPanel;
     }
 
@@ -193,6 +188,7 @@ public class UpdateEmployeeDialog extends WebDialog {
     private WebButton createBootstrapButton(String text) {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
+        webButton.setSelectedForeground(Color.WHITE);
         webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
         return webButton;
     }

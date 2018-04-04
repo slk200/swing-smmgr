@@ -63,13 +63,13 @@ public class UpdateInsiderTypeDialog extends WebDialog {
 
         this.add(createContentPane());
         this.refreshData();
-        this.pack();
-        this.setLocationRelativeTo(RuntimeConstants.root);
         this.initListener();
     }
 
     public static boolean newInstance() {
         UpdateInsiderTypeDialog updateInsiderTypeDialog = new UpdateInsiderTypeDialog();
+        updateInsiderTypeDialog.setSize(400, 400);
+        updateInsiderTypeDialog.setLocationRelativeTo(RuntimeConstants.root);
         updateInsiderTypeDialog.setVisible(true);
         return isRefresh;
     }
@@ -283,6 +283,7 @@ public class UpdateInsiderTypeDialog extends WebDialog {
     private WebButton createBootstrapButton(String text) {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
+        webButton.setSelectedForeground(Color.WHITE);
         webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
         return webButton;
     }

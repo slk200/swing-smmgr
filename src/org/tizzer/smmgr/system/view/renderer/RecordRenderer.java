@@ -4,7 +4,6 @@ import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
@@ -18,7 +17,7 @@ public class RecordRenderer implements ListCellRenderer {
         Object[] content = (Object[]) value;
         JLabel label = new JLabel();
         label.setOpaque(true);
-        label.setBorder(new EmptyBorder(10, 30, 10, 30));
+        label.setPreferredSize(new Dimension(240, 60));
         label.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
         label.setIconTextGap(5);
         label.setIcon(IconManager.BOOKTAG);

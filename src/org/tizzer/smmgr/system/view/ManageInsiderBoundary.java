@@ -11,7 +11,7 @@ import org.tizzer.smmgr.system.model.request.QueryInsiderRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryInsiderResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.view.component.WebPageView;
+import org.tizzer.smmgr.system.view.component.JPageView;
 import org.tizzer.smmgr.system.view.dialog.UpdateInsiderTypeDialog;
 import org.tizzer.smmgr.system.view.listener.PageListener;
 
@@ -28,7 +28,7 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
     private final static Class clazz = ManageStoreBoundary.class;
     private final static Object[] tableHead = {"会员卡号", "会员姓名", "会员电话", "会员地址", "会员类型", "备注", "会员生日", "录入时间"};
 
-    private WebPageView pageView;
+    private JPageView pageView;
     private WebButton setButton;
 
     public ManageInsiderBoundary() {
@@ -122,11 +122,11 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
         return webPanel;
     }
 
-    private WebPageView createPageView() {
-        WebPageView webPageView = new WebPageView();
-        webPageView.setInputPrompt("卡号/姓名/电话/地址");
-        webPageView.addDateChangeListener(this);
-        return webPageView;
+    private JPageView createPageView() {
+        JPageView jPageView = new JPageView();
+        jPageView.setInputPrompt("卡号/姓名/电话/地址");
+        jPageView.addDateChangeListener(this);
+        return jPageView;
     }
 
     private WebButton createBootstrapButton() {

@@ -74,19 +74,17 @@ public class ManageGoodsBoundary extends WebPanel {
         list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int index = list.getSelectedIndex();
-                    if (index != -1) {
-                        typeId = typeIdCache[index];
-                        keyword = "";
-                        currentPage = 1;
-                        QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
-                        if (queryGoodsResponseDto.getCode() == ResultCode.OK) {
-                            refreshTableData(queryGoodsResponseDto.getData());
-                            setPageIndicator(queryGoodsResponseDto.getPageCount());
-                        } else {
-                            SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
-                        }
+                int index = list.getSelectedIndex();
+                if (index != -1) {
+                    typeId = typeIdCache[index];
+                    keyword = "";
+                    currentPage = 1;
+                    QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
+                    if (queryGoodsResponseDto.getCode() == ResultCode.OK) {
+                        refreshTableData(queryGoodsResponseDto.getData());
+                        setPageIndicator(queryGoodsResponseDto.getPageCount());
+                    } else {
+                        SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
                     }
                 }
             }
@@ -95,19 +93,21 @@ public class ManageGoodsBoundary extends WebPanel {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int flag = UpdateGoodsDialog.newInstance(table.getValueAt(table.getSelectedRow(), 0));
-                if (flag != 0) {
-                    if (flag == 2) {
-                        QueryAllGoodsTypeResponseDto queryAllGoodsTypeResponseDto = queryAllGoodsType();
-                        typeIdCache = queryAllGoodsTypeResponseDto.getId();
-                        setListItem(queryAllGoodsTypeResponseDto.getName());
-                    }
-                    QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
-                    if (queryGoodsResponseDto.getCode() == ResultCode.OK) {
-                        refreshTableData(queryGoodsResponseDto.getData());
-                        setPageIndicator(queryGoodsResponseDto.getPageCount());
-                    } else {
-                        SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                if (e.getClickCount() == 2) {
+                    int flag = UpdateGoodsDialog.newInstance(table.getValueAt(table.getSelectedRow(), 0));
+                    if (flag != 0) {
+                        if (flag == 2) {
+                            QueryAllGoodsTypeResponseDto queryAllGoodsTypeResponseDto = queryAllGoodsType();
+                            typeIdCache = queryAllGoodsTypeResponseDto.getId();
+                            setListItem(queryAllGoodsTypeResponseDto.getName());
+                        }
+                        QueryGoodsResponseDto queryGoodsResponseDto = queryGoods(typeId, keyword, currentPage);
+                        if (queryGoodsResponseDto.getCode() == ResultCode.OK) {
+                            refreshTableData(queryGoodsResponseDto.getData());
+                            setPageIndicator(queryGoodsResponseDto.getPageCount());
+                        } else {
+                            SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                        }
                     }
                 }
             }

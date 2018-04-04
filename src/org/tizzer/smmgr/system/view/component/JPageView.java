@@ -28,7 +28,7 @@ import java.util.Vector;
  * @author tizzer
  * @version 1.0
  */
-public class WebPageView extends WebPanel {
+public class JPageView extends WebPanel {
 
     /**
      * params supplied for searching
@@ -65,7 +65,7 @@ public class WebPageView extends WebPanel {
      */
     private PageListener pageListener;
 
-    public WebPageView() {
+    public JPageView() {
         startDateField = createDateField("yyyy-MM-dd 00:00:00");
         endDateField = createDateField("yyyy-MM-dd 23:59:59");
         searchButton = createTrailingComponent();

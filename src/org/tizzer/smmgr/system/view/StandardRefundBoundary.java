@@ -45,6 +45,7 @@ public class StandardRefundBoundary extends WebPanel {
 
     //被退单的缓存
     private Object[] recordCache;
+    private Integer[] quantityCache;
     //记录当前被退单号
     private Object currentSerialNo;
     //记录当前退款总额
@@ -75,13 +76,13 @@ public class StandardRefundBoundary extends WebPanel {
                 if (value.matches("[1-9]([0-9]?)*")) {
                     //新数量
                     int newValue = Integer.parseInt(value);
-                    //旧数量
-                    int oldValue = Integer.parseInt(tcl.getOldValue() + "");
-                    if (newValue < oldValue) {
+                    if (newValue < quantityCache[tcl.getRow()]) {
                         //现价
                         double presentCost = (double) tradeGoodsTable.getValueAt(tcl.getRow(), 4);
                         //更新小计
                         tradeGoodsTable.setValueAt((double) Math.round(presentCost * newValue * 100) / 100, tcl.getRow(), 6);
+                        //旧数量
+                        int oldValue = Integer.parseInt(tcl.getOldValue() + "");
                         //更新当前退款总额
                         currentRefund += (newValue - oldValue) * presentCost;
                         currentRefund = (double) Math.round(currentRefund * 100) / 100;
@@ -141,6 +142,7 @@ public class StandardRefundBoundary extends WebPanel {
                     } else {
                         currentSerialNo = serialNo;
                         recordCache = queryRefundRecordResponseDto.getCache();
+                        quantityCache = queryRefundRecordResponseDto.getQuantity();
                         currentRefund = queryRefundRecordResponseDto.getCost();
                         tableModel.setDataVector(queryRefundRecordResponseDto.getData(), tableHead);
                         setRefundButton(queryRefundRecordResponseDto.getCost() + "");

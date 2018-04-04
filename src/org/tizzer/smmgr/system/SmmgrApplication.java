@@ -7,6 +7,7 @@ import org.tizzer.smmgr.system.utils.SwingUtil;
 import org.tizzer.smmgr.system.view.LoginBoundary;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author tizzer
@@ -16,17 +17,10 @@ public class SmmgrApplication extends WebFrame {
 
     private SmmgrApplication() {
         LoginBoundary loginBoundary = new LoginBoundary();
-        this.getContentPane().add(loginBoundary);
-        this.setIconImage(IconManager.TASKBAR);
-        this.setTitle("超市管家");
-        this.setSize(1280, 800);
-        this.setMinimumSize(this.getSize());
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        this.setVisible(true);
+        this.initProperties(loginBoundary);
+        this.updateRuntimeParams(this);
         loginBoundary.setClosingOperation(this);
         loginBoundary.setDefaultButton();
-        RuntimeConstants.root = this;
     }
 
     public static void main(String[] args) {
@@ -37,6 +31,21 @@ public class SmmgrApplication extends WebFrame {
                 new SmmgrApplication();
             }
         });
+    }
+
+    private void initProperties(JComponent component) {
+        this.getContentPane().add(component);
+        this.setIconImage(IconManager.TASKBAR);
+        this.setTitle("超市管家");
+        this.setMinimumSize(new Dimension(1280, 720));
+// TODO       this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        this.setLocationRelativeTo(this);
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.setVisible(true);
+    }
+
+    private void updateRuntimeParams(WebFrame frame) {
+        RuntimeConstants.root = frame;
     }
 
 }

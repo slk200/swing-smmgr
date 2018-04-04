@@ -13,7 +13,7 @@ import org.tizzer.smmgr.system.model.response.QueryImportRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryImportSpecResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.view.component.WebRecordView;
+import org.tizzer.smmgr.system.view.component.JRecordView;
 import org.tizzer.smmgr.system.view.dialog.AddImportDialog;
 import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.RecordRenderer;
@@ -33,7 +33,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
     private WebLabel quantityLabel;
     private WebLabel costLabel;
     private WebLabel noteLabel;
-    private WebRecordView recordView;
+    private JRecordView recordView;
     private WebButton addImportButton;
 
     //当前选中单号缓存
@@ -190,13 +190,13 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
         return webPanel;
     }
 
-    private WebRecordView createRecordView() {
-        WebRecordView webRecordView = new WebRecordView();
-        webRecordView.setTableHead(tableHead);
-        webRecordView.setExternalComponent(createExternalPane());
-        webRecordView.setListCellRenderer(new RecordRenderer());
-        webRecordView.addRecordListener(this);
-        return webRecordView;
+    private JRecordView createRecordView() {
+        JRecordView jRecordView = new JRecordView();
+        jRecordView.setTableHead(tableHead);
+        jRecordView.setExternalComponent(createExternalPane());
+        jRecordView.setListCellRenderer(new RecordRenderer());
+        jRecordView.addRecordListener(this);
+        return jRecordView;
     }
 
     private WebLabel createInfoLabel(String text) {

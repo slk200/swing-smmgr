@@ -26,6 +26,8 @@ public interface IconManager {
     ImageIcon RESETDESK = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/resetdesk.png"));
     ImageIcon ADDGOODS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/addgoods.png"));
     ImageIcon DELETERECORD = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/deleterecord.png"));
+    ImageIcon PREVIOUS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/previous.png"));
+    ImageIcon NEXT = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/next.png"));
 
     //navigation
     ImageIcon HOME = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/home.png"));

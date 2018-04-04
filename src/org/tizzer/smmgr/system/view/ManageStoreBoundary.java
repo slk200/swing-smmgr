@@ -16,7 +16,7 @@ import org.tizzer.smmgr.system.model.response.QueryOneStoreResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryStoreResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.view.component.WebPageView;
+import org.tizzer.smmgr.system.view.component.JPageView;
 import org.tizzer.smmgr.system.view.dialog.AddStoreDialog;
 import org.tizzer.smmgr.system.view.dialog.UpdateStoreDialog;
 import org.tizzer.smmgr.system.view.listener.PageListener;
@@ -35,7 +35,7 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
 
     private final static Object[] tableHead = {"序号", "门店名", "地址", "录入时间"};
 
-    private WebPageView pageView;
+    private JPageView pageView;
     private WebButton addButton;
     private WebButton editButton;
     private WebButton delButton;
@@ -205,11 +205,11 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
         return webPanel;
     }
 
-    private WebPageView createPageView() {
-        WebPageView webPageView = new WebPageView();
-        webPageView.setInputPrompt("序号/门店名/地址");
-        webPageView.addDateChangeListener(this);
-        return webPageView;
+    private JPageView createPageView() {
+        JPageView jPageView = new JPageView();
+        jPageView.setInputPrompt("序号/门店名/地址");
+        jPageView.addDateChangeListener(this);
+        return jPageView;
     }
 
     private WebButton createBootstrapButton(String text) {

@@ -42,7 +42,6 @@ public class AddGoodsDialog extends WebDialog {
     private WebComboBox typeComboBox;
     private WebSpinner jPriceSpinner;
     private WebSpinner sPriceSpinner;
-    private WebSpinner inventorySpinner;
     private WebDateField scDateField;
     private WebSpinner bzDateSpinner;
     private WebButton upcCreateButton;
@@ -64,7 +63,6 @@ public class AddGoodsDialog extends WebDialog {
         typeComboBox = createGoodsTypeComboBox();
         jPriceSpinner = createPriceSpinner();
         sPriceSpinner = createPriceSpinner();
-        inventorySpinner = createNumberSpinner();
         scDateField = createSCDateField();
         bzDateSpinner = createNumberSpinner();
         addButton = createBootstrapButton("添加");
@@ -147,7 +145,7 @@ public class AddGoodsDialog extends WebDialog {
             saveGoodsRequestDto.setSpell(SpellWorker.getAllFirstLetter(name));
             saveGoodsRequestDto.setjPrice((Double) jPriceSpinner.getValue());
             saveGoodsRequestDto.setsPrice((Double) sPriceSpinner.getValue());
-            saveGoodsRequestDto.setInvention((Integer) inventorySpinner.getValue());
+            saveGoodsRequestDto.setInvention(0);
             saveGoodsRequestDto.setScDate(scDateField.getText());
             saveGoodsRequestDto.setBzDate((Integer) bzDateSpinner.getValue());
             saveGoodsRequestDto.setType(type);
@@ -182,8 +180,8 @@ public class AddGoodsDialog extends WebDialog {
         webPanel.setLayout(new GridBagLayout());
         webPanel.setMargin(20);
         webPanel.setBackground(ColorManager._241_246_253);
-        List<String> stringList = Arrays.asList("条码：", "名称：", "类型：", "进价：", "售价：", "库存：", "生产期：", "保质期(天)：");
-        List<Container> containerList = Arrays.asList(upcField, nameField, typeComboBox, jPriceSpinner, sPriceSpinner, inventorySpinner, scDateField, bzDateSpinner);
+        List<String> stringList = Arrays.asList("条码：", "名称：", "类型：", "进价：", "售价：", "生产期：", "保质期(天)：");
+        List<Container> containerList = Arrays.asList(upcField, nameField, typeComboBox, jPriceSpinner, sPriceSpinner, scDateField, bzDateSpinner);
         for (int i = 0; i < stringList.size(); i++) {
             SwingUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
             SwingUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);

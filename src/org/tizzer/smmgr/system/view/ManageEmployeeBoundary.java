@@ -11,7 +11,7 @@ import org.tizzer.smmgr.system.model.request.QueryEmployeeRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryEmployeeResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.view.component.WebPageView;
+import org.tizzer.smmgr.system.view.component.JPageView;
 import org.tizzer.smmgr.system.view.dialog.AddEmployeeDialog;
 import org.tizzer.smmgr.system.view.dialog.UpdateEmployeeDialog;
 import org.tizzer.smmgr.system.view.listener.PageListener;
@@ -31,7 +31,7 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
 
     private final static Object[] tableHead = {"员工号", "姓名", "电话", "地址", "所属门店", "注册时间", "权限", "状态"};
 
-    private WebPageView pageView;
+    private JPageView pageView;
     private WebButton addButton;
     private WebButton editButton;
 
@@ -150,12 +150,12 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
         return webPanel;
     }
 
-    private WebPageView createPageView() {
-        WebPageView webPageView = new WebPageView();
-        webPageView.setInputPrompt("员工号/姓名/地址/电话");
-        webPageView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        webPageView.addDateChangeListener(this);
-        return webPageView;
+    private JPageView createPageView() {
+        JPageView jPageView = new JPageView();
+        jPageView.setInputPrompt("员工号/姓名/地址/电话");
+        jPageView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jPageView.addDateChangeListener(this);
+        return jPageView;
     }
 
     private WebButton createBootstrapButton(String text) {

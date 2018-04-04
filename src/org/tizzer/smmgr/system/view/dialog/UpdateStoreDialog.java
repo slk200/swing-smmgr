@@ -168,6 +168,7 @@ public class UpdateStoreDialog extends WebDialog {
     private WebButton createBootstrapButton(String text) {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
+        webButton.setSelectedForeground(Color.WHITE);
         webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
         return webButton;
     }

@@ -3,7 +3,6 @@ package org.tizzer.smmgr.system.view.renderer;
 import org.tizzer.smmgr.system.constant.ColorManager;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
@@ -15,7 +14,7 @@ public class GoodsTypeRenderer implements ListCellRenderer {
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         JLabel label = new JLabel();
         label.setOpaque(true);
-        label.setBorder(new EmptyBorder(20, 90, 20, 90));
+        label.setPreferredSize(new Dimension(240, 60));
         label.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
         label.setText(value + "");
         label.setHorizontalAlignment(SwingConstants.CENTER);

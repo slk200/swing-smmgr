@@ -13,7 +13,7 @@ import org.tizzer.smmgr.system.model.response.QueryBookRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryBookSpecResponseDto;
 import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
-import org.tizzer.smmgr.system.view.component.WebRecordView;
+import org.tizzer.smmgr.system.view.component.JRecordView;
 import org.tizzer.smmgr.system.view.dialog.AddBookDialog;
 import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.RecordRenderer;
@@ -33,7 +33,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
     private WebLabel quantityLabel;
     private WebLabel costLabel;
     private WebLabel noteLabel;
-    private WebRecordView recordView;
+    private JRecordView recordView;
     private WebButton addBookButton;
 
     //当前选中单号缓存
@@ -43,7 +43,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
         quantityLabel = createInfoLabel(getBoldBlackText(""));
         costLabel = createInfoLabel(getBoldOrangeText(""));
         noteLabel = createInfoLabel("备注：");
-        addBookButton = createBootstrapButton("新建订单");
+        addBookButton = createBootstrapButton(" 订货 ");
         recordView = createRecordView();
 
         this.prepareData();
@@ -190,13 +190,13 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
         return webPanel;
     }
 
-    private WebRecordView createRecordView() {
-        WebRecordView webRecordView = new WebRecordView();
-        webRecordView.setTableHead(tableHead);
-        webRecordView.setExternalComponent(createExternalPane());
-        webRecordView.setListCellRenderer(new RecordRenderer());
-        webRecordView.addRecordListener(this);
-        return webRecordView;
+    private JRecordView createRecordView() {
+        JRecordView jRecordView = new JRecordView();
+        jRecordView.setTableHead(tableHead);
+        jRecordView.setExternalComponent(createExternalPane());
+        jRecordView.setListCellRenderer(new RecordRenderer());
+        jRecordView.addRecordListener(this);
+        return jRecordView;
     }
 
     private WebLabel createInfoLabel(String text) {

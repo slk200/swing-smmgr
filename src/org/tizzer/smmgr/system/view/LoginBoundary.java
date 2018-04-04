@@ -11,7 +11,6 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.text.WebPasswordField;
 import com.alee.laf.text.WebTextField;
-import com.alee.utils.TimeUtils;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
 import org.tizzer.smmgr.system.constant.ResultCode;
@@ -208,7 +207,6 @@ public class LoginBoundary extends WebPanel {
     private void updateRuntimeParam(String staffNo, Integer storeId) {
         RuntimeConstants.staffNo = staffNo;
         RuntimeConstants.storeId = storeId;
-        RuntimeConstants.loginAt = TimeUtils.formatCurrentDate("yy-MM-dd HH:mm:ss");
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.tizzer.smmgr.system.view.dialog;
 
 import com.alee.laf.button.WebButton;
-import com.alee.laf.checkbox.WebCheckBox;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
@@ -34,7 +33,6 @@ public class AddEmployeeDialog extends WebDialog {
     private WebTextField nameField;
     private WebTextField phoneField;
     private WebTextField addressField;
-    private WebCheckBox adminBox;
     private WebButton addButton;
     private WebButton cancelButton;
 
@@ -45,7 +43,6 @@ public class AddEmployeeDialog extends WebDialog {
         nameField = createInfoTextField();
         phoneField = createInfoTextField();
         addressField = createInfoTextField();
-        adminBox = createInfoBox();
         addButton = createBootstrapButton("添加");
         cancelButton = createBootstrapButton("取消");
 
@@ -123,7 +120,7 @@ public class AddEmployeeDialog extends WebDialog {
             saveEmployeeRequestDto.setName(value[2]);
             saveEmployeeRequestDto.setPhone(value[3]);
             saveEmployeeRequestDto.setAddress(value[4]);
-            saveEmployeeRequestDto.setAdmin(adminBox.isSelected());
+            saveEmployeeRequestDto.setAdmin(false);
             saveEmployeeRequestDto.setStoreId(RuntimeConstants.storeId);
             saveEmployeeResponseDto = HttpHandler.post("/save/employee", saveEmployeeRequestDto.toString(), SaveEmployeeResponseDto.class);
         } catch (Exception e) {
@@ -137,8 +134,8 @@ public class AddEmployeeDialog extends WebDialog {
         webPanel.setLayout(new GridBagLayout());
         webPanel.setMargin(20);
         webPanel.setBackground(ColorManager._241_246_253);
-        List<String> stringList = Arrays.asList("员工号：", "密码：", "姓名：", "电话：", "地址：", "权限：");
-        List<Container> containerList = Arrays.asList(staffNoField, passwordField, nameField, phoneField, addressField, adminBox);
+        List<String> stringList = Arrays.asList("员工号：", "密码：", "姓名：", "电话：", "地址：");
+        List<Container> containerList = Arrays.asList(staffNoField, passwordField, nameField, phoneField, addressField);
         for (int i = 0; i < stringList.size(); i++) {
             SwingUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
             SwingUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
@@ -162,13 +159,10 @@ public class AddEmployeeDialog extends WebDialog {
         return webTextField;
     }
 
-    private WebCheckBox createInfoBox() {
-        return new WebCheckBox("管理员");
-    }
-
     private WebButton createBootstrapButton(String text) {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
+        webButton.setSelectedForeground(Color.WHITE);
         webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
         return webButton;
     }

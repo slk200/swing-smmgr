@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
  * @author tizzer
  * @version 1.0
  */
-public class WebRecordView extends WebPanel {
+public class JRecordView extends WebPanel {
     /**
      * params for load new data
      */
@@ -60,7 +60,7 @@ public class WebRecordView extends WebPanel {
      */
     private RecordListener recordListener;
 
-    public WebRecordView() {
+    public JRecordView() {
         startDateField = createDateField("yyyy-MM-dd 00:00:00");
         endDateField = createDateField("yyyy-MM-dd 23:59:59");
         searchButton = createTrailingComponent();

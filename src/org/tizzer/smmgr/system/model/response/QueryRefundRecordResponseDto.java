@@ -12,6 +12,17 @@ public class QueryRefundRecordResponseDto extends ResultResponse {
         return new Object[]{cardNo, phone, payType, discount};
     }
 
+    public Integer[] getQuantity() {
+        if (data != null) {
+            Integer[] quantities = new Integer[data.length];
+            for (int i = 0; i < data.length; i++) {
+                quantities[i] = data[i].getQuantity();
+            }
+            return quantities;
+        }
+        return null;
+    }
+
     public Object[][] getData() {
         if (data != null) {
             Object[][] tableBody = new Object[data.length][5];
