@@ -26,7 +26,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author tizzer
@@ -75,12 +74,12 @@ public class AddTransDialog extends WebDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TableCellListener tcl = (TableCellListener) e.getSource();
-                String value = tcl.getNewValue() + "";
+                String value = String.valueOf(tcl.getNewValue());
                 if (value.matches("[1-9]([0-9]?)*")) {
                     //新数量
                     int newValue = Integer.parseInt(value);
                     //旧数量
-                    int oldValue = Integer.parseInt(tcl.getOldValue() + "");
+                    int oldValue = Integer.parseInt(String.valueOf(tcl.getOldValue()));
                     if (newValue != oldValue) {
                         //进价
                         double presentCost = (double) transGoodsTable.getValueAt(tcl.getRow(), 2);
@@ -89,7 +88,7 @@ public class AddTransDialog extends WebDialog {
                         //更新当前调货总额
                         currentTrans += (newValue - oldValue) * presentCost;
                         currentTrans = (double) Math.round(currentTrans * 100) / 100;
-                        setTransButton(currentTrans + "");
+                        setTransButton(String.valueOf(currentTrans));
                         return;
                     }
                 }
@@ -97,77 +96,65 @@ public class AddTransDialog extends WebDialog {
             }
         });
 
-        resetTransButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+        resetTransButton.addActionListener(e -> {
+            int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+            if (operation == JOptionPane.YES_OPTION) {
+                reset();
+            }
+        });
+
+        deleteRowButton.addActionListener(e -> {
+            if (transGoodsTable.getSelectedRow() == -1) {
+                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                return;
+            }
+            int[] rows = transGoodsTable.getSelectedRows();
+            for (int i = rows.length; i > 0; i--) {
+                //小计
+                double cost = (double) transGoodsTable.getValueAt(rows[i - 1], 4);
+                //更新当前调货总额
+                currentTrans -= cost;
+                tableModel.removeRow(rows[i - 1]);
+            }
+            currentTrans = (double) Math.round(currentTrans * 100) / 100;
+            setTransButton(String.valueOf(currentTrans));
+            //后续台面校验
+            if (transGoodsTable.getRowCount() == 0) {
+                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空调货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
                 if (operation == JOptionPane.YES_OPTION) {
                     reset();
                 }
             }
         });
 
-        deleteRowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (transGoodsTable.getSelectedRow() == -1) {
-                    SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
-                    return;
-                }
-                int[] rows = transGoodsTable.getSelectedRows();
-                for (int i = rows.length; i > 0; i--) {
-                    //小计
-                    double cost = (double) transGoodsTable.getValueAt(rows[i - 1], 4);
-                    //更新当前调货总额
-                    currentTrans -= cost;
-                    tableModel.removeRow(rows[i - 1]);
-                }
-                currentTrans = (double) Math.round(currentTrans * 100) / 100;
-                setTransButton(currentTrans + "");
-                //后续台面校验
-                if (transGoodsTable.getRowCount() == 0) {
-                    int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空调货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
-                    if (operation == JOptionPane.YES_OPTION) {
-                        reset();
+        searchGoodsField.addActionListener(e -> {
+            String keyword = searchGoodsField.getText().trim();
+            if (!keyword.equals("")) {
+                QueryTransGoodsResponseDto queryTransGoodsResponseDto = queryTransGoods(keyword);
+                if (queryTransGoodsResponseDto.getCode() == ResultCode.OK) {
+                    transGoodsCache = queryTransGoodsResponseDto.getData();
+                    if (transGoodsCache.length > 1) {
+                        transGoodsCache = ChooseGoodsDialog.newInstance(transGoodsCache);
                     }
+                    refreshTable();
                 }
             }
         });
 
-        searchGoodsField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String keyword = searchGoodsField.getText().trim();
-                if (!keyword.equals("")) {
-                    QueryTransGoodsResponseDto queryTransGoodsResponseDto = queryTransGoods(keyword);
-                    if (queryTransGoodsResponseDto.getCode() == ResultCode.OK) {
-                        transGoodsCache = queryTransGoodsResponseDto.getData();
-                        if (transGoodsCache.length > 1) {
-                            transGoodsCache = ChooseGoodsDialog.newInstance(transGoodsCache);
-                        }
-                        refreshTable();
-                    }
-                }
+        transButton.addActionListener(e -> {
+            if (currentTrans == 0) {
+                return;
             }
-        });
-
-        transButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (currentTrans == 0) {
-                    return;
-                }
-                int storeId = ChooseStoreDialog.newInstance();
-                if (storeId == -1) {
-                    return;
-                }
-                SaveTransRecordResponseDto saveTransRecordResponseDto = saveTransRecord(storeId);
-                if (saveTransRecordResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(transButton, saveTransRecordResponseDto.getMessage());
-                } else {
-                    isRefresh = true;
-                    dispose();
-                }
+            int storeId = ChooseStoreDialog.newInstance();
+            if (storeId == -1) {
+                return;
+            }
+            SaveTransRecordResponseDto saveTransRecordResponseDto = saveTransRecord(storeId);
+            if (saveTransRecordResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(transButton, saveTransRecordResponseDto.getMessage());
+            } else {
+                isRefresh = true;
+                dispose();
             }
         });
     }
@@ -233,13 +220,13 @@ public class AddTransDialog extends WebDialog {
      */
     private void refreshTable() {
         if (transGoodsCache != null) {
-            String upc = (String) transGoodsCache[0][0];
+            String upc = String.valueOf(transGoodsCache[0][0]);
             for (int i = 0; i < transGoodsTable.getRowCount(); i++) {
                 if (upc.equals(transGoodsTable.getValueAt(i, 0))) {
                     //进价
                     double presentCost = (double) transGoodsTable.getValueAt(i, 2);
                     //当前数量
-                    int num = Integer.parseInt(transGoodsTable.getValueAt(i, 3) + "");
+                    int num = Integer.parseInt(String.valueOf(transGoodsTable.getValueAt(i, 3)));
                     //当前小计
                     double cost = (double) transGoodsTable.getValueAt(i, 4);
                     //现在小计
@@ -250,7 +237,7 @@ public class AddTransDialog extends WebDialog {
                     transGoodsTable.setValueAt(cost, i, 4);
                     //更新当前调货总额
                     currentTrans = (double) Math.round((currentTrans + presentCost) * 100) / 100;
-                    setTransButton(currentTrans + "");
+                    setTransButton(String.valueOf(currentTrans));
                     searchGoodsField.setText(null);
                     return;
                 }
@@ -261,7 +248,7 @@ public class AddTransDialog extends WebDialog {
             tableModel.addRow(row);
             //更新当前调货总额
             currentTrans = (double) Math.round((currentTrans + importPrice) * 100) / 100;
-            setTransButton(currentTrans + "");
+            setTransButton(String.valueOf(currentTrans));
         }
         searchGoodsField.setText(null);
     }

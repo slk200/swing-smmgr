@@ -76,7 +76,7 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
                 if (queryLossSpecResponseDto.getCode() == ResultCode.OK) {
                     recordView.setTableBody(queryLossSpecResponseDto.getData());
                     quantityLabel.setText(getBoldBlackText(queryLossSpecResponseDto.getQuantity()));
-                    costLabel.setText(getBoldOrangeText(queryLossSpecResponseDto.getCost() + ""));
+                    costLabel.setText(getBoldOrangeText(String.valueOf(queryLossSpecResponseDto.getCost())));
                     noteLabel.setText("备注：" + queryLossSpecResponseDto.getNote());
                 } else {
                     SwingUtil.showNotification("访问出错，" + queryLossSpecResponseDto.getMessage());

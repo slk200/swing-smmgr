@@ -20,8 +20,6 @@ import org.tizzer.smmgr.system.view.listener.NavigationListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 
 /**
@@ -66,32 +64,34 @@ public class StandardInsiderBoundary extends WebPanel {
     }
 
     private void initListener() {
-        backToSaleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                backToSale();
-            }
-        });
+        backToSaleButton.addActionListener(e -> backToSale());
 
-        saveInsiderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String cardNo = cardNoField.getText().trim();
-                if (cardNo.equals("")) {
-                    SwingUtil.showTip(cardNoField, "会员卡号不能为空");
-                    return;
+        saveInsiderButton.addActionListener(e -> {
+            String cardNo = cardNoField.getText().trim();
+            if (cardNo.equals("")) {
+                SwingUtil.showTip(cardNoField, "会员卡号不能为空");
+                return;
+            }
+            String name = nameField.getText().trim();
+            if (name.equals("")) {
+                SwingUtil.showTip(nameField, "姓名不能为空");
+                return;
+            }
+            String phone = phoneField.getText().trim();
+            if (phone.equals("")) {
+                SwingUtil.showTip(phoneField, "电话不能为空");
+                return;
+            }
+            SaveInsiderResponseDto saveInsiderResponseDto = saveInsider(cardNo, name, phone);
+            if (saveInsiderResponseDto.getCode() == ResultCode.OK) {
+                int option = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>会员保存成功！</h3><p>是否离开此界面？</p></html>", "询问", JOptionPane.YES_NO_OPTION);
+                if (option == JOptionPane.YES_OPTION) {
+                    backToSale();
+                } else {
+                    reset();
                 }
-                String name = nameField.getText().trim();
-                if (name.equals("")) {
-                    SwingUtil.showTip(nameField, "姓名不能为空");
-                    return;
-                }
-                String phone = phoneField.getText().trim();
-                if (phone.equals("")) {
-                    SwingUtil.showTip(phoneField, "电话不能为空");
-                    return;
-                }
-                saveInsider(cardNo, name, phone);
+            } else {
+                SwingUtil.showTip(saveInsiderButton, saveInsiderResponseDto.getMessage());
             }
         });
     }
@@ -120,7 +120,7 @@ public class StandardInsiderBoundary extends WebPanel {
      * @param name
      * @param phone
      */
-    private void saveInsider(String cardNo, String name, String phone) {
+    private SaveInsiderResponseDto saveInsider(String cardNo, String name, String phone) {
         SaveInsiderResponseDto saveInsiderResponseDto = new SaveInsiderResponseDto();
         try {
             SaveInsiderRequestDto saveInsiderRequestDto = new SaveInsiderRequestDto();
@@ -132,19 +132,10 @@ public class StandardInsiderBoundary extends WebPanel {
             saveInsiderRequestDto.setType(idCache[typeComboBox.getSelectedIndex()]);
             saveInsiderRequestDto.setBirth(birthField.getText());
             saveInsiderResponseDto = HttpHandler.post("/save/insider", saveInsiderRequestDto.toString(), SaveInsiderResponseDto.class);
-            if (saveInsiderResponseDto.getCode() == ResultCode.OK) {
-                int option = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>会员保存成功！</h3><p>是否离开此界面？</p></html>", "询问", JOptionPane.YES_NO_OPTION);
-                if (option == JOptionPane.YES_OPTION) {
-                    backToSale();
-                } else {
-                    reset();
-                }
-            } else {
-                SwingUtil.showTip(saveInsiderButton, saveInsiderResponseDto.getMessage());
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return saveInsiderResponseDto;
     }
 
     /**

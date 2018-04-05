@@ -21,8 +21,6 @@ import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -78,39 +76,31 @@ public class UpdateInsiderDialog extends WebDialog {
     }
 
     private void initListener() {
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (birthField.isEnabled()) {
-                    if (birthField.getDate() == null) {
-                        if (Objects.equals(typeComboBox.getSelectedItem(), dataCache[4])) {
-                            SwingUtil.showTip(updateButton, "并没有修改信息");
-                            return;
-                        }
-                    }
-                    updateInsider();
-                } else {
+        updateButton.addActionListener(e -> {
+            if (birthField.isEnabled()) {
+                if (birthField.getDate() == null) {
                     if (Objects.equals(typeComboBox.getSelectedItem(), dataCache[4])) {
                         SwingUtil.showTip(updateButton, "并没有修改信息");
                         return;
                     }
-                    UpdateInsiderResponseDto updateInsiderResponseDto = updateInsider();
-                    if (updateInsiderResponseDto.getCode() != ResultCode.OK) {
-                        SwingUtil.showTip(updateButton, updateInsiderResponseDto.getMessage());
-                    } else {
-                        newDiscount = discountCache[typeComboBox.getSelectedIndex()];
-                        dispose();
-                    }
+                }
+                updateInsider();
+            } else {
+                if (Objects.equals(typeComboBox.getSelectedItem(), dataCache[4])) {
+                    SwingUtil.showTip(updateButton, "并没有修改信息");
+                    return;
+                }
+                UpdateInsiderResponseDto updateInsiderResponseDto = updateInsider();
+                if (updateInsiderResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(updateButton, updateInsiderResponseDto.getMessage());
+                } else {
+                    newDiscount = discountCache[typeComboBox.getSelectedIndex()];
+                    dispose();
                 }
             }
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

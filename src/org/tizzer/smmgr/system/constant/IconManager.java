@@ -8,6 +8,9 @@ import java.awt.*;
  * @version 1.0
  */
 public interface IconManager {
+    //guide
+    Image GUIDE = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/guide.png")).getImage();
+
     //taskbar
     Image TASKBAR = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/taskbar.png")).getImage();
 
@@ -27,7 +30,14 @@ public interface IconManager {
     ImageIcon ADDGOODS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/addgoods.png"));
     ImageIcon DELETERECORD = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/deleterecord.png"));
     ImageIcon PREVIOUS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/previous.png"));
+    ImageIcon PREVIOUSOVER = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/previous_over.png"));
+    ImageIcon PREVIOUSPRESS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/previous_press.png"));
     ImageIcon NEXT = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/next.png"));
+    ImageIcon NEXTOVER = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/next_over.png"));
+    ImageIcon NEXTPRESS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/next_press.png"));
+    ImageIcon ENTER = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/enter.png"));
+    ImageIcon ENTEROVER = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/enter_over.png"));
+    ImageIcon ENTERPRESS = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/enter_press.png"));
 
     //navigation
     ImageIcon HOME = new ImageIcon(IconManager.class.getResource("/org/tizzer/smmgr/image/other/home.png"));

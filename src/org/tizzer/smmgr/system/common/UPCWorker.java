@@ -1,6 +1,6 @@
 package org.tizzer.smmgr.system.common;
 
-public class IdWorker {
+public class UPCWorker {
 
     private long workerId;
     private long datacenterId;
@@ -17,7 +17,7 @@ public class IdWorker {
     private long sequenceMask = ~(-1L << sequenceBits);
     private long lastTimestamp = -1L;
 
-    private IdWorker(long workerId, long datacenterId, long sequence) {
+    private UPCWorker(long workerId, long datacenterId, long sequence) {
         // sanity check for workerId
         if (workerId > maxWorkerId || workerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
@@ -34,7 +34,7 @@ public class IdWorker {
     }
 
     public static Long createId() {
-        IdWorker worker = new IdWorker(1, 1, 1);
+        UPCWorker worker = new UPCWorker(1, 1, 1);
         return worker.nextId();
     }
 

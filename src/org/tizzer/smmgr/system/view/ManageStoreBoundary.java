@@ -23,8 +23,6 @@ import org.tizzer.smmgr.system.view.listener.PageListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Vector;
 
 /**
@@ -55,49 +53,40 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
     }
 
     private void initListener() {
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (AddStoreDialog.newInstance()) {
+        addButton.addActionListener(e -> {
+            if (AddStoreDialog.newInstance()) {
+                pageView.refresh();
+            }
+        });
+
+        editButton.addActionListener(e -> {
+            QueryOneStoreResponseDto queryOneStoreResponseDto = getCurrentStore();
+            if (queryOneStoreResponseDto.getCode() == ResultCode.OK) {
+                if (UpdateStoreDialog.newInstance(queryOneStoreResponseDto.getData())) {
                     pageView.refresh();
                 }
+            } else {
+                SwingUtil.showTip(editButton, queryOneStoreResponseDto.getMessage());
             }
         });
 
-        editButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                QueryOneStoreResponseDto queryOneStoreResponseDto = getCurrentStore();
-                if (queryOneStoreResponseDto.getCode() == ResultCode.OK) {
-                    if (UpdateStoreDialog.newInstance(queryOneStoreResponseDto.getData())) {
-                        pageView.refresh();
-                    }
-                } else {
-                    SwingUtil.showTip(editButton, queryOneStoreResponseDto.getMessage());
-                }
+        delButton.addActionListener(e -> {
+            if (pageView.getSelectedRow() == -1) {
+                SwingUtil.showTip(delButton, "请至少选择一条数据");
+                return;
             }
-        });
-
-        delButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (pageView.getSelectedRow() == -1) {
-                    SwingUtil.showTip(delButton, "请至少选择一条数据");
+            Vector<Integer> id = pageView.getSelectedRowsColumnIndexData(0);
+            for (Integer row : id) {
+                if (row.equals(RuntimeConstants.storeId)) {
+                    SwingUtil.showTip(delButton, "所在门店不可删除");
                     return;
                 }
-                Vector<Integer> id = pageView.getSelectedRowsColumnIndexData(0);
-                for (Integer row : id) {
-                    if (row.equals(RuntimeConstants.storeId)) {
-                        SwingUtil.showTip(delButton, "所在门店不可删除");
-                        return;
-                    }
-                }
-                DeleteStoreResponseDto deleteStoreResponseDto = deleteStore(id);
-                if (deleteStoreResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(delButton, deleteStoreResponseDto.getMessage());
-                } else {
-                    pageView.refresh();
-                }
+            }
+            DeleteStoreResponseDto deleteStoreResponseDto = deleteStore(id);
+            if (deleteStoreResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(delButton, deleteStoreResponseDto.getMessage());
+            } else {
+                pageView.refresh();
             }
         });
     }

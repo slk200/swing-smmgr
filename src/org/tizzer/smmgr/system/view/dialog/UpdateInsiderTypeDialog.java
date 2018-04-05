@@ -27,8 +27,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
@@ -80,101 +78,87 @@ public class UpdateInsiderTypeDialog extends WebDialog {
             public void mouseClicked(MouseEvent e) {
                 int row = table.getSelectedRow();
                 if (row != -1) {
-                    nameField.setText((String) table.getValueAt(row, 1));
+                    nameField.setText(String.valueOf(table.getValueAt(row, 1)));
                     discountField.setValue(table.getValueAt(row, 2));
                 }
             }
         });
 
-        delButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (table.getSelectedRow() == -1) {
-                    SwingUtil.showTip(delButton, "请至少选择一条数据");
-                    return;
-                }
-                Vector<Integer> id = new Vector<>();
-                for (int row : table.getSelectedRows()) {
-                    id.add((Integer) table.getValueAt(row, 0));
-                }
-                DeleteInsiderTypeResponseDto deleteInsiderTypeResponseDto = deleteInsiderType(id);
-                if (deleteInsiderTypeResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(delButton, deleteInsiderTypeResponseDto.getMessage());
-                } else {
-                    refreshData();
-                }
+        delButton.addActionListener(e -> {
+            if (table.getSelectedRow() == -1) {
+                SwingUtil.showTip(delButton, "请至少选择一条数据");
+                return;
+            }
+            Vector<Integer> id = new Vector<>();
+            for (int row : table.getSelectedRows()) {
+                id.add((Integer) table.getValueAt(row, 0));
+            }
+            DeleteInsiderTypeResponseDto deleteInsiderTypeResponseDto = deleteInsiderType(id);
+            if (deleteInsiderTypeResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(delButton, deleteInsiderTypeResponseDto.getMessage());
+            } else {
+                refreshData();
             }
         });
 
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = nameField.getText().trim();
-                if (name.equals("")) {
-                    SwingUtil.showTip(nameField, "会员等级不能为空");
+        addButton.addActionListener(e -> {
+            String name = nameField.getText().trim();
+            if (name.equals("")) {
+                SwingUtil.showTip(nameField, "会员等级不能为空");
+                return;
+            }
+            for (int i = 0; i < table.getRowCount(); i++) {
+                if (name.equals(table.getValueAt(i, 1))) {
+                    SwingUtil.showTip(addButton, "会员等级与第" + (i + 1) + "行重复");
                     return;
                 }
-                for (int i = 0; i < table.getRowCount(); i++) {
-                    if (name.equals(table.getValueAt(i, 1))) {
-                        SwingUtil.showTip(addButton, "会员等级与第" + (i + 1) + "行重复");
-                        return;
-                    }
-                    if (discountField.getValue().equals(table.getValueAt(i, 2))) {
-                        SwingUtil.showTip(addButton, "会员折扣与第" + (i + 1) + "行重复");
-                        return;
-                    }
+                if (discountField.getValue().equals(table.getValueAt(i, 2))) {
+                    SwingUtil.showTip(addButton, "会员折扣与第" + (i + 1) + "行重复");
+                    return;
                 }
-                SaveInsiderTypeResponseDto saveInsiderTypeResponseDto = saveInsiderType(name);
-                if (saveInsiderTypeResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(addButton, saveInsiderTypeResponseDto.getMessage());
-                } else {
-                    refreshData();
-                }
+            }
+            SaveInsiderTypeResponseDto saveInsiderTypeResponseDto = saveInsiderType(name);
+            if (saveInsiderTypeResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(addButton, saveInsiderTypeResponseDto.getMessage());
+            } else {
+                refreshData();
             }
         });
 
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = nameField.getText().trim();
-                if (name.equals("")) {
-                    SwingUtil.showTip(nameField, "会员等级不能为空");
+        updateButton.addActionListener(e -> {
+            String name = nameField.getText().trim();
+            if (name.equals("")) {
+                SwingUtil.showTip(nameField, "会员等级不能为空");
+                return;
+            }
+            int row = table.getSelectedRow();
+            if (name.equals(table.getValueAt(row, 1)) && discountField.getValue().equals(table.getValueAt(row, 2))) {
+                SwingUtil.showTip(updateButton, "并没有修改信息");
+                return;
+            }
+            for (int i = 0; i < table.getRowCount(); i++) {
+                if (i == row) {
+                    continue;
+                }
+                if (name.equals(table.getValueAt(i, 1))) {
+                    SwingUtil.showTip(updateButton, "会员等级与第" + (i + 1) + "行重复");
                     return;
                 }
-                int row = table.getSelectedRow();
-                if (name.equals(table.getValueAt(row, 1)) && discountField.getValue().equals(table.getValueAt(row, 2))) {
-                    SwingUtil.showTip(updateButton, "并没有修改信息");
+                if (discountField.getValue().equals(table.getValueAt(i, 2))) {
+                    SwingUtil.showTip(updateButton, "会员折扣与第" + (i + 1) + "行重复");
                     return;
                 }
-                for (int i = 0; i < table.getRowCount(); i++) {
-                    if (i == row) {
-                        continue;
-                    }
-                    if (name.equals(table.getValueAt(i, 1))) {
-                        SwingUtil.showTip(updateButton, "会员等级与第" + (i + 1) + "行重复");
-                        return;
-                    }
-                    if (discountField.getValue().equals(table.getValueAt(i, 2))) {
-                        SwingUtil.showTip(updateButton, "会员折扣与第" + (i + 1) + "行重复");
-                        return;
-                    }
-                }
-                UpdateInsiderTypeResponseDto updateInsiderTypeResponseDto = updateInsiderType(name);
-                if (updateInsiderTypeResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(updateButton, updateInsiderTypeResponseDto.getMessage());
-                } else {
-                    refreshData();
-                    isRefresh = true;
-                }
+            }
+            UpdateInsiderTypeResponseDto updateInsiderTypeResponseDto = updateInsiderType(name);
+            if (updateInsiderTypeResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(updateButton, updateInsiderTypeResponseDto.getMessage());
+            } else {
+                refreshData();
+                isRefresh = true;
             }
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

@@ -26,7 +26,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author tizzer
@@ -77,12 +76,12 @@ public class AddImportDialog extends WebDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TableCellListener tcl = (TableCellListener) e.getSource();
-                String value = tcl.getNewValue() + "";
+                String value = String.valueOf(tcl.getNewValue());
                 if (value.matches("[1-9]([0-9]?)*")) {
                     //新数量
                     int newValue = Integer.parseInt(value);
                     //旧数量
-                    int oldValue = Integer.parseInt(tcl.getOldValue() + "");
+                    int oldValue = Integer.parseInt(String.valueOf(tcl.getOldValue()));
                     if (newValue != oldValue) {
                         //进价
                         double presentCost = (double) importGoodsTable.getValueAt(tcl.getRow(), 2);
@@ -91,7 +90,7 @@ public class AddImportDialog extends WebDialog {
                         //更新当前进货总额
                         currentImport += (newValue - oldValue) * presentCost;
                         currentImport = (double) Math.round(currentImport * 100) / 100;
-                        setImportButton(currentImport + "");
+                        setImportButton(String.valueOf(currentImport));
                         return;
                     }
                 }
@@ -99,81 +98,64 @@ public class AddImportDialog extends WebDialog {
             }
         });
 
-        addGoodsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                AddGoodsDialog.newInstance();
+        addGoodsButton.addActionListener(e -> AddGoodsDialog.newInstance());
+
+        resetImportButton.addActionListener(e -> {
+            int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+            if (operation == JOptionPane.YES_OPTION) {
+                reset();
             }
         });
 
-        resetImportButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+        deleteRowButton.addActionListener(e -> {
+            if (importGoodsTable.getSelectedRow() == -1) {
+                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                return;
+            }
+            int[] rows = importGoodsTable.getSelectedRows();
+            for (int i = rows.length; i > 0; i--) {
+                //小计
+                double cost = (double) importGoodsTable.getValueAt(rows[i - 1], 4);
+                //更新当前进货总额
+                currentImport -= cost;
+                tableModel.removeRow(rows[i - 1]);
+            }
+            currentImport = (double) Math.round(currentImport * 100) / 100;
+            setImportButton(String.valueOf(currentImport));
+            //后续台面校验
+            if (importGoodsTable.getRowCount() == 0) {
+                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空进货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
                 if (operation == JOptionPane.YES_OPTION) {
                     reset();
                 }
             }
         });
 
-        deleteRowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (importGoodsTable.getSelectedRow() == -1) {
-                    SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
-                    return;
-                }
-                int[] rows = importGoodsTable.getSelectedRows();
-                for (int i = rows.length; i > 0; i--) {
-                    //小计
-                    double cost = (double) importGoodsTable.getValueAt(rows[i - 1], 4);
-                    //更新当前进货总额
-                    currentImport -= cost;
-                    tableModel.removeRow(rows[i - 1]);
-                }
-                currentImport = (double) Math.round(currentImport * 100) / 100;
-                setImportButton(currentImport + "");
-                //后续台面校验
-                if (importGoodsTable.getRowCount() == 0) {
-                    int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空进货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
-                    if (operation == JOptionPane.YES_OPTION) {
-                        reset();
+        searchGoodsField.addActionListener(e -> {
+            String keyword = searchGoodsField.getText().trim();
+            if (!keyword.equals("")) {
+                QueryImportGoodsResponseDto queryImportGoodsResponseDto = queryImportGoods(keyword);
+                if (queryImportGoodsResponseDto.getCode() == ResultCode.OK) {
+                    importGoodsCache = queryImportGoodsResponseDto.getData();
+                    if (importGoodsCache.length > 1) {
+                        importGoodsCache = ChooseGoodsDialog.newInstance(importGoodsCache);
                     }
+                    refreshTable();
                 }
             }
         });
 
-        searchGoodsField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String keyword = searchGoodsField.getText().trim();
-                if (!keyword.equals("")) {
-                    QueryImportGoodsResponseDto queryImportGoodsResponseDto = queryImportGoods(keyword);
-                    if (queryImportGoodsResponseDto.getCode() == ResultCode.OK) {
-                        importGoodsCache = queryImportGoodsResponseDto.getData();
-                        if (importGoodsCache.length > 1) {
-                            importGoodsCache = ChooseGoodsDialog.newInstance(importGoodsCache);
-                        }
-                        refreshTable();
-                    }
-                }
+        importButton.addActionListener(e -> {
+            if (currentImport == 0) {
+                return;
             }
-        });
-
-        importButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (currentImport == 0) {
-                    return;
-                }
-                String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入订购备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
-                SaveImportRecordResponseDto saveBookRecordResponseDto = saveImportRecord(note);
-                if (saveBookRecordResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(importButton, saveBookRecordResponseDto.getMessage());
-                } else {
-                    isRefresh = true;
-                    dispose();
-                }
+            String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入订购备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
+            SaveImportRecordResponseDto saveBookRecordResponseDto = saveImportRecord(note);
+            if (saveBookRecordResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(importButton, saveBookRecordResponseDto.getMessage());
+            } else {
+                isRefresh = true;
+                dispose();
             }
         });
     }
@@ -239,13 +221,13 @@ public class AddImportDialog extends WebDialog {
      */
     private void refreshTable() {
         if (importGoodsCache != null) {
-            String upc = (String) importGoodsCache[0][0];
+            String upc = String.valueOf(importGoodsCache[0][0]);
             for (int i = 0; i < importGoodsTable.getRowCount(); i++) {
                 if (upc.equals(importGoodsTable.getValueAt(i, 0))) {
                     //进价
                     double presentCost = (double) importGoodsTable.getValueAt(i, 2);
                     //当前数量
-                    int num = Integer.parseInt(importGoodsTable.getValueAt(i, 3) + "");
+                    int num = Integer.parseInt(String.valueOf(importGoodsTable.getValueAt(i, 3)));
                     //当前小计
                     double cost = (double) importGoodsTable.getValueAt(i, 4);
                     //现在小计
@@ -256,7 +238,7 @@ public class AddImportDialog extends WebDialog {
                     importGoodsTable.setValueAt(cost, i, 4);
                     //更新当前进货总额
                     currentImport = (double) Math.round((currentImport + presentCost) * 100) / 100;
-                    setImportButton(currentImport + "");
+                    setImportButton(String.valueOf(currentImport));
                     searchGoodsField.setText(null);
                     return;
                 }
@@ -267,7 +249,7 @@ public class AddImportDialog extends WebDialog {
             tableModel.addRow(row);
             //更新当前进货总额
             currentImport = (double) Math.round((currentImport + importPrice) * 100) / 100;
-            setImportButton(currentImport + "");
+            setImportButton(String.valueOf(currentImport));
         }
         searchGoodsField.setText(null);
     }

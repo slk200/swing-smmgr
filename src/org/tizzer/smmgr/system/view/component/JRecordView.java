@@ -17,7 +17,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 
 /**
@@ -78,15 +79,12 @@ public class JRecordView extends WebPanel {
     }
 
     private void initListener() {
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                startDate = startDateField.getText();
-                endDate = endDateField.getText();
-                keyword = searchField.getText().trim();
-                curLoadIndex = 1;
-                recordListener.searchPerformed(startDate, endDate, keyword, curLoadIndex, loadSize);
-            }
+        searchButton.addActionListener(e -> {
+            startDate = startDateField.getText();
+            endDate = endDateField.getText();
+            keyword = searchField.getText().trim();
+            curLoadIndex = 1;
+            recordListener.searchPerformed(startDate, endDate, keyword, curLoadIndex, loadSize);
         });
         searchField.addActionListener(searchButton.getActionListeners()[0]);
 
@@ -104,12 +102,7 @@ public class JRecordView extends WebPanel {
             }
         });
 
-        scrollPane.addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                loadNew();
-            }
-        });
+        scrollPane.addMouseWheelListener(e -> loadNew());
     }
 
     private void loadNew() {

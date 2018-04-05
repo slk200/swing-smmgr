@@ -8,10 +8,10 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.spinner.WebSpinner;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.IdWorker;
 import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.common.SpellWorker;
+import org.tizzer.smmgr.system.common.UPCWorker;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
@@ -24,8 +24,6 @@ import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -81,51 +79,40 @@ public class AddGoodsDialog extends WebDialog {
     }
 
     private void initListener() {
-        upcCreateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (upcField.getText().equals("")) {
-                    Long upc = IdWorker.createId();
-                    upcField.setText(String.valueOf(upc));
-                }
+        upcCreateButton.addActionListener(e -> {
+            if (upcField.getText().equals("")) {
+                Long upc = UPCWorker.createId();
+                upcField.setText(String.valueOf(upc));
             }
         });
 
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String upc = upcField.getText();
-                if (upc.equals("")) {
-                    SwingUtil.showTip(upcField, "条码不能为空");
-                    return;
-                }
-                String name = nameField.getText().trim();
-                if (name.equals("")) {
-                    SwingUtil.showTip(nameField, "名称不能为空");
-                    return;
-                }
-                String type = ((String) typeComboBox.getEditor().getItem()).trim();
-                for (int i = 0; i < nameCache.length; i++) {
-                    if (type.equals(nameCache[i])) {
-                        chooseId = idCache[i];
-                        break;
-                    }
-                }
-                SaveGoodsResponseDto saveGoodsResponseDto = saveGoods(upc, name, type);
-                if (saveGoodsResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(addButton, saveGoodsResponseDto.getMessage());
-                } else {
-                    dispose();
+        addButton.addActionListener(e -> {
+            String upc = upcField.getText();
+            if (upc.equals("")) {
+                SwingUtil.showTip(upcField, "条码不能为空");
+                return;
+            }
+            String name = nameField.getText().trim();
+            if (name.equals("")) {
+                SwingUtil.showTip(nameField, "名称不能为空");
+                return;
+            }
+            String type = String.valueOf(typeComboBox.getEditor().getItem()).trim();
+            for (int i = 0; i < nameCache.length; i++) {
+                if (type.equals(nameCache[i])) {
+                    chooseId = idCache[i];
+                    break;
                 }
             }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            SaveGoodsResponseDto saveGoodsResponseDto = saveGoods(upc, name, type);
+            if (saveGoodsResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(addButton, saveGoodsResponseDto.getMessage());
+            } else {
                 dispose();
             }
         });
+
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

@@ -25,7 +25,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author tizzer
@@ -53,10 +52,10 @@ public class StandardRefundBoundary extends WebPanel {
 
     public StandardRefundBoundary() {
         tradeGoodsTable = createTransactionTable();
-        resetTradeButton = createBootstrapButton("清理台面", IconManager.RESETDESK, "brown.xml");
-        deleteRowButton = createBootstrapButton("删除记录", IconManager.DELETERECORD, "brown.xml");
+        resetTradeButton = createBootstrapButton("清理台面", IconManager.RESETDESK);
+        deleteRowButton = createBootstrapButton("删除记录", IconManager.DELETERECORD);
         currentRefundLabel = createRefundLabel();
-        searchRecordField = createTrailingField("详细单号");
+        searchRecordField = createTrailingField();
         refundButton = createRefundButton();
         this.setLabelText("");
         this.setRefundButton("0.0");
@@ -72,7 +71,7 @@ public class StandardRefundBoundary extends WebPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TableCellListener tcl = (TableCellListener) e.getSource();
-                String value = tcl.getNewValue() + "";
+                String value = String.valueOf(tcl.getNewValue());
                 if (value.matches("[1-9]([0-9]?)*")) {
                     //新数量
                     int newValue = Integer.parseInt(value);
@@ -82,11 +81,11 @@ public class StandardRefundBoundary extends WebPanel {
                         //更新小计
                         tradeGoodsTable.setValueAt((double) Math.round(presentCost * newValue * 100) / 100, tcl.getRow(), 6);
                         //旧数量
-                        int oldValue = Integer.parseInt(tcl.getOldValue() + "");
+                        int oldValue = Integer.parseInt(String.valueOf(tcl.getOldValue()));
                         //更新当前退款总额
                         currentRefund += (newValue - oldValue) * presentCost;
                         currentRefund = (double) Math.round(currentRefund * 100) / 100;
-                        setRefundButton(currentRefund + "");
+                        setRefundButton(String.valueOf(currentRefund));
                         return;
                     }
                 }
@@ -94,78 +93,65 @@ public class StandardRefundBoundary extends WebPanel {
             }
         });
 
-        resetTradeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+        resetTradeButton.addActionListener(e -> {
+            int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+            if (operation == JOptionPane.YES_OPTION) {
+                reset();
+            }
+        });
+
+        deleteRowButton.addActionListener(e -> {
+            if (tradeGoodsTable.getSelectedRow() == -1) {
+                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                return;
+            }
+            int[] rows = tradeGoodsTable.getSelectedRows();
+            for (int i = rows.length; i > 0; i--) {
+                //小计
+                double cost = (double) tradeGoodsTable.getValueAt(rows[i - 1], 6);
+                //更新当前消费总额
+                currentRefund -= cost;
+                tableModel.removeRow(rows[i - 1]);
+            }
+            currentRefund = (double) Math.round(currentRefund * 100) / 100;
+            setRefundButton(String.valueOf(currentRefund));
+            //后续台面校验
+            if (tradeGoodsTable.getRowCount() == 0) {
+                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空退货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
                 if (operation == JOptionPane.YES_OPTION) {
                     reset();
                 }
             }
         });
 
-        deleteRowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (tradeGoodsTable.getSelectedRow() == -1) {
-                    SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
-                    return;
-                }
-                int[] rows = tradeGoodsTable.getSelectedRows();
-                for (int i = rows.length; i > 0; i--) {
-                    //小计
-                    double cost = (double) tradeGoodsTable.getValueAt(rows[i - 1], 6);
-                    //更新当前消费总额
-                    currentRefund -= cost;
-                    tableModel.removeRow(rows[i - 1]);
-                }
-                currentRefund = (double) Math.round(currentRefund * 100) / 100;
-                setRefundButton(currentRefund + "");
-                //后续台面校验
-                if (tradeGoodsTable.getRowCount() == 0) {
-                    int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空退货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
-                    if (operation == JOptionPane.YES_OPTION) {
-                        reset();
-                    }
-                }
-            }
-        });
-
-        searchRecordField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String serialNo = searchRecordField.getText().trim();
-                if (!serialNo.equals("")) {
-                    QueryRefundRecordResponseDto queryRefundRecordResponseDto = queryRefundRecord(serialNo);
-                    if (queryRefundRecordResponseDto.getCode() != ResultCode.OK) {
-                        SwingUtil.showTip(searchRecordField, queryRefundRecordResponseDto.getMessage());
-                    } else {
-                        currentSerialNo = serialNo;
-                        recordCache = queryRefundRecordResponseDto.getCache();
-                        quantityCache = queryRefundRecordResponseDto.getQuantity();
-                        currentRefund = queryRefundRecordResponseDto.getCost();
-                        tableModel.setDataVector(queryRefundRecordResponseDto.getData(), tableHead);
-                        setRefundButton(queryRefundRecordResponseDto.getCost() + "");
-                        setLabelText(serialNo);
-                    }
-                }
-            }
-        });
-
-        refundButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (currentRefund == 0) {
-                    return;
-                }
-                SaveTradeRecordResponseDto saveTradeRecordResponseDto = tradeGoods(currentSerialNo);
-                if (saveTradeRecordResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(refundButton, saveTradeRecordResponseDto.getMessage());
+        searchRecordField.addActionListener(e -> {
+            String serialNo = searchRecordField.getText().trim();
+            if (!serialNo.equals("")) {
+                QueryRefundRecordResponseDto queryRefundRecordResponseDto = queryRefundRecord(serialNo);
+                if (queryRefundRecordResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(searchRecordField, queryRefundRecordResponseDto.getMessage());
                 } else {
-                    reset();
+                    currentSerialNo = serialNo;
+                    recordCache = queryRefundRecordResponseDto.getCache();
+                    quantityCache = queryRefundRecordResponseDto.getQuantity();
+                    currentRefund = queryRefundRecordResponseDto.getCost();
+                    tableModel.setDataVector(queryRefundRecordResponseDto.getData(), tableHead);
+                    setRefundButton(String.valueOf(queryRefundRecordResponseDto.getCost()));
+                    setLabelText(serialNo);
                 }
             }
+        });
 
+        refundButton.addActionListener(e -> {
+            if (currentRefund == 0) {
+                return;
+            }
+            SaveTradeRecordResponseDto saveTradeRecordResponseDto = tradeGoods(currentSerialNo);
+            if (saveTradeRecordResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(refundButton, saveTradeRecordResponseDto.getMessage());
+            } else {
+                reset();
+            }
         });
     }
 
@@ -312,19 +298,19 @@ public class StandardRefundBoundary extends WebPanel {
         return new WebLabel();
     }
 
-    private WebTextField createTrailingField(String inputPrompt) {
+    private WebTextField createTrailingField() {
         WebTextField webTextField = new WebTextField(20);
-        webTextField.setInputPrompt(inputPrompt);
+        webTextField.setInputPrompt("详细单号");
         webTextField.setMargin(5);
         return webTextField;
     }
 
-    private WebButton createBootstrapButton(String text, ImageIcon icon, String colorConfig) {
+    private WebButton createBootstrapButton(String text, ImageIcon icon) {
         WebButton webButton = new WebButton(text, icon);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
-        webButton.setPainter(NPatchUtil.getNinePatchPainter(colorConfig));
+        webButton.setPainter(NPatchUtil.getNinePatchPainter("brown.xml"));
         return webButton;
     }
 

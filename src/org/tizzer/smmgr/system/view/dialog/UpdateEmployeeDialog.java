@@ -16,8 +16,6 @@ import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author tizzer
@@ -79,39 +77,31 @@ public class UpdateEmployeeDialog extends WebDialog {
     }
 
     private void initListener() {
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String phone = phoneField.getText().trim();
-                if (phone.equals("")) {
-                    SwingUtil.showTip(phoneField, "电话不能为空");
-                    return;
-                }
-                String address = addressField.getText().trim();
-                if (address.equals("")) {
-                    SwingUtil.showTip(addressField, "地址不能为空");
-                    return;
-                }
-                if (phone.equals(dataCache[2]) && address.equals(dataCache[3]) && dataCache[7].equals(enableBox.isSelected())) {
-                    dispose();
-                    return;
-                }
-                UpdateEmployeeResponseDto updateEmployeeResponseDto = updateEmployee(phone, address);
-                if (updateEmployeeResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(updateButton, updateEmployeeResponseDto.getMessage());
-                } else {
-                    isRefresh = true;
-                    dispose();
-                }
+        updateButton.addActionListener(e -> {
+            String phone = phoneField.getText().trim();
+            if (phone.equals("")) {
+                SwingUtil.showTip(phoneField, "电话不能为空");
+                return;
             }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            String address = addressField.getText().trim();
+            if (address.equals("")) {
+                SwingUtil.showTip(addressField, "地址不能为空");
+                return;
+            }
+            if (phone.equals(dataCache[2]) && address.equals(dataCache[3]) && dataCache[7].equals(enableBox.isSelected())) {
+                dispose();
+                return;
+            }
+            UpdateEmployeeResponseDto updateEmployeeResponseDto = updateEmployee(phone, address);
+            if (updateEmployeeResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(updateButton, updateEmployeeResponseDto.getMessage());
+            } else {
+                isRefresh = true;
                 dispose();
             }
         });
+
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

@@ -23,8 +23,6 @@ import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Random;
@@ -70,33 +68,25 @@ public class LoginBoundary extends WebPanel {
     }
 
     public void initListener() {
-        securityButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                securityButton.setText(getSecurityCode());
-            }
-        });
+        securityButton.addActionListener(e -> securityButton.setText(getSecurityCode()));
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String staffNo = staffNoField.getText();
-                if (staffNo.equals("")) {
-                    SwingUtil.showTip(staffNoField, "账号不能为空");
-                    return;
-                }
-                String password = passwordField.getText();
-                if (password.equals("")) {
-                    SwingUtil.showTip(passwordField, "密码不能为空");
-                    return;
-                }
-                String securityCode = securityButton.getText().replaceAll(" ", "");
-                if (!securityField.getText().equals(securityCode.replaceAll(" ", ""))) {
-                    SwingUtil.showTip(securityField, "验证码不正确");
-                    return;
-                }
-                verify(staffNo, password);
+        loginButton.addActionListener(e -> {
+            String staffNo = staffNoField.getText();
+            if (staffNo.equals("")) {
+                SwingUtil.showTip(staffNoField, "账号不能为空");
+                return;
             }
+            String password = passwordField.getText();
+            if (password.equals("")) {
+                SwingUtil.showTip(passwordField, "密码不能为空");
+                return;
+            }
+            String securityCode = securityButton.getText().replaceAll(" ", "");
+            if (!securityField.getText().equals(securityCode.replaceAll(" ", ""))) {
+                SwingUtil.showTip(securityField, "验证码不正确");
+                return;
+            }
+            verify(staffNo, password);
         });
     }
 
@@ -215,7 +205,7 @@ public class LoginBoundary extends WebPanel {
         GradientPaint gradientPaint = new GradientPaint(0, 0, Color.WHITE, getWidth() * 3 / 4, getHeight() * 3 / 4, ColorManager._28_102_220, false);
         g2d.setPaint(gradientPaint);
         g2d.fillRect(0, 0, getWidth(), getHeight());
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     }
 
     private WebImage createPosterImage(ImageIcon icon) {

@@ -15,8 +15,6 @@ import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,39 +58,31 @@ public class UpdateStoreDialog extends WebDialog {
     }
 
     private void initListener() {
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = nameField.getText().trim();
-                if (name.equals("")) {
-                    SwingUtil.showTip(nameField, "门店名不能为空");
-                    return;
-                }
-                String address = addressField.getText().trim();
-                if (address.equals("")) {
-                    SwingUtil.showTip(addressField, "地址不能为空");
-                    return;
-                }
-                if (name.equals(dataCache[1]) && address.equals(dataCache[2])) {
-                    dispose();
-                    return;
-                }
-                UpdateStoreResponseDto updateStoreResponseDto = updateStore(name, address);
-                if (updateStoreResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(updateButton, updateStoreResponseDto.getMessage());
-                } else {
-                    isRefresh = true;
-                    dispose();
-                }
+        updateButton.addActionListener(e -> {
+            String name = nameField.getText().trim();
+            if (name.equals("")) {
+                SwingUtil.showTip(nameField, "门店名不能为空");
+                return;
             }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            String address = addressField.getText().trim();
+            if (address.equals("")) {
+                SwingUtil.showTip(addressField, "地址不能为空");
+                return;
+            }
+            if (name.equals(dataCache[1]) && address.equals(dataCache[2])) {
+                dispose();
+                return;
+            }
+            UpdateStoreResponseDto updateStoreResponseDto = updateStore(name, address);
+            if (updateStoreResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(updateButton, updateStoreResponseDto.getMessage());
+            } else {
+                isRefresh = true;
                 dispose();
             }
         });
+
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

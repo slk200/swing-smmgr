@@ -12,8 +12,6 @@ import org.tizzer.smmgr.system.utils.NPatchUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -40,8 +38,8 @@ public class LaunchManageMode extends WebPanel {
     public LaunchManageMode() {
         factButton = createNavigationButton("营业概况", IconManager.FACT);
         factButton.setSelected(true);
-        storeButton = createNavigationButton("门店管理", IconManager.STORE);
         employeeButton = createNavigationButton("员工管理", IconManager.EMPLOYEE);
+        storeButton = createNavigationButton("门店管理", IconManager.STORE);
         insiderButton = createNavigationButton("会员管理", IconManager.INSIDER);
         goodsButton = createNavigationButton("商品管理", IconManager.GOODSEDIT);
         importButton = createNavigationButton("进货管理", IconManager.PURCHASEGOODS);
@@ -60,88 +58,22 @@ public class LaunchManageMode extends WebPanel {
     }
 
     private void initListener() {
-        factButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeView(new ManageStateBoundary());
-            }
+        factButton.addActionListener(e -> changeView(new ManageStateBoundary()));
+        employeeButton.addActionListener(e -> changeView(new ManageEmployeeBoundary()));
+        storeButton.addActionListener(e -> changeView(new ManageStoreBoundary()));
+        insiderButton.addActionListener(e -> changeView(new ManageInsiderBoundary()));
+        goodsButton.addActionListener(e -> changeView(new ManageGoodsBoundary()));
+        importButton.addActionListener(e -> changeView(new ManageImportBoundary()));
+        transButton.addActionListener(e -> changeView(new ManageTransBoundary()));
+        bookButton.addActionListener(e -> changeView(new ManageBookBoundary()));
+        recordButton.addActionListener(e -> changeView(new ManageTradeBoundary()));
+        lossButton.addActionListener(e -> changeView(new ManageLossBoundary()));
+        settingButton.addActionListener(e -> {
+
         });
 
-        storeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeView(new ManageStoreBoundary());
-            }
-        });
+        helpButton.addActionListener(e -> {
 
-        employeeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeView(new ManageEmployeeBoundary());
-            }
-        });
-
-        insiderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeView(new ManageInsiderBoundary());
-            }
-        });
-
-        goodsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeView(new ManageGoodsBoundary());
-            }
-        });
-
-        importButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeView(new ManageImportBoundary());
-            }
-        });
-
-        transButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeView(new ManageTransBoundary());
-            }
-        });
-
-        bookButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeView(new ManageBookBoundary());
-            }
-        });
-
-        recordButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeView(new ManageTradeBoundary());
-            }
-        });
-
-        lossButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeView(new ManageLossBoundary());
-            }
-        });
-
-        settingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        helpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
         });
     }
 
@@ -185,7 +117,7 @@ public class LaunchManageMode extends WebPanel {
         WebPanel webPanel = new WebPanel();
         webPanel.setBackground(ColorManager._31_31_31);
         webPanel.setLayout(new VerticalFlowLayout());
-        webPanel.add(factButton, storeButton, employeeButton, insiderButton, goodsButton, importButton, transButton, bookButton, recordButton, lossButton, settingButton, helpButton);
+        webPanel.add(factButton, employeeButton, storeButton, insiderButton, goodsButton, importButton, transButton, bookButton, recordButton, lossButton, settingButton, helpButton);
         SwingUtils.groupButtons(webPanel);
         return webPanel;
     }
@@ -193,6 +125,7 @@ public class LaunchManageMode extends WebPanel {
     private WebToggleButton createNavigationButton(String text, ImageIcon icon) {
         WebToggleButton webToggleButton = new WebToggleButton(text, icon);
         webToggleButton.setIconTextGap(10);
+        webToggleButton.setMoveIconOnPress(false);
         webToggleButton.setForeground(Color.WHITE);
         webToggleButton.setSelectedForeground(Color.WHITE);
         webToggleButton.setHorizontalAlignment(SwingConstants.LEFT);

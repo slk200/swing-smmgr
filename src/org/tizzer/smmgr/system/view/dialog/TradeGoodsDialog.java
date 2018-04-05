@@ -21,8 +21,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -33,10 +31,10 @@ import java.awt.event.MouseEvent;
 public class TradeGoodsDialog extends WebDialog {
 
     private final static Object[] tableHead = {"条码", "名称", "售价"};
-    //传入参数缓存
-    private static Object[][] dataCache;
     //是否处理标志
     private static boolean isHandle;
+    //传入参数缓存
+    private Object[][] dataCache;
     private WebButton searchButton;
     private WebTextField searchField;
     private DefaultTableModel tableModel;
@@ -63,22 +61,19 @@ public class TradeGoodsDialog extends WebDialog {
         tradeGoodsDialog.setLocationRelativeTo(RuntimeConstants.root);
         tradeGoodsDialog.setVisible(true);
         if (!isHandle) {
-            dataCache = null;
+            tradeGoodsDialog.dataCache = null;
         }
-        return dataCache;
+        return tradeGoodsDialog.dataCache;
     }
 
     private void initListener() {
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String keyword = searchField.getText().trim();
-                if (!keyword.equals("")) {
-                    QueryTradeGoodsResponseDto queryTradeGoodsResponseDto = queryTradeGoods(keyword);
-                    if (queryTradeGoodsResponseDto.getData() != null) {
-                        dataCache = queryTradeGoodsResponseDto.getData();
-                        setTableData(dataCache);
-                    }
+        searchButton.addActionListener(e -> {
+            String keyword = searchField.getText().trim();
+            if (!keyword.equals("")) {
+                QueryTradeGoodsResponseDto queryTradeGoodsResponseDto = queryTradeGoods(keyword);
+                if (queryTradeGoodsResponseDto.getData() != null) {
+                    dataCache = queryTradeGoodsResponseDto.getData();
+                    setTableData(dataCache);
                 }
             }
         });
@@ -99,29 +94,21 @@ public class TradeGoodsDialog extends WebDialog {
             }
         });
 
-        chooseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int row = table.getSelectedRow();
-                if (row == -1) {
-                    SwingUtil.showTip(chooseButton, "请先选择一个商品");
-                    return;
-                }
-                dataCache = new Object[1][tableHead.length];
-                for (int i = 0; i < tableHead.length; i++) {
-                    dataCache[0][i] = table.getValueAt(row, i);
-                }
-                isHandle = true;
-                dispose();
+        chooseButton.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row == -1) {
+                SwingUtil.showTip(chooseButton, "请先选择一个商品");
+                return;
             }
+            dataCache = new Object[1][tableHead.length];
+            for (int i = 0; i < tableHead.length; i++) {
+                dataCache[0][i] = table.getValueAt(row, i);
+            }
+            isHandle = true;
+            dispose();
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

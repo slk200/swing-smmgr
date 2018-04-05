@@ -25,7 +25,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author tizzer
@@ -65,12 +64,12 @@ public class StandardLossBoundary extends WebPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TableCellListener tcl = (TableCellListener) e.getSource();
-                String value = tcl.getNewValue() + "";
+                String value = String.valueOf(tcl.getNewValue());
                 if (value.matches("[1-9]([0-9]?)*")) {
                     //新数量
                     int newValue = Integer.parseInt(value);
                     //旧数量
-                    int oldValue = Integer.parseInt(tcl.getOldValue() + "");
+                    int oldValue = Integer.parseInt(String.valueOf(tcl.getOldValue()));
                     if (newValue != oldValue) {
                         //进价
                         double presentCost = (double) lossGoodsTable.getValueAt(tcl.getRow(), 2);
@@ -79,7 +78,7 @@ public class StandardLossBoundary extends WebPanel {
                         //更新当前亏损总额
                         currentLoss += (newValue - oldValue) * presentCost;
                         currentLoss = (double) Math.round(currentLoss * 100) / 100;
-                        setLossButton(currentLoss + "");
+                        setLossButton(String.valueOf(currentLoss));
                         return;
                     }
                 }
@@ -87,75 +86,62 @@ public class StandardLossBoundary extends WebPanel {
             }
         });
 
-        resetLossButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+        resetLossButton.addActionListener(e -> {
+            int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+            if (operation == JOptionPane.YES_OPTION) {
+                reset();
+            }
+        });
+
+        deleteRowButton.addActionListener(e -> {
+            if (lossGoodsTable.getSelectedRow() == -1) {
+                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                return;
+            }
+            int[] rows = lossGoodsTable.getSelectedRows();
+            for (int i = rows.length; i > 0; i--) {
+                //小计
+                double cost = (double) lossGoodsTable.getValueAt(rows[i - 1], 4);
+                //更新当前亏损总额
+                currentLoss -= cost;
+                tableModel.removeRow(rows[i - 1]);
+            }
+            currentLoss = (double) Math.round(currentLoss * 100) / 100;
+            setLossButton(String.valueOf(currentLoss));
+            //后续台面校验
+            if (lossGoodsTable.getRowCount() == 0) {
+                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空退货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
                 if (operation == JOptionPane.YES_OPTION) {
                     reset();
                 }
             }
         });
 
-        deleteRowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (lossGoodsTable.getSelectedRow() == -1) {
-                    SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
-                    return;
-                }
-                int[] rows = lossGoodsTable.getSelectedRows();
-                for (int i = rows.length; i > 0; i--) {
-                    //小计
-                    double cost = (double) lossGoodsTable.getValueAt(rows[i - 1], 4);
-                    //更新当前亏损总额
-                    currentLoss -= cost;
-                    tableModel.removeRow(rows[i - 1]);
-                }
-                currentLoss = (double) Math.round(currentLoss * 100) / 100;
-                setLossButton(currentLoss + "");
-                //后续台面校验
-                if (lossGoodsTable.getRowCount() == 0) {
-                    int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空退货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
-                    if (operation == JOptionPane.YES_OPTION) {
-                        reset();
+        searchGoodsField.addActionListener(e -> {
+            String keyword = searchGoodsField.getText().trim();
+            if (!keyword.equals("")) {
+                QueryLossGoodsResponseDto queryLossGoodsResponseDto = queryLossGoods(keyword);
+                if (queryLossGoodsResponseDto.getCode() == ResultCode.OK) {
+                    lossGoodsCache = queryLossGoodsResponseDto.getData();
+                    if (lossGoodsCache.length > 1) {
+                        lossGoodsCache = ChooseGoodsDialog.newInstance(lossGoodsCache);
                     }
+                    refreshTable();
                 }
             }
         });
 
-        searchGoodsField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String keyword = searchGoodsField.getText().trim();
-                if (!keyword.equals("")) {
-                    QueryLossGoodsResponseDto queryLossGoodsResponseDto = queryLossGoods(keyword);
-                    if (queryLossGoodsResponseDto.getCode() == ResultCode.OK) {
-                        lossGoodsCache = queryLossGoodsResponseDto.getData();
-                        if (lossGoodsCache.length > 1) {
-                            lossGoodsCache = ChooseGoodsDialog.newInstance(lossGoodsCache);
-                        }
-                        refreshTable();
-                    }
-                }
+        lossButton.addActionListener(e -> {
+            if (currentLoss == 0) {
+                return;
             }
-        });
-
-        lossButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (currentLoss == 0) {
-                    return;
-                }
-                String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入报损备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
-                SaveLossRecordResponseDto saveLossRecordResponseDto = saveLossRecord(note);
-                if (saveLossRecordResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(lossButton, saveLossRecordResponseDto.getMessage());
-                } else {
-                    reset();
-                }
+            String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入报损备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
+            SaveLossRecordResponseDto saveLossRecordResponseDto = saveLossRecord(note);
+            if (saveLossRecordResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(lossButton, saveLossRecordResponseDto.getMessage());
+            } else {
+                reset();
             }
-
         });
     }
 
@@ -221,13 +207,13 @@ public class StandardLossBoundary extends WebPanel {
      */
     private void refreshTable() {
         if (lossGoodsCache != null) {
-            String upc = (String) lossGoodsCache[0][0];
+            String upc = String.valueOf(lossGoodsCache[0][0]);
             for (int i = 0; i < lossGoodsTable.getRowCount(); i++) {
                 if (upc.equals(lossGoodsTable.getValueAt(i, 0))) {
                     //进价
                     double presentCost = (double) lossGoodsTable.getValueAt(i, 2);
                     //当前数量
-                    int num = Integer.parseInt(lossGoodsTable.getValueAt(i, 3) + "");
+                    int num = Integer.parseInt(String.valueOf(lossGoodsTable.getValueAt(i, 3)));
                     //当前小计
                     double cost = (double) lossGoodsTable.getValueAt(i, 4);
                     //现在小计
@@ -238,7 +224,7 @@ public class StandardLossBoundary extends WebPanel {
                     lossGoodsTable.setValueAt(cost, i, 4);
                     //更新当前亏损总额
                     currentLoss = (double) Math.round((currentLoss + presentCost) * 100) / 100;
-                    setLossButton(currentLoss + "");
+                    setLossButton(String.valueOf(currentLoss));
                     searchGoodsField.setText(null);
                     return;
                 }
@@ -249,7 +235,7 @@ public class StandardLossBoundary extends WebPanel {
             tableModel.addRow(row);
             //更新当前亏损总额
             currentLoss = (double) Math.round((currentLoss + importPrice) * 100) / 100;
-            setLossButton(currentLoss + "");
+            setLossButton(String.valueOf(currentLoss));
         }
         searchGoodsField.setText(null);
     }

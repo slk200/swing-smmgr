@@ -25,8 +25,6 @@ import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -83,41 +81,33 @@ public class UpdateGoodsDialog extends WebDialog {
     }
 
     private void initListener() {
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = nameField.getText().trim();
-                if (name.equals("")) {
-                    SwingUtil.showTip(nameField, "名称不能为空");
-                    return;
-                }
-                String type = ((String) typeComboBox.getEditor().getItem()).trim();
-                for (int i = 0; i < nameCache.length; i++) {
-                    if (type.equals(nameCache[i])) {
-                        chooseId = idCache[i];
-                        break;
-                    }
-                }
-                SaveGoodsResponseDto saveGoodsResponseDto = saveGoods(name, type);
-                if (saveGoodsResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(updateButton, saveGoodsResponseDto.getMessage());
-                } else {
-                    if (chooseId == -1) {
-                        flag = 2;
-                    } else {
-                        flag = 1;
-                    }
-                    dispose();
+        updateButton.addActionListener(e -> {
+            String name = nameField.getText().trim();
+            if (name.equals("")) {
+                SwingUtil.showTip(nameField, "名称不能为空");
+                return;
+            }
+            String type = String.valueOf(typeComboBox.getEditor().getItem()).trim();
+            for (int i = 0; i < nameCache.length; i++) {
+                if (type.equals(nameCache[i])) {
+                    chooseId = idCache[i];
+                    break;
                 }
             }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            SaveGoodsResponseDto saveGoodsResponseDto = saveGoods(name, type);
+            if (saveGoodsResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(updateButton, saveGoodsResponseDto.getMessage());
+            } else {
+                if (chooseId == -1) {
+                    flag = 2;
+                } else {
+                    flag = 1;
+                }
                 dispose();
             }
         });
+
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

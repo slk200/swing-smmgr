@@ -15,8 +15,6 @@ import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,35 +51,27 @@ public class AddStoreDialog extends WebDialog {
     }
 
     private void initListener() {
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = nameField.getText().trim();
-                if (name.equals("")) {
-                    SwingUtil.showTip(nameField, "门店名不能为空");
-                    return;
-                }
-                String address = addressField.getText().trim();
-                if (address.equals("")) {
-                    SwingUtil.showTip(addressField, "地址不能为空");
-                    return;
-                }
-                SaveStoreResponseDto saveStoreResponseDto = saveStore(name, address);
-                if (saveStoreResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(addButton, saveStoreResponseDto.getMessage());
-                } else {
-                    isRefresh = true;
-                    dispose();
-                }
+        addButton.addActionListener(e -> {
+            String name = nameField.getText().trim();
+            if (name.equals("")) {
+                SwingUtil.showTip(nameField, "门店名不能为空");
+                return;
             }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            String address = addressField.getText().trim();
+            if (address.equals("")) {
+                SwingUtil.showTip(addressField, "地址不能为空");
+                return;
+            }
+            SaveStoreResponseDto saveStoreResponseDto = saveStore(name, address);
+            if (saveStoreResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(addButton, saveStoreResponseDto.getMessage());
+            } else {
+                isRefresh = true;
                 dispose();
             }
         });
+
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

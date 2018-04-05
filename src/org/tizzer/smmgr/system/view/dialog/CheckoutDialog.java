@@ -18,8 +18,7 @@ import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 
 /**
  * @author tizzer
@@ -57,32 +56,43 @@ public class CheckoutDialog extends WebDialog {
     public static Object newInstance(double cost) {
         CheckoutDialog checkoutDialog = new CheckoutDialog();
         checkoutDialog.cost = cost;
-        checkoutDialog.costLabel.setText(cost + "");
+        checkoutDialog.costLabel.setText(String.valueOf(cost));
         checkoutDialog.paySpinner.setValue(cost);
         checkoutDialog.setVisible(true);
         return payType;
     }
 
     private void initListener() {
-        confirmButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                double payment = (double) paySpinner.getValue();
-                if (payment < cost) {
-                    SwingUtil.showTip(confirmButton, "请核对收款");
-                    return;
+        confirmButton.addActionListener(e -> {
+            double payment = (double) paySpinner.getValue();
+            if (payment < cost) {
+                SwingUtil.showTip(confirmButton, "请核对收款");
+                return;
+            }
+            payType = typeComboBox.getSelectedItem();
+            dispose();
+        });
+
+        paySpinner.addChangeListener(e -> {
+            double pay = (double) paySpinner.getValue();
+            double gap = (double) Math.round((pay - cost) * 100) / 100;
+            changeField.setText(String.valueOf(gap));
+        });
+
+        typeComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if (!e.getItem().equals("现金")) {
+                    paySpinner.setEnabled(false);
+                    paySpinner.setValue(cost);
+                } else {
+                    paySpinner.setEnabled(true);
                 }
-                payType = typeComboBox.getSelectedItem();
-                dispose();
             }
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                payType = null;
-                dispose();
-            }
+        cancelButton.addActionListener(e -> {
+            payType = null;
+            dispose();
         });
     }
 

@@ -79,7 +79,7 @@ public class StandardTradeBoundary extends WebPanel implements RecordListener {
                 if (queryTradeSpecResponseDto.getCode() == ResultCode.OK) {
                     recordView.setTableBody(queryTradeSpecResponseDto.getData());
                     quantityLabel.setText(getBoldBlackText(queryTradeSpecResponseDto.getQuantity()));
-                    costLabel.setText(getBoldOrangeText(queryTradeSpecResponseDto.getCost() + "", queryTradeSpecResponseDto.getPayType()));
+                    costLabel.setText(getBoldOrangeText(String.valueOf(queryTradeSpecResponseDto.getCost()), queryTradeSpecResponseDto.getPayType()));
                     cardNoLabel.setText("会员：" + queryTradeSpecResponseDto.getCardNo());
                     phoneLabel.setText("电话：" + queryTradeSpecResponseDto.getPhone());
                 } else {

@@ -22,14 +22,14 @@ public class SwingUtil {
         //关闭weblaf文字抗锯齿
         //StyleConstants.defaultTextRenderingHints = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
         //StyleConstants.textRenderingHints = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-        Font DEFAULT_FONT = new Font("Microsoft YaHei", Font.PLAIN, 14);
-        WebLookAndFeel.globalControlFont = new FontUIResource(DEFAULT_FONT);
-        WebLookAndFeel.globalTooltipFont = new FontUIResource(DEFAULT_FONT);
-        WebLookAndFeel.globalAlertFont = new FontUIResource(DEFAULT_FONT);
-        WebLookAndFeel.globalMenuFont = new FontUIResource(DEFAULT_FONT);
-        WebLookAndFeel.globalAcceleratorFont = new FontUIResource(DEFAULT_FONT);
-        WebLookAndFeel.globalTitleFont = new FontUIResource(DEFAULT_FONT);
-        WebLookAndFeel.globalTextFont = new FontUIResource(DEFAULT_FONT);
+        Font defaultFont = new Font("Microsoft YaHei", Font.PLAIN, 14);
+        WebLookAndFeel.globalControlFont = new FontUIResource(defaultFont);
+        WebLookAndFeel.globalTooltipFont = new FontUIResource(defaultFont);
+        WebLookAndFeel.globalAlertFont = new FontUIResource(defaultFont);
+        WebLookAndFeel.globalMenuFont = new FontUIResource(defaultFont);
+        WebLookAndFeel.globalAcceleratorFont = new FontUIResource(defaultFont);
+        WebLookAndFeel.globalTitleFont = new FontUIResource(defaultFont);
+        WebLookAndFeel.globalTextFont = new FontUIResource(defaultFont);
         WebLookAndFeel.install();
     }
 

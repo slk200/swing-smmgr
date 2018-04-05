@@ -44,7 +44,7 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
         quantityLabel = createInfoLabel(getBoldBlackText(""));
         costLabel = createInfoLabel(getBoldOrangeText(""));
         storeLabel = createInfoLabel("分店：");
-        addTransButton = createBootstrapButton(" 调货 ");
+        addTransButton = createBootstrapButton();
         recordView = createRecordView();
 
         this.prepareData();
@@ -92,7 +92,7 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
                 if (queryTransSpecResponseDto.getCode() == ResultCode.OK) {
                     recordView.setTableBody(queryTransSpecResponseDto.getData());
                     quantityLabel.setText(getBoldBlackText(queryTransSpecResponseDto.getQuantity()));
-                    costLabel.setText(getBoldOrangeText(queryTransSpecResponseDto.getCost() + ""));
+                    costLabel.setText(getBoldOrangeText(String.valueOf(queryTransSpecResponseDto.getCost())));
                     storeLabel.setText("分店：" + queryTransSpecResponseDto.getName());
                 } else {
                     SwingUtil.showNotification("访问出错，" + queryTransSpecResponseDto.getMessage());
@@ -204,8 +204,8 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
         return new WebLabel(text);
     }
 
-    private WebButton createBootstrapButton(String text) {
-        WebButton webButton = new WebButton(text);
+    private WebButton createBootstrapButton() {
+        WebButton webButton = new WebButton(" 调货 ");
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));

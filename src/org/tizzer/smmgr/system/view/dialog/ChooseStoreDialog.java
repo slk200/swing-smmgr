@@ -19,8 +19,6 @@ import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -73,23 +71,15 @@ public class ChooseStoreDialog extends WebDialog {
             }
         });
 
-        chooseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int index = list.getSelectedIndex();
-                if (index != -1) {
-                    chooseId = idCache[index];
-                    dispose();
-                }
-            }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        chooseButton.addActionListener(e -> {
+            int index = list.getSelectedIndex();
+            if (index != -1) {
+                chooseId = idCache[index];
                 dispose();
             }
         });
+
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

@@ -15,8 +15,6 @@ import org.tizzer.smmgr.system.utils.NPatchUtil;
 import org.tizzer.smmgr.system.utils.SwingUtil;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
 
@@ -59,50 +57,42 @@ public class AddEmployeeDialog extends WebDialog {
     }
 
     private void initListener() {
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String staffNo = staffNoField.getText().trim();
-                if (staffNo.equals("")) {
-                    SwingUtil.showTip(staffNoField, "员工号不能为空");
-                    return;
-                }
-                String password = passwordField.getText().trim();
-                if (password.equals("")) {
-                    SwingUtil.showTip(passwordField, "密码不能为空");
-                    return;
-                }
-                String name = nameField.getText().trim();
-                if (name.equals("")) {
-                    SwingUtil.showTip(nameField, "姓名不能为空");
-                    return;
-                }
-                String phone = phoneField.getText().trim();
-                if (phone.equals("")) {
-                    SwingUtil.showTip(phoneField, "电话不能为空");
-                    return;
-                }
-                String address = addressField.getText().trim();
-                if (address.equals("")) {
-                    SwingUtil.showTip(addressField, "地址不能为空");
-                    return;
-                }
-                SaveEmployeeResponseDto saveEmployeeResponseDto = saveEmployee(staffNo, password, name, phone, address);
-                if (saveEmployeeResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(addButton, saveEmployeeResponseDto.getMessage());
-                } else {
-                    isRefresh = true;
-                    dispose();
-                }
+        addButton.addActionListener(e -> {
+            String staffNo = staffNoField.getText().trim();
+            if (staffNo.equals("")) {
+                SwingUtil.showTip(staffNoField, "员工号不能为空");
+                return;
             }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            String password = passwordField.getText().trim();
+            if (password.equals("")) {
+                SwingUtil.showTip(passwordField, "密码不能为空");
+                return;
+            }
+            String name = nameField.getText().trim();
+            if (name.equals("")) {
+                SwingUtil.showTip(nameField, "姓名不能为空");
+                return;
+            }
+            String phone = phoneField.getText().trim();
+            if (phone.equals("")) {
+                SwingUtil.showTip(phoneField, "电话不能为空");
+                return;
+            }
+            String address = addressField.getText().trim();
+            if (address.equals("")) {
+                SwingUtil.showTip(addressField, "地址不能为空");
+                return;
+            }
+            SaveEmployeeResponseDto saveEmployeeResponseDto = saveEmployee(staffNo, password, name, phone, address);
+            if (saveEmployeeResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(addButton, saveEmployeeResponseDto.getMessage());
+            } else {
+                isRefresh = true;
                 dispose();
             }
         });
+
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

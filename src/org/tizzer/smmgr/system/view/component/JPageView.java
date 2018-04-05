@@ -17,10 +17,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
@@ -89,48 +86,27 @@ public class JPageView extends WebPanel {
      * initialize listener for all components
      */
     private void initListener() {
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        searchButton.addActionListener(e -> {
+            specPageField.setText(null);
+            currentPage = 1;
+            startDate = startDateField.getText();
+            endDate = endDateField.getText();
+            keyword = searchField.getText().trim();
+            pageListener.pagePerformed(startDate, endDate, keyword, pageSize, currentPage);
+        });
+        searchField.addActionListener(searchButton.getActionListeners()[0]);
+        pageSizeComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
                 specPageField.setText(null);
                 currentPage = 1;
-                startDate = startDateField.getText();
-                endDate = endDateField.getText();
-                keyword = searchField.getText().trim();
+                pageSize = (int) e.getItem();
                 pageListener.pagePerformed(startDate, endDate, keyword, pageSize, currentPage);
             }
         });
-        searchField.addActionListener(searchButton.getActionListeners()[0]);
-        pageSizeComboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    specPageField.setText(null);
-                    currentPage = 1;
-                    pageSize = (int) e.getItem();
-                    pageListener.pagePerformed(startDate, endDate, keyword, pageSize, currentPage);
-                }
-            }
-        });
-        previousPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pageChange(PageEvent.PREVIOUS);
-            }
-        });
-        gotoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pageChange(PageEvent.GOTO);
-            }
-        });
+        previousPageButton.addActionListener(e -> pageChange(PageEvent.PREVIOUS));
+        gotoButton.addActionListener(e -> pageChange(PageEvent.GOTO));
         specPageField.addActionListener(gotoButton.getActionListeners()[0]);
-        nextPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pageChange(PageEvent.NEXT);
-            }
-        });
+        nextPageButton.addActionListener(e -> pageChange(PageEvent.NEXT));
     }
 
     /**

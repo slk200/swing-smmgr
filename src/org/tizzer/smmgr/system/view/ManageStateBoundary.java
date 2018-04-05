@@ -1,7 +1,6 @@
 package org.tizzer.smmgr.system.view;
 
 import com.alee.extended.layout.VerticalFlowLayout;
-import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.panel.WebPanel;
 import org.jfree.chart.ChartFactory;
@@ -27,15 +26,16 @@ import java.awt.*;
  */
 public class ManageStateBoundary extends WebPanel {
 
-    private final static Font defaultFont = WebLookAndFeel.globalAcceleratorFont;
+    private Font defaultFont = new Font("Microsoft YaHei", Font.PLAIN, 14);
+    private Font titleFont = new Font("Microsoft YaHei", Font.PLAIN, 18);
 
     private JFreeChart costProportionChart;
     private WebButton previousButton;
     private WebButton nextButton;
 
     public ManageStateBoundary() {
-        previousButton = createSwitchButton(IconManager.PREVIOUS);
-        nextButton = createSwitchButton(IconManager.NEXT);
+        previousButton = createSwitchButton(IconManager.PREVIOUS, IconManager.PREVIOUSOVER, IconManager.PREVIOUSPRESS);
+        nextButton = createSwitchButton(IconManager.NEXT, IconManager.NEXTOVER, IconManager.NEXTPRESS);
 
         this.prepareData();
         this.setOpaque(false);
@@ -79,9 +79,9 @@ public class ManageStateBoundary extends WebPanel {
     }
 
     private JFreeChart createChart(DefaultPieDataset dataset) {
-        JFreeChart chart = ChartFactory.createPieChart("消费明细", dataset, true, false, false);
+        JFreeChart chart = ChartFactory.createPieChart("消费明细(近30天)", dataset, true, false, false);
         chart.getLegend().setItemFont(defaultFont);
-        chart.getTitle().setFont(defaultFont);
+        chart.getTitle().setFont(titleFont);
         chart.setBackgroundPaint(ColorManager._241_246_253);
         return chart;
     }
@@ -96,13 +96,13 @@ public class ManageStateBoundary extends WebPanel {
         plot.setBackgroundPaint(ColorManager._212_234_255);
         plot.setLabelFont(defaultFont);
         plot.setLabelBackgroundPaint(new Color(254, 234, 12));
-        plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0}：￥: {1}，{2}"));
+        plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0}：￥: {1}    {2}"));
         plot.setExplodePercent("会员消费", 0.3);
         plot.setSectionPaint("会员消费", new Color(167, 118, 72));
         plot.setSectionPaint("普通消费", new Color(255, 97, 1));
     }
 
-    private DefaultPieDataset createDataset(double consumerCost, double insiderCost) {
+    private DefaultPieDataset createDataset(Double consumerCost, Double insiderCost) {
         DefaultPieDataset dataset = new DefaultPieDataset();
         if (consumerCost == 0 && insiderCost == 0) {
             return null;
@@ -112,9 +112,13 @@ public class ManageStateBoundary extends WebPanel {
         return dataset;
     }
 
-    private WebButton createSwitchButton(ImageIcon icon) {
-        WebButton webButton = WebButton.createIconWebButton(icon, true);
-        webButton.setRound(17);
+    private WebButton createSwitchButton(ImageIcon icon, ImageIcon overIcon, ImageIcon pressIcon) {
+        WebButton webButton = new WebButton();
+        webButton.setIcon(icon);
+        webButton.setRolloverIcon(overIcon);
+        webButton.setPressedIcon(pressIcon);
+        webButton.setMoveIconOnPress(false);
+        webButton.setUndecorated(true);
         return webButton;
     }
 

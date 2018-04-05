@@ -29,7 +29,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author tizzer
@@ -80,12 +79,12 @@ public class StandardCollectionBoundary extends WebPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TableCellListener tcl = (TableCellListener) e.getSource();
-                String value = tcl.getNewValue() + "";
+                String value = String.valueOf(tcl.getNewValue());
                 if (value.matches("[1-9]([0-9]?)*")) {
                     //新数量
-                    int newValue = Integer.parseInt(tradeGoodsTable.getValueAt(tcl.getRow(), 5) + "");
+                    int newValue = Integer.parseInt(String.valueOf(tradeGoodsTable.getValueAt(tcl.getRow(), 5)));
                     //旧数量
-                    int oldValue = Integer.parseInt(tcl.getOldValue() + "");
+                    int oldValue = Integer.parseInt(String.valueOf(tcl.getOldValue()));
                     if (newValue != oldValue) {
                         //现价
                         double presentCost = (double) tradeGoodsTable.getValueAt(tcl.getRow(), 4);
@@ -94,7 +93,7 @@ public class StandardCollectionBoundary extends WebPanel {
                         //更新当前消费总额
                         currentCost += (newValue - oldValue) * presentCost;
                         currentCost = (double) Math.round(currentCost * 100) / 100;
-                        setCheckoutButton(currentCost + "");
+                        setCheckoutButton(String.valueOf(currentCost));
                         return;
                     }
                 }
@@ -102,143 +101,122 @@ public class StandardCollectionBoundary extends WebPanel {
             }
         });
 
-        resetTradeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+        resetTradeButton.addActionListener(e -> {
+            int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+            if (operation == JOptionPane.YES_OPTION) {
+                reset();
+            }
+        });
+
+        deleteRowButton.addActionListener(e -> {
+            if (tradeGoodsTable.getSelectedRow() == -1) {
+                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                return;
+            }
+            int[] rows = tradeGoodsTable.getSelectedRows();
+            for (int i = rows.length; i > 0; i--) {
+                //小计
+                double cost = (double) tradeGoodsTable.getValueAt(rows[i - 1], 6);
+                //更新当前消费总额
+                currentCost -= cost;
+                tableModel.removeRow(rows[i - 1]);
+            }
+            currentCost = (double) Math.round(currentCost * 100) / 100;
+            setCheckoutButton(String.valueOf(currentCost));
+            //后续台面校验
+            if (tradeGoodsTable.getRowCount() == 0 && discount != 100) {
+                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空交易区，是否要退出会员？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
                 if (operation == JOptionPane.YES_OPTION) {
+                    discount = 100;
+                    insiderCache = null;
+                    searchInsiderField.setText(null);
+                    searchInsiderField.setEditable(true);
+                }
+            }
+        });
+
+        searchGoodsField.addActionListener(e -> {
+            String keyword = searchGoodsField.getText().trim();
+            if (!keyword.equals("")) {
+                QueryTradeGoodsResponseDto queryTradeGoodsResponseDto = queryTradeGoods(keyword);
+                if (queryTradeGoodsResponseDto.getCode() == ResultCode.OK) {
+                    tradeGoodsCache = queryTradeGoodsResponseDto.getData();
+                    if (tradeGoodsCache.length > 1) {
+                        tradeGoodsCache = TradeGoodsDialog.newInstance(tradeGoodsCache);
+                    }
+                    refreshTable();
+                }
+            }
+        });
+
+        searchInsiderField.addActionListener(e -> {
+            String keyword = searchInsiderField.getText().trim();
+            if (!keyword.equals("")) {
+                QueryOneInsiderResponseDto queryOneInsiderResponseDto = queryOneInsider(keyword);
+                if (queryOneInsiderResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(searchInsiderField, queryOneInsiderResponseDto.getMessage());
+                } else {
+                    //缓存会员信息
+                    insiderCache = queryOneInsiderResponseDto.getData();
+                    //记录会员折扣
+                    discount = queryOneInsiderResponseDto.getDiscount();
+                    //刷新表格数据和当前总额
+                    refreshTable(discount);
+                    //锁定会员的组件
+                    searchInsiderField.setEditable(false);
+                }
+            }
+        });
+
+        seeInsiderButton.addActionListener(e -> {
+            if (insiderCache == null) {
+                return;
+            }
+            //打开会员详情对话框
+            int newDiscount = UpdateInsiderDialog.newInstance(insiderCache);
+            //对比会员折扣是否修改了
+            if (discount != newDiscount) {
+                QueryOneInsiderResponseDto queryOneInsiderResponseDto = queryOneInsider(insiderCache[0].toString());
+                if (queryOneInsiderResponseDto.getCode() == ResultCode.OK) {
+                    insiderCache = queryOneInsiderResponseDto.getData();
+                    refreshTable(discount);
+                } else {
+                    SwingUtil.showNotification("访问出错，" + queryOneInsiderResponseDto.getMessage());
+                }
+            }
+        });
+
+        cancelInsiderButton.addActionListener(e -> {
+            //修改折扣
+            discount = 100;
+            //清理会员数据缓存
+            insiderCache = null;
+            //刷新表格数据和当前总额
+            refreshTable(discount);
+            //恢复会员的组件的初始态
+            searchInsiderField.setText(null);
+            searchInsiderField.setEditable(true);
+        });
+
+        checkoutButton.addActionListener(e -> {
+            if (currentCost == 0) {
+                return;
+            }
+            //付款方式
+            Object payType = CheckoutDialog.newInstance(currentCost);
+            if (payType != null) {
+                Object cardNo = null;
+                Object phone = null;
+                if (discount != 100) {
+                    //会员参数
+                    cardNo = insiderCache[0];
+                    phone = insiderCache[2];
+                }
+                SaveTradeRecordResponseDto saveTradeRecordResponseDto = saveTradeRecord(payType, cardNo, phone);
+                if (saveTradeRecordResponseDto.getCode() != ResultCode.OK) {
+                    SwingUtil.showTip(checkoutButton, saveTradeRecordResponseDto.getMessage());
+                } else {
                     reset();
-                }
-            }
-        });
-
-        deleteRowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (tradeGoodsTable.getSelectedRow() == -1) {
-                    SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
-                    return;
-                }
-                int[] rows = tradeGoodsTable.getSelectedRows();
-                for (int i = rows.length; i > 0; i--) {
-                    //小计
-                    double cost = (double) tradeGoodsTable.getValueAt(rows[i - 1], 6);
-                    //更新当前消费总额
-                    currentCost -= cost;
-                    tableModel.removeRow(rows[i - 1]);
-                }
-                currentCost = (double) Math.round(currentCost * 100) / 100;
-                setCheckoutButton(currentCost + "");
-                //后续台面校验
-                if (tradeGoodsTable.getRowCount() == 0 && discount != 100) {
-                    int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空交易区，是否要退出会员？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
-                    if (operation == JOptionPane.YES_OPTION) {
-                        discount = 100;
-                        insiderCache = null;
-                        searchInsiderField.setText(null);
-                        searchInsiderField.setEditable(true);
-                    }
-                }
-            }
-        });
-
-        searchGoodsField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String keyword = searchGoodsField.getText().trim();
-                if (!keyword.equals("")) {
-                    QueryTradeGoodsResponseDto queryTradeGoodsResponseDto = queryTradeGoods(keyword);
-                    if (queryTradeGoodsResponseDto.getCode() == ResultCode.OK) {
-                        tradeGoodsCache = queryTradeGoodsResponseDto.getData();
-                        if (tradeGoodsCache.length > 1) {
-                            tradeGoodsCache = TradeGoodsDialog.newInstance(tradeGoodsCache);
-                        }
-                        refreshTable();
-                    }
-                }
-            }
-        });
-
-        searchInsiderField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String keyword = searchInsiderField.getText().trim();
-                if (!keyword.equals("")) {
-                    QueryOneInsiderResponseDto queryOneInsiderResponseDto = queryOneInsider(keyword);
-                    if (queryOneInsiderResponseDto.getCode() != ResultCode.OK) {
-                        SwingUtil.showTip(searchInsiderField, queryOneInsiderResponseDto.getMessage());
-                    } else {
-                        //缓存会员信息
-                        insiderCache = queryOneInsiderResponseDto.getData();
-                        //记录会员折扣
-                        discount = queryOneInsiderResponseDto.getDiscount();
-                        //刷新表格数据和当前总额
-                        refreshTable(discount);
-                        //锁定会员的组件
-                        searchInsiderField.setEditable(false);
-                    }
-                }
-            }
-        });
-
-        seeInsiderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (insiderCache == null) {
-                    return;
-                }
-                //打开会员详情对话框
-                int newDiscount = UpdateInsiderDialog.newInstance(insiderCache);
-                //对比会员折扣是否修改了
-                if (discount != newDiscount) {
-                    QueryOneInsiderResponseDto queryOneInsiderResponseDto = queryOneInsider(insiderCache[0].toString());
-                    if (queryOneInsiderResponseDto.getCode() == ResultCode.OK) {
-                        insiderCache = queryOneInsiderResponseDto.getData();
-                        refreshTable(discount);
-                    } else {
-                        SwingUtil.showNotification("访问出错，" + queryOneInsiderResponseDto.getMessage());
-                    }
-                }
-            }
-        });
-
-        cancelInsiderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //修改折扣
-                discount = 100;
-                //清理会员数据缓存
-                insiderCache = null;
-                //刷新表格数据和当前总额
-                refreshTable(discount);
-                //恢复会员的组件的初始态
-                searchInsiderField.setText(null);
-                searchInsiderField.setEditable(true);
-            }
-        });
-
-        checkoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (currentCost == 0) {
-                    return;
-                }
-                //付款方式
-                Object payType = CheckoutDialog.newInstance(currentCost);
-                if (payType != null) {
-                    Object cardNo = null;
-                    Object phone = null;
-                    if (discount != 100) {
-                        //会员参数
-                        cardNo = insiderCache[0];
-                        phone = insiderCache[2];
-                    }
-                    SaveTradeRecordResponseDto saveTradeRecordResponseDto = saveTradeRecord(payType, cardNo, phone);
-                    if (saveTradeRecordResponseDto.getCode() != ResultCode.OK) {
-                        SwingUtil.showTip(checkoutButton, saveTradeRecordResponseDto.getMessage());
-                    } else {
-                        reset();
-                    }
                 }
             }
         });
@@ -335,13 +313,13 @@ public class StandardCollectionBoundary extends WebPanel {
      */
     private void refreshTable() {
         if (tradeGoodsCache != null) {
-            String upc = (String) tradeGoodsCache[0][0];
+            String upc = String.valueOf(tradeGoodsCache[0][0]);
             for (int i = 0; i < tradeGoodsTable.getRowCount(); i++) {
                 if (upc.equals(tradeGoodsTable.getValueAt(i, 0))) {
                     //现价
                     double presentCost = (double) tradeGoodsTable.getValueAt(i, 4);
                     //当前数量
-                    int num = Integer.parseInt(tradeGoodsTable.getValueAt(i, 5) + "");
+                    int num = Integer.parseInt(String.valueOf(tradeGoodsTable.getValueAt(i, 5)));
                     //当前小计
                     double cost = (double) tradeGoodsTable.getValueAt(i, 6);
                     //现在小计
@@ -352,7 +330,7 @@ public class StandardCollectionBoundary extends WebPanel {
                     tradeGoodsTable.setValueAt(cost, i, 6);
                     //更新当前花费总额
                     currentCost = (double) Math.round((currentCost + presentCost) * 100) / 100;
-                    setCheckoutButton(currentCost + "");
+                    setCheckoutButton(String.valueOf(currentCost));
                     searchGoodsField.setText(null);
                     return;
                 }
@@ -366,7 +344,7 @@ public class StandardCollectionBoundary extends WebPanel {
             tableModel.addRow(row);
             //更新当前消费总额
             currentCost = (double) Math.round((currentCost + presentCost) * 100) / 100;
-            setCheckoutButton(currentCost + "");
+            setCheckoutButton(String.valueOf(currentCost));
         }
         searchGoodsField.setText(null);
     }
@@ -382,7 +360,7 @@ public class StandardCollectionBoundary extends WebPanel {
             //现价
             double presentCost = (double) Math.round((double) tradeGoodsTable.getValueAt(i, 2) * discount) / 100;
             //小计
-            double total = (double) Math.round(presentCost * Integer.parseInt(tradeGoodsTable.getValueAt(i, 5) + "") * 100) / 100;
+            double total = (double) Math.round(presentCost * Integer.parseInt(String.valueOf(tradeGoodsTable.getValueAt(i, 5))) * 100) / 100;
             //更新折扣
             tradeGoodsTable.setValueAt(discount, i, 3);
             //更新现价
@@ -393,7 +371,7 @@ public class StandardCollectionBoundary extends WebPanel {
             currentCost += total;
         }
         currentCost = (double) Math.round(currentCost * 100) / 100;
-        setCheckoutButton(currentCost + "");
+        setCheckoutButton(String.valueOf(currentCost));
     }
 
     /**

@@ -43,7 +43,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
         quantityLabel = createInfoLabel(getBoldBlackText(""));
         costLabel = createInfoLabel(getBoldOrangeText(""));
         noteLabel = createInfoLabel("备注：");
-        addBookButton = createBootstrapButton(" 订货 ");
+        addBookButton = createBootstrapButton();
         recordView = createRecordView();
 
         this.prepareData();
@@ -91,7 +91,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
                 if (queryBookSpecResponseDto.getCode() == ResultCode.OK) {
                     recordView.setTableBody(queryBookSpecResponseDto.getData());
                     quantityLabel.setText(getBoldBlackText(queryBookSpecResponseDto.getQuantity()));
-                    costLabel.setText(getBoldOrangeText(queryBookSpecResponseDto.getCost() + ""));
+                    costLabel.setText(getBoldOrangeText(String.valueOf(queryBookSpecResponseDto.getCost())));
                     noteLabel.setText("备注：" + queryBookSpecResponseDto.getNote());
                 } else {
                     SwingUtil.showNotification("访问出错，" + queryBookSpecResponseDto.getMessage());
@@ -203,8 +203,8 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
         return new WebLabel(text);
     }
 
-    private WebButton createBootstrapButton(String text) {
-        WebButton webButton = new WebButton(text);
+    private WebButton createBootstrapButton() {
+        WebButton webButton = new WebButton(" 订货 ");
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));

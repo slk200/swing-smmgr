@@ -43,7 +43,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
         quantityLabel = createInfoLabel(getBoldBlackText(""));
         costLabel = createInfoLabel(getBoldOrangeText(""));
         noteLabel = createInfoLabel("备注：");
-        addImportButton = createBootstrapButton(" 进货 ");
+        addImportButton = createBootstrapButton();
         recordView = createRecordView();
 
         this.prepareData();
@@ -91,7 +91,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
                 if (queryImportSpecResponseDto.getCode() == ResultCode.OK) {
                     recordView.setTableBody(queryImportSpecResponseDto.getData());
                     quantityLabel.setText(getBoldBlackText(queryImportSpecResponseDto.getQuantity()));
-                    costLabel.setText(getBoldOrangeText(queryImportSpecResponseDto.getCost() + ""));
+                    costLabel.setText(getBoldOrangeText(String.valueOf(queryImportSpecResponseDto.getCost())));
                     noteLabel.setText("备注：" + queryImportSpecResponseDto.getNote());
                 } else {
                     SwingUtil.showNotification("访问出错，" + queryImportSpecResponseDto.getMessage());
@@ -203,8 +203,8 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
         return new WebLabel(text);
     }
 
-    private WebButton createBootstrapButton(String text) {
-        WebButton webButton = new WebButton(text);
+    private WebButton createBootstrapButton() {
+        WebButton webButton = new WebButton(" 进货 ");
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));

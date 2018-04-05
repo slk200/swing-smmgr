@@ -26,7 +26,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author tizzer
@@ -77,12 +76,12 @@ public class AddBookDialog extends WebDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TableCellListener tcl = (TableCellListener) e.getSource();
-                String value = tcl.getNewValue() + "";
+                String value = String.valueOf(tcl.getNewValue());
                 if (value.matches("[1-9]([0-9]?)*")) {
                     //新数量
                     int newValue = Integer.parseInt(value);
                     //旧数量
-                    int oldValue = Integer.parseInt(tcl.getOldValue() + "");
+                    int oldValue = Integer.parseInt(String.valueOf(tcl.getOldValue()));
                     if (newValue != oldValue) {
                         //进价
                         double presentCost = (double) bookGoodsTable.getValueAt(tcl.getRow(), 2);
@@ -91,7 +90,7 @@ public class AddBookDialog extends WebDialog {
                         //更新当前订购总额
                         currentBook += (newValue - oldValue) * presentCost;
                         currentBook = (double) Math.round(currentBook * 100) / 100;
-                        setBookButton(currentBook + "");
+                        setBookButton(String.valueOf(currentBook));
                         return;
                     }
                 }
@@ -99,76 +98,63 @@ public class AddBookDialog extends WebDialog {
             }
         });
 
-        resetBookButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+        resetBookButton.addActionListener(e -> {
+            int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
+            if (operation == JOptionPane.YES_OPTION) {
+                reset();
+            }
+        });
+
+        deleteRowButton.addActionListener(e -> {
+            if (bookGoodsTable.getSelectedRow() == -1) {
+                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                return;
+            }
+            int[] rows = bookGoodsTable.getSelectedRows();
+            for (int i = rows.length; i > 0; i--) {
+                //小计
+                double cost = (double) bookGoodsTable.getValueAt(rows[i - 1], 4);
+                //更新当前订购总额
+                currentBook -= cost;
+                tableModel.removeRow(rows[i - 1]);
+            }
+            currentBook = (double) Math.round(currentBook * 100) / 100;
+            setBookButton(String.valueOf(currentBook));
+            //后续台面校验
+            if (bookGoodsTable.getRowCount() == 0) {
+                int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空订货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
                 if (operation == JOptionPane.YES_OPTION) {
                     reset();
                 }
             }
         });
 
-        deleteRowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (bookGoodsTable.getSelectedRow() == -1) {
-                    SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
-                    return;
-                }
-                int[] rows = bookGoodsTable.getSelectedRows();
-                for (int i = rows.length; i > 0; i--) {
-                    //小计
-                    double cost = (double) bookGoodsTable.getValueAt(rows[i - 1], 4);
-                    //更新当前订购总额
-                    currentBook -= cost;
-                    tableModel.removeRow(rows[i - 1]);
-                }
-                currentBook = (double) Math.round(currentBook * 100) / 100;
-                setBookButton(currentBook + "");
-                //后续台面校验
-                if (bookGoodsTable.getRowCount() == 0) {
-                    int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>您已清空订货区，是否要清理台面？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
-                    if (operation == JOptionPane.YES_OPTION) {
-                        reset();
+        searchGoodsField.addActionListener(e -> {
+            String keyword = searchGoodsField.getText().trim();
+            if (!keyword.equals("")) {
+                QueryBookGoodsResponseDto queryBookGoodsResponseDto = queryBookGoods(keyword);
+                if (queryBookGoodsResponseDto.getCode() == ResultCode.OK) {
+                    bookGoodsCache = queryBookGoodsResponseDto.getData();
+                    if (bookGoodsCache.length > 1) {
+                        bookGoodsCache = ChooseGoodsDialog.newInstance(bookGoodsCache);
                     }
+                    refreshTable();
                 }
             }
         });
 
-        searchGoodsField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String keyword = searchGoodsField.getText().trim();
-                if (!keyword.equals("")) {
-                    QueryBookGoodsResponseDto queryBookGoodsResponseDto = queryBookGoods(keyword);
-                    if (queryBookGoodsResponseDto.getCode() == ResultCode.OK) {
-                        bookGoodsCache = queryBookGoodsResponseDto.getData();
-                        if (bookGoodsCache.length > 1) {
-                            bookGoodsCache = ChooseGoodsDialog.newInstance(bookGoodsCache);
-                        }
-                        refreshTable();
-                    }
-                }
+        bookButton.addActionListener(e -> {
+            if (currentBook == 0) {
+                return;
             }
-        });
-
-        bookButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (currentBook == 0) {
-                    return;
-                }
-                String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入订购备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
-                SaveBookRecordResponseDto saveBookRecordResponseDto = saveBookRecord(note);
-                if (saveBookRecordResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(bookButton, saveBookRecordResponseDto.getMessage());
-                } else {
-                    isRefresh = true;
-                    dispose();
-                }
+            String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入订购备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
+            SaveBookRecordResponseDto saveBookRecordResponseDto = saveBookRecord(note);
+            if (saveBookRecordResponseDto.getCode() != ResultCode.OK) {
+                SwingUtil.showTip(bookButton, saveBookRecordResponseDto.getMessage());
+            } else {
+                isRefresh = true;
+                dispose();
             }
-
         });
     }
 
@@ -233,13 +219,13 @@ public class AddBookDialog extends WebDialog {
      */
     private void refreshTable() {
         if (bookGoodsCache != null) {
-            String upc = (String) bookGoodsCache[0][0];
+            String upc = String.valueOf(bookGoodsCache[0][0]);
             for (int i = 0; i < bookGoodsTable.getRowCount(); i++) {
                 if (upc.equals(bookGoodsTable.getValueAt(i, 0))) {
                     //进价
                     double presentCost = (double) bookGoodsTable.getValueAt(i, 2);
                     //当前数量
-                    int num = Integer.parseInt(bookGoodsTable.getValueAt(i, 3) + "");
+                    int num = Integer.parseInt(String.valueOf(bookGoodsTable.getValueAt(i, 3)));
                     //当前小计
                     double cost = (double) bookGoodsTable.getValueAt(i, 4);
                     //现在小计
@@ -250,7 +236,7 @@ public class AddBookDialog extends WebDialog {
                     bookGoodsTable.setValueAt(cost, i, 4);
                     //更新当前订购总额
                     currentBook = (double) Math.round((currentBook + presentCost) * 100) / 100;
-                    setBookButton(currentBook + "");
+                    setBookButton(String.valueOf(currentBook));
                     searchGoodsField.setText(null);
                     return;
                 }
@@ -261,7 +247,7 @@ public class AddBookDialog extends WebDialog {
             tableModel.addRow(row);
             //更新当前订购总额
             currentBook = (double) Math.round((currentBook + importPrice) * 100) / 100;
-            setBookButton(currentBook + "");
+            setBookButton(String.valueOf(currentBook));
         }
         searchGoodsField.setText(null);
     }

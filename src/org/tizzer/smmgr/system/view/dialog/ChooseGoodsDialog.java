@@ -21,8 +21,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -69,16 +67,13 @@ public class ChooseGoodsDialog extends WebDialog {
     }
 
     private void initListener() {
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String keyword = searchField.getText().trim();
-                if (!keyword.equals("")) {
-                    QueryLossGoodsResponseDto queryLossGoodsResponseDto = queryLossGoods(keyword);
-                    if (queryLossGoodsResponseDto.getData() != null) {
-                        dataCache = queryLossGoodsResponseDto.getData();
-                        setTableData(dataCache);
-                    }
+        searchButton.addActionListener(e -> {
+            String keyword = searchField.getText().trim();
+            if (!keyword.equals("")) {
+                QueryLossGoodsResponseDto queryLossGoodsResponseDto = queryLossGoods(keyword);
+                if (queryLossGoodsResponseDto.getData() != null) {
+                    dataCache = queryLossGoodsResponseDto.getData();
+                    setTableData(dataCache);
                 }
             }
         });
@@ -99,29 +94,21 @@ public class ChooseGoodsDialog extends WebDialog {
             }
         });
 
-        chooseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int row = table.getSelectedRow();
-                if (row == -1) {
-                    SwingUtil.showTip(chooseButton, "请先选择一个商品");
-                    return;
-                }
-                dataCache = new Object[1][tableHead.length];
-                for (int i = 0; i < tableHead.length; i++) {
-                    dataCache[0][i] = table.getValueAt(row, i);
-                }
-                isHandle = true;
-                dispose();
+        chooseButton.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row == -1) {
+                SwingUtil.showTip(chooseButton, "请先选择一个商品");
+                return;
             }
+            dataCache = new Object[1][tableHead.length];
+            for (int i = 0; i < tableHead.length; i++) {
+                dataCache[0][i] = table.getValueAt(row, i);
+            }
+            isHandle = true;
+            dispose();
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        cancelButton.addActionListener(e -> dispose());
     }
 
     /**

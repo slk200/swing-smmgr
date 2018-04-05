@@ -20,8 +20,6 @@ import org.tizzer.smmgr.system.view.renderer.StateRenderer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author tizzer
@@ -49,25 +47,19 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
     }
 
     private void initListener() {
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (AddEmployeeDialog.newInstance()) {
-                    pageView.refresh();
-                }
+        addButton.addActionListener(e -> {
+            if (AddEmployeeDialog.newInstance()) {
+                pageView.refresh();
             }
         });
 
-        editButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (pageView.getSelectedRow() == -1) {
-                    SwingUtil.showTip(editButton, "请先选择一条数据");
-                    return;
-                }
-                if (UpdateEmployeeDialog.newInstance(pageView.getSelectedRowData(pageView.getSelectedRow()))) {
-                    pageView.refresh();
-                }
+        editButton.addActionListener(e -> {
+            if (pageView.getSelectedRow() == -1) {
+                SwingUtil.showTip(editButton, "请先选择一条数据");
+                return;
+            }
+            if (UpdateEmployeeDialog.newInstance(pageView.getSelectedRowData(pageView.getSelectedRow()))) {
+                pageView.refresh();
             }
         });
     }

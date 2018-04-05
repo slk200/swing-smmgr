@@ -26,9 +26,13 @@ public class XMLHandler {
     private Document doc;
     private Element root;
 
-    public XMLHandler(String xmlName) throws DocumentException {
-        file = new File("" + xmlName);//TODO
-        doc = new SAXReader().read(file);
+    public XMLHandler(String xmlName) {
+        file = new File("src/org/tizzer/smmgr/config/system/" + xmlName);
+        try {
+            doc = new SAXReader().read(file);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
         root = doc.getRootElement();
     }
 
