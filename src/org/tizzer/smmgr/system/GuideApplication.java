@@ -27,15 +27,22 @@ public class GuideApplication extends WebDialog implements ActionListener {
     private Image image = IconManager.GUIDE;
     private WebStepProgress stepProgress;
     private ComponentTransition transition;
+    private JComponent[] guides;
+    private WebButton previousButton;
     private WebButton nextButton;
+    private int currentIndex = 0;
 
     public GuideApplication() {
         stepProgress = createStepProgress();
         transition = createAnimationComponent();
+        guides = new JComponent[]{createFirstGuide(), createSecondGuide(), createThirdGuide()};
+        previousButton = createSwitchButton(IconManager.PREVIOUS, IconManager.PREVIOUSOVER, IconManager.PREVIOUSPRESS);
+        previousButton.setVisible(false);
         nextButton = createSwitchButton(IconManager.NEXT, IconManager.NEXTOVER, IconManager.NEXTPRESS);
+        previousButton.addActionListener(this);
         nextButton.addActionListener(this);
 
-        this.add(createGuidePane(stepProgress, transition, nextButton));
+        this.add(createGuidePane(previousButton, transition, nextButton, stepProgress));
         this.setUndecorated(true);
         this.setBackground(new Color(0, 0, 0, 0));
         this.setSize(image.getWidth(this), image.getHeight(this));
@@ -46,18 +53,20 @@ public class GuideApplication extends WebDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        switch (transition.getName()) {
-            case "first":
-                transition.performTransition(createSecondGuide());
-                transition.setName("second");
-                stepProgress.setSelectedStepIndex(1);
-                break;
-            default:
-                transition.performTransition(createThirdGuide());
-                transition.setName(null);
-                stepProgress.setSelectedStepIndex(2);
-                nextButton.setVisible(false);
+        if (e.getSource().equals(previousButton)) {
+            ((SlideTransitionEffect) transition.getTransitionEffect()).setDirection(Direction.right);
+            switchView(--currentIndex);
+        } else {
+            ((SlideTransitionEffect) transition.getTransitionEffect()).setDirection(Direction.left);
+            switchView(++currentIndex);
         }
+    }
+
+    private void switchView(int index) {
+        previousButton.setVisible(index != 0);
+        nextButton.setVisible(index != 2);
+        transition.performTransition(guides[index]);
+        stepProgress.setSelectedStepIndex(index);
     }
 
     private WebPanel createGuidePane(JComponent... component) {
@@ -73,9 +82,10 @@ public class GuideApplication extends WebDialog implements ActionListener {
                 {border, space, border, TableLayout.FILL, border, space, border},
                 {border, space, border, TableLayout.FILL, border, space, border}
         }));
+        webPanel.add(component[0], "1, 3, c, c");
         webPanel.add(component[1], "3, 3, c, c");
         webPanel.add(component[2], "5, 3, c, c");
-        webPanel.add(component[0], "1, 5, 5, 1");
+        webPanel.add(component[3], "1, 5, 5, 1");
         return webPanel;
     }
 
@@ -117,7 +127,6 @@ public class GuideApplication extends WebDialog implements ActionListener {
     private ComponentTransition createAnimationComponent() {
         ComponentTransition componentTransition = new ComponentTransition();
         componentTransition.setOpaque(false);
-        componentTransition.setName("first");
         componentTransition.setContent(createFirstGuide());
         componentTransition.addTransitionEffect(createSlideTransitionEffect());
         return componentTransition;
