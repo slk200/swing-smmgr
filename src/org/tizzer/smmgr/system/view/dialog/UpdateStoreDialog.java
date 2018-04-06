@@ -109,7 +109,7 @@ public class UpdateStoreDialog extends WebDialog {
         UpdateStoreResponseDto updateStoreResponseDto = new UpdateStoreResponseDto();
         try {
             UpdateStoreRequestDto updateStoreRequestDto = new UpdateStoreRequestDto();
-            updateStoreRequestDto.setId((Long) dataCache[0]);
+            updateStoreRequestDto.setId(Long.valueOf(String.valueOf(dataCache[0])));
             updateStoreRequestDto.setName(name);
             updateStoreRequestDto.setAddress(address);
             updateStoreResponseDto = HttpHandler.post("/update/store", updateStoreRequestDto.toString(), UpdateStoreResponseDto.class);
