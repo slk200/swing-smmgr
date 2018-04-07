@@ -79,11 +79,11 @@ public class SpellWorker {
         if (chinese == null || chinese.trim().length() == 0) {
             return "";
         }
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < chinese.length(); i++) {
-            result = result + getFirstLetter(chinese.substring(i, i + 1));
+            result.append(getFirstLetter(chinese.substring(i, i + 1)));
         }
-        return result;
+        return result.toString();
     }
 
 }  

@@ -35,7 +35,7 @@ public class HttpHandler {
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
         BufferedReader reader = null;
-        String result = "";
+        StringBuilder result = new StringBuilder();
         String tempLine;
         if (httpURLConnection.getResponseCode() != 200) {
             throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
@@ -45,14 +45,14 @@ public class HttpHandler {
             inputStreamReader = new InputStreamReader(inputStream);
             reader = new BufferedReader(inputStreamReader);
             while ((tempLine = reader.readLine()) != null) {
-                result += tempLine;
+                result.append(tempLine);
             }
         } catch (Exception e) {
             SwingUtil.showNotification("访问服务器异常，" + e.getMessage());
         } finally {
             StreamUtil.close(reader, inputStreamReader, inputStream);
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -78,7 +78,7 @@ public class HttpHandler {
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
         BufferedReader reader = null;
-        String result = "";
+        StringBuilder result = new StringBuilder();
         String tempLine;
         try {
             outputStream = httpURLConnection.getOutputStream();
@@ -92,14 +92,14 @@ public class HttpHandler {
             inputStreamReader = new InputStreamReader(inputStream);
             reader = new BufferedReader(inputStreamReader);
             while ((tempLine = reader.readLine()) != null) {
-                result += tempLine;
+                result.append(tempLine);
             }
         } catch (Exception e) {
             SwingUtil.showNotification("访问服务器异常，" + e.getMessage());
         } finally {
             StreamUtil.close(outputStreamWriter, outputStream, reader, inputStreamReader, inputStream);
         }
-        return result;
+        return result.toString();
     }
 
     /**

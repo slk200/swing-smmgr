@@ -41,18 +41,18 @@ public class StreamUtil {
      * @return
      */
     public static String getFileContent(String fileName) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         try {
             BufferedReader reader = new BufferedReader(new FileReader("src/constant/entity/" + fileName));
             String temp;
             while ((temp = reader.readLine()) != null) {
-                result += temp + "\n";
+                result.append(temp).append("\n");
             }
         } catch (IOException e) {
             Logcat.type(clazz, "文件读取异常：" + e.getMessage(), LogLevel.ERROR);
             e.printStackTrace();
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -62,13 +62,13 @@ public class StreamUtil {
      * @return
      */
     public static String list2String(List list) {
-        String param = "";
+        StringBuilder param = new StringBuilder();
         if (list != null) {
             for (Object element : list) {
-                param += element;
+                param.append(element);
             }
         }
-        return param;
+        return param.toString();
     }
 
 }
