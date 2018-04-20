@@ -48,6 +48,7 @@ public class GuideApplication extends WebDialog implements ActionListener {
         this.setSize(image.getWidth(this), image.getHeight(this));
         this.setLocationRelativeTo(this);
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.setAlwaysOnTop(true);
         this.setVisible(true);
     }
 
