@@ -33,7 +33,7 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
     private WebButton addButton;
     private WebButton editButton;
 
-    public ManageEmployeeBoundary() {
+    ManageEmployeeBoundary() {
         pageView = createPageView();
         addButton = createBootstrapButton("新增");
         editButton = createBootstrapButton("编辑");

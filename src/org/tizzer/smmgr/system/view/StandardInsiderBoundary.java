@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
  * @author tizzer
  * @version 1.0
  */
-public class StandardInsiderBoundary extends WebPanel {
+class StandardInsiderBoundary extends WebPanel {
 
     private WebTextField cardNoField;
     private WebComboBox typeComboBox;
@@ -43,7 +43,7 @@ public class StandardInsiderBoundary extends WebPanel {
     //会员类型缓存
     private Integer[] idCache;
 
-    public StandardInsiderBoundary(NavigationListener navigationListener) {
+    StandardInsiderBoundary(NavigationListener navigationListener) {
         cardNoField = createInformationField("必填");
         typeComboBox = new WebComboBox();
         nameField = createInformationField("必填");

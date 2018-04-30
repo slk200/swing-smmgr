@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
  * @author tizzer
  * @version 1.0
  */
-public class StandardRefundBoundary extends WebPanel {
+class StandardRefundBoundary extends WebPanel {
 
     private final static Object[] tableHead = {"商品条码", "商品名称", "原价", "折扣(%)", "现价", "数量", "小计"};
 
@@ -50,7 +50,7 @@ public class StandardRefundBoundary extends WebPanel {
     //记录当前退款总额
     private double currentRefund = 0;
 
-    public StandardRefundBoundary() {
+    StandardRefundBoundary() {
         tradeGoodsTable = createTransactionTable();
         resetTradeButton = createBootstrapButton("清理台面", IconManager.RESETDESK);
         deleteRowButton = createBootstrapButton("删除记录", IconManager.DELETERECORD);

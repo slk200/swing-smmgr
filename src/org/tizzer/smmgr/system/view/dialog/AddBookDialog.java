@@ -47,7 +47,7 @@ public class AddBookDialog extends WebDialog {
     //记录当前订购总额
     private double currentBook = 0;
 
-    public AddBookDialog() {
+    private AddBookDialog() {
         super(RuntimeConstants.root, "新建订单", true);
         bookGoodsTable = createTransactionTable();
         resetBookButton = createBootstrapButton("清理台面", IconManager.RESETDESK);

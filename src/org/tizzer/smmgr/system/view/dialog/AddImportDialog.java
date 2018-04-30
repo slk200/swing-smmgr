@@ -47,7 +47,7 @@ public class AddImportDialog extends WebDialog {
     //记录当前进货总额
     private double currentImport = 0;
 
-    public AddImportDialog() {
+    private AddImportDialog() {
         super(RuntimeConstants.root, "进货", true);
         importGoodsTable = createTransactionTable();
         addGoodsButton = createBootstrapButton("新增商品", IconManager.ADDGOODS);

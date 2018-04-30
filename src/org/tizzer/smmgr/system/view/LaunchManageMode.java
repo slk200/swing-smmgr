@@ -19,7 +19,7 @@ import java.awt.event.WindowEvent;
  * @author tizzer
  * @version 1.0
  */
-public class LaunchManageMode extends WebPanel {
+class LaunchManageMode extends WebPanel {
 
     private WebToggleButton factButton;
     private WebToggleButton storeButton;
@@ -35,7 +35,7 @@ public class LaunchManageMode extends WebPanel {
     private WebToggleButton helpButton;
     private WebPanel handlePanel;
 
-    public LaunchManageMode() {
+    LaunchManageMode() {
         factButton = createNavigationButton("营业概况", IconManager.FACT);
         factButton.setSelected(true);
         employeeButton = createNavigationButton("员工管理", IconManager.EMPLOYEE);

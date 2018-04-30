@@ -31,7 +31,7 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
     private JPageView pageView;
     private WebButton setButton;
 
-    public ManageInsiderBoundary() {
+    ManageInsiderBoundary() {
         pageView = createPageView();
         setButton = createBootstrapButton();
 

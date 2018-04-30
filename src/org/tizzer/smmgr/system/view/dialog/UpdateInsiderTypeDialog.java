@@ -49,7 +49,7 @@ public class UpdateInsiderTypeDialog extends WebDialog {
     private WebButton delButton;
     private WebButton cancelButton;
 
-    public UpdateInsiderTypeDialog() {
+    private UpdateInsiderTypeDialog() {
         super(RuntimeConstants.root, "编辑会员等级", true);
         table = createInsiderTypeTable();
         nameField = createInsiderTypeNameField();

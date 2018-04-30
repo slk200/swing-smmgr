@@ -37,7 +37,7 @@ public class CheckoutDialog extends WebDialog {
     //消费总额
     private double cost;
 
-    public CheckoutDialog() {
+    private CheckoutDialog() {
         super(RuntimeConstants.root, "付款", true);
         costLabel = createCostLabel();
         typeComboBox = createPayTypeComboBox();

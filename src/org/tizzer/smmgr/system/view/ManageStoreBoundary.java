@@ -38,7 +38,7 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
     private WebButton editButton;
     private WebButton delButton;
 
-    public ManageStoreBoundary() {
+    ManageStoreBoundary() {
         pageView = createPageView();
         addButton = createBootstrapButton("新增");
         editButton = createBootstrapButton("编辑");

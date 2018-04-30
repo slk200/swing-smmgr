@@ -37,7 +37,7 @@ public class ChooseStoreDialog extends WebDialog {
     //商店缓存
     private Integer[] idCache;
 
-    public ChooseStoreDialog() {
+    private ChooseStoreDialog() {
         super(RuntimeConstants.root, "选择分店", true);
         list = createStoreList();
         chooseButton = createBootstrapButton("选择");

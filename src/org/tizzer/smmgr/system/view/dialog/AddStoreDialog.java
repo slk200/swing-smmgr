@@ -31,7 +31,7 @@ public class AddStoreDialog extends WebDialog {
     private WebButton addButton;
     private WebButton cancelButton;
 
-    public AddStoreDialog() {
+    private AddStoreDialog() {
         super(RuntimeConstants.root, "新增门店", true);
         addButton = createBootstrapButton("添加");
         cancelButton = createBootstrapButton("取消");

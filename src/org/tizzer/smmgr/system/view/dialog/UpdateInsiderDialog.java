@@ -49,7 +49,7 @@ public class UpdateInsiderDialog extends WebDialog {
     private Integer[] idCache;
     private Integer[] discountCache;
 
-    public UpdateInsiderDialog() {
+    private UpdateInsiderDialog() {
         super(RuntimeConstants.root, "编辑会员资料", true);
         cardNoField = createDisableField();
         nameField = createDisableField();

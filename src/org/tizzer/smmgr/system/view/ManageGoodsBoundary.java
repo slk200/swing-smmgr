@@ -30,7 +30,7 @@ import java.awt.event.MouseEvent;
  * @author tizzer
  * @version 1.0
  */
-public class ManageGoodsBoundary extends WebPanel {
+class ManageGoodsBoundary extends WebPanel {
     private final static Object[] tableHead = {"条码", "名称", "进价", "售价", "库存"};
 
     /**
@@ -53,7 +53,7 @@ public class ManageGoodsBoundary extends WebPanel {
     //商品类型缓存
     private Integer[] typeIdCache;
 
-    public ManageGoodsBoundary() {
+    ManageGoodsBoundary() {
         searchField = createSearchField();
         list = createTypeList();
         table = createGoodsTable();

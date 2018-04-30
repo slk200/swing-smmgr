@@ -31,7 +31,7 @@ public class LaunchStandardMode extends WebPanel implements NavigationListener {
     private WebToggleButton helpButton;
     private WebPanel handlePanel;
 
-    public LaunchStandardMode() {
+    LaunchStandardMode() {
         homeButton = createNavigationButton("收银台面", IconManager.HOME);
         homeButton.setSelected(true);
         insiderButton = createNavigationButton("新增会员", IconManager.INSIDER);

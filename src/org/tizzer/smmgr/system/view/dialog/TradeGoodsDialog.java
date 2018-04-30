@@ -42,7 +42,7 @@ public class TradeGoodsDialog extends WebDialog {
     private WebButton chooseButton;
     private WebButton cancelButton;
 
-    public TradeGoodsDialog(Object[][] dataCache) {
+    private TradeGoodsDialog(Object[][] dataCache) {
         super(RuntimeConstants.root, "选择交易商品", true);
         searchButton = createTrailingComponent();
         searchField = createSearchField();

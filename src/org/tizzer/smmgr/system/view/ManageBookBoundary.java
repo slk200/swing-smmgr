@@ -39,7 +39,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
     //当前选中单号缓存
     private Object serialNoCache;
 
-    public ManageBookBoundary() {
+    ManageBookBoundary() {
         quantityLabel = createInfoLabel(getBoldBlackText(""));
         costLabel = createInfoLabel(getBoldOrangeText(""));
         noteLabel = createInfoLabel("备注：");

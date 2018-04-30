@@ -42,7 +42,7 @@ public class ChooseGoodsDialog extends WebDialog {
     //是否变更标志
     private boolean isHandle;
 
-    public ChooseGoodsDialog(Object[][] dataCache) {
+    private ChooseGoodsDialog(Object[][] dataCache) {
         super(RuntimeConstants.root, "选择交易商品", true);
         searchButton = createTrailingComponent();
         searchField = createSearchField();

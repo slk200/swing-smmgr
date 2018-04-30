@@ -39,7 +39,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
     //当前选中单号缓存
     private Object serialNoCache;
 
-    public ManageImportBoundary() {
+    ManageImportBoundary() {
         quantityLabel = createInfoLabel(getBoldBlackText(""));
         costLabel = createInfoLabel(getBoldOrangeText(""));
         noteLabel = createInfoLabel("备注：");

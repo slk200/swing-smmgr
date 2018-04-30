@@ -54,7 +54,7 @@ public class UpdateGoodsDialog extends WebDialog {
     //类型选择的索引
     private Integer chooseId = -1;
 
-    public UpdateGoodsDialog(Object upc) {
+    private UpdateGoodsDialog(Object upc) {
         super(RuntimeConstants.root, "编辑商品", true);
         upcField = createDisabledField();
         nameField = createEditableField();

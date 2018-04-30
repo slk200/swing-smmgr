@@ -34,7 +34,7 @@ public class AddEmployeeDialog extends WebDialog {
     private WebButton addButton;
     private WebButton cancelButton;
 
-    public AddEmployeeDialog() {
+    private AddEmployeeDialog() {
         super(RuntimeConstants.root, "新增员工", true);
         staffNoField = createInfoTextField();
         passwordField = createInfoTextField();

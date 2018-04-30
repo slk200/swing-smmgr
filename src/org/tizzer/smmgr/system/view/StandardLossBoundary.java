@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
  * @author tizzer
  * @version 1.0
  */
-public class StandardLossBoundary extends WebPanel {
+class StandardLossBoundary extends WebPanel {
     private final static Object[] tableHead = {"商品条码", "商品名称", "进价", "数量", "小计"};
 
     private DefaultTableModel tableModel;
@@ -45,7 +45,7 @@ public class StandardLossBoundary extends WebPanel {
     //记录当前亏损总额
     private double currentLoss = 0;
 
-    public StandardLossBoundary() {
+    StandardLossBoundary() {
         lossGoodsTable = createTransactionTable();
         resetLossButton = createBootstrapButton("清理台面", IconManager.RESETDESK);
         deleteRowButton = createBootstrapButton("删除记录", IconManager.DELETERECORD);

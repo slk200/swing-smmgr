@@ -44,7 +44,7 @@ public class ManageStateBoundary extends WebPanel implements ActionListener {
     private WebButton nextButton;
     private int currentIndex = 0;
 
-    public ManageStateBoundary() {
+    ManageStateBoundary() {
         previousButton = createSwitchButton(IconManager.PREVIOUS, IconManager.PREVIOUSOVER, IconManager.PREVIOUSPRESS);
         previousButton.setVisible(false);
         nextButton = createSwitchButton(IconManager.NEXT, IconManager.NEXTOVER, IconManager.NEXTPRESS);

@@ -51,7 +51,7 @@ public class AddGoodsDialog extends WebDialog {
     //选择的索引
     private Integer chooseId = -1;
 
-    public AddGoodsDialog() {
+    private AddGoodsDialog() {
         super(RuntimeConstants.root, "新增商品", true);
         upcCreateButton = createBootstrapButton("生成");
         upcField = createInfoField(upcCreateButton);

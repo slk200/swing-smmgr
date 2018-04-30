@@ -36,7 +36,7 @@ public class StandardTradeBoundary extends WebPanel implements RecordListener {
     //当前选中单号缓存
     private Object serialNoCache;
 
-    public StandardTradeBoundary() {
+    StandardTradeBoundary() {
         quantityLabel = createInfoLabel(getBoldBlackText(""));
         costLabel = createInfoLabel(getBoldOrangeText("", ""));
         cardNoLabel = createInfoLabel("会员：");

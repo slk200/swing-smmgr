@@ -46,7 +46,7 @@ public class AddTransDialog extends WebDialog {
     //记录当前调货总额
     private double currentTrans = 0;
 
-    public AddTransDialog() {
+    private AddTransDialog() {
         super(RuntimeConstants.root, "调货", true);
         transGoodsTable = createTransactionTable();
         resetTransButton = createBootstrapButton("清理台面", IconManager.RESETDESK);

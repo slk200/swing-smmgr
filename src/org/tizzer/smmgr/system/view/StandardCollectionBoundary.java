@@ -34,7 +34,7 @@ import java.awt.event.ActionEvent;
  * @author tizzer
  * @version 1.0
  */
-public class StandardCollectionBoundary extends WebPanel {
+class StandardCollectionBoundary extends WebPanel {
 
     private final static Object[] tableHead = {"商品条码", "商品名称", "原价", "折扣(%)", "现价", "数量", "小计"};
 
@@ -57,7 +57,7 @@ public class StandardCollectionBoundary extends WebPanel {
     //当前消费总额
     private double currentCost = 0;
 
-    public StandardCollectionBoundary() {
+    StandardCollectionBoundary() {
         tradeGoodsTable = createTransactionTable();
         resetTradeButton = createBootstrapButton("清理台面", IconManager.RESETDESK, "brown.xml");
         deleteRowButton = createBootstrapButton("删除记录", IconManager.DELETERECORD, "brown.xml");

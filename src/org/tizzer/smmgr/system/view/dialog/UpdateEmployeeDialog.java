@@ -37,7 +37,7 @@ public class UpdateEmployeeDialog extends WebDialog {
     //传入参数缓存
     private Object[] dataCache;
 
-    public UpdateEmployeeDialog() {
+    private UpdateEmployeeDialog() {
         super(RuntimeConstants.root, "编辑员工信息", true);
         staffNoField = createDisabledTextField();
         nameField = createDisabledTextField();

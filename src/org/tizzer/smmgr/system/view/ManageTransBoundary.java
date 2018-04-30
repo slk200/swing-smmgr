@@ -40,7 +40,7 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
     //当前选中单号缓存
     private Object serialNoCache;
 
-    public ManageTransBoundary() {
+    ManageTransBoundary() {
         quantityLabel = createInfoLabel(getBoldBlackText(""));
         costLabel = createInfoLabel(getBoldOrangeText(""));
         storeLabel = createInfoLabel("分店：");
