@@ -12,9 +12,9 @@ import java.awt.*;
  * @author tizzer
  * @version 1.0
  */
-public class SmmgrApplication extends WebFrame {
+class SmmgrApplication extends WebFrame {
 
-    public SmmgrApplication() {
+    SmmgrApplication() {
         LoginBoundary loginBoundary = new LoginBoundary();
         this.initProperties(loginBoundary);
         this.updateRuntimeParams(this);

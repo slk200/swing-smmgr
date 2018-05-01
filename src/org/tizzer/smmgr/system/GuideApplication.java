@@ -32,7 +32,7 @@ public class GuideApplication extends WebDialog implements ActionListener {
     private WebButton nextButton;
     private int currentIndex = 0;
 
-    public GuideApplication() {
+    GuideApplication() {
         stepProgress = createStepProgress();
         transition = createAnimationComponent();
         guides = new JComponent[]{createFirstGuide(), createSecondGuide(), createThirdGuide()};
