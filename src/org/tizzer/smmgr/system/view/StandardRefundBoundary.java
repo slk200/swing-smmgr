@@ -6,7 +6,6 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.IconManager;
 import org.tizzer.smmgr.system.constant.ResultCode;
@@ -16,8 +15,8 @@ import org.tizzer.smmgr.system.model.request.QueryRefundRecordRequestDto;
 import org.tizzer.smmgr.system.model.request.SaveTradeRecordRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryRefundRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveTradeRecordResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.listener.TableCellListener;
 
 import javax.swing.*;
@@ -102,7 +101,7 @@ class StandardRefundBoundary extends WebPanel {
 
         deleteRowButton.addActionListener(e -> {
             if (tradeGoodsTable.getSelectedRow() == -1) {
-                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                LafUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
                 return;
             }
             int[] rows = tradeGoodsTable.getSelectedRows();
@@ -129,7 +128,7 @@ class StandardRefundBoundary extends WebPanel {
             if (!serialNo.equals("")) {
                 QueryRefundRecordResponseDto queryRefundRecordResponseDto = queryRefundRecord(serialNo);
                 if (queryRefundRecordResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(searchRecordField, queryRefundRecordResponseDto.getMessage());
+                    LafUtil.showTip(searchRecordField, queryRefundRecordResponseDto.getMessage());
                 } else {
                     currentSerialNo = serialNo;
                     recordCache = queryRefundRecordResponseDto.getCache();
@@ -148,7 +147,7 @@ class StandardRefundBoundary extends WebPanel {
             }
             SaveTradeRecordResponseDto saveTradeRecordResponseDto = tradeGoods(currentSerialNo);
             if (saveTradeRecordResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(refundButton, saveTradeRecordResponseDto.getMessage());
+                LafUtil.showTip(refundButton, saveTradeRecordResponseDto.getMessage());
             } else {
                 reset();
             }
@@ -168,7 +167,7 @@ class StandardRefundBoundary extends WebPanel {
             queryRefundRecordRequestDto.setSerialNo(serialNo);
             queryRefundRecordResponseDto = HttpHandler.get("/query/refund/record?" + queryRefundRecordRequestDto.toString(), QueryRefundRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryRefundRecordResponseDto;
@@ -214,7 +213,7 @@ class StandardRefundBoundary extends WebPanel {
             saveTradeRecordRequestDto.setSerialNo(originalSerialNo);
             saveTradeRecordResponseDto = HttpHandler.post("/save/trade/record", saveTradeRecordRequestDto.toString(), SaveTradeRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return saveTradeRecordResponseDto;
@@ -270,9 +269,9 @@ class StandardRefundBoundary extends WebPanel {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
         webPanel.setLayout(new GridBagLayout());
-        SwingUtil.setupComponent(webPanel, resetTradeButton, 0, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, refundButton, 0, 1, 2, 1);
+        LafUtil.setupComponent(webPanel, resetTradeButton, 0, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, refundButton, 0, 1, 2, 1);
         return webPanel;
     }
 
@@ -310,7 +309,7 @@ class StandardRefundBoundary extends WebPanel {
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("brown.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("brown.xml"));
         return webButton;
     }
 
@@ -318,7 +317,7 @@ class StandardRefundBoundary extends WebPanel {
         WebButton webButton = new WebButton();
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("green.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("green.xml"));
         return webButton;
     }
 

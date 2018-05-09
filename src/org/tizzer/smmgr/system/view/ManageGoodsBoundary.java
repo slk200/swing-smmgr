@@ -7,15 +7,14 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryGoodsRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryAllGoodsTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryGoodsResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.dialog.UpdateGoodsDialog;
 import org.tizzer.smmgr.system.view.renderer.GoodsTypeRenderer;
 
@@ -82,7 +81,7 @@ class ManageGoodsBoundary extends WebPanel {
                         refreshTableData(queryGoodsResponseDto.getData());
                         setPageIndicator(queryGoodsResponseDto.getPageCount());
                     } else {
-                        SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                        LafUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
                     }
                 }
             }
@@ -104,7 +103,7 @@ class ManageGoodsBoundary extends WebPanel {
                             refreshTableData(queryGoodsResponseDto.getData());
                             setPageIndicator(queryGoodsResponseDto.getPageCount());
                         } else {
-                            SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                            LafUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
                         }
                     }
                 }
@@ -119,7 +118,7 @@ class ManageGoodsBoundary extends WebPanel {
                 refreshTableData(queryGoodsResponseDto.getData());
                 setPageIndicator(queryGoodsResponseDto.getPageCount());
             } else {
-                SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                LafUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
             }
         });
 
@@ -131,7 +130,7 @@ class ManageGoodsBoundary extends WebPanel {
                     refreshTableData(queryGoodsResponseDto.getData());
                     setPageIndicator(queryGoodsResponseDto.getPageCount());
                 } else {
-                    SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                    LafUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
                 }
             }
         });
@@ -144,7 +143,7 @@ class ManageGoodsBoundary extends WebPanel {
                     refreshTableData(queryGoodsResponseDto.getData());
                     setPageIndicator(queryGoodsResponseDto.getPageCount());
                 } else {
-                    SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                    LafUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
                 }
             }
         });
@@ -168,7 +167,7 @@ class ManageGoodsBoundary extends WebPanel {
             queryGoodsRequestDto.setPageSize(30);
             queryGoodsResponseDto = HttpHandler.get("/query/goods?" + queryGoodsRequestDto.toString(), QueryGoodsResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryGoodsResponseDto;
@@ -184,7 +183,7 @@ class ManageGoodsBoundary extends WebPanel {
         try {
             queryAllGoodsTypeResponseDto = HttpHandler.get("/query/goods/type", QueryAllGoodsTypeResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryAllGoodsTypeResponseDto;
@@ -199,7 +198,7 @@ class ManageGoodsBoundary extends WebPanel {
             this.typeIdCache = queryAllGoodsTypeResponseDto.getId();
             this.setListItem(queryAllGoodsTypeResponseDto.getName());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryAllGoodsTypeResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryAllGoodsTypeResponseDto.getMessage());
         }
         if (!listModel.isEmpty()) {
             typeId = typeIdCache[0];
@@ -208,7 +207,7 @@ class ManageGoodsBoundary extends WebPanel {
                 refreshTableData(queryGoodsResponseDto.getData());
                 setPageIndicator(queryGoodsResponseDto.getPageCount());
             } else {
-                SwingUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
+                LafUtil.showNotification("访问出错，" + queryGoodsResponseDto.getMessage());
             }
         }
     }
@@ -308,7 +307,7 @@ class ManageGoodsBoundary extends WebPanel {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 

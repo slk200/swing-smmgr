@@ -6,7 +6,6 @@ import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
@@ -17,8 +16,8 @@ import org.tizzer.smmgr.system.model.request.QueryTradeGoodsRequestDto;
 import org.tizzer.smmgr.system.model.request.SaveTransRecordRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryTransGoodsResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveTransRecordResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.listener.TableCellListener;
 
 import javax.swing.*;
@@ -105,7 +104,7 @@ public class AddTransDialog extends WebDialog {
 
         deleteRowButton.addActionListener(e -> {
             if (transGoodsTable.getSelectedRow() == -1) {
-                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                LafUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
                 return;
             }
             int[] rows = transGoodsTable.getSelectedRows();
@@ -151,7 +150,7 @@ public class AddTransDialog extends WebDialog {
             }
             SaveTransRecordResponseDto saveTransRecordResponseDto = saveTransRecord(storeId);
             if (saveTransRecordResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(transButton, saveTransRecordResponseDto.getMessage());
+                LafUtil.showTip(transButton, saveTransRecordResponseDto.getMessage());
             } else {
                 isRefresh = true;
                 dispose();
@@ -190,7 +189,7 @@ public class AddTransDialog extends WebDialog {
             saveTransRecordRequestDto.setQuantity(quantity);
             saveTransRecordResponseDto = HttpHandler.post("/save/trans/record", saveTransRecordRequestDto.toString(), SaveTransRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return saveTransRecordResponseDto;
@@ -209,7 +208,7 @@ public class AddTransDialog extends WebDialog {
             queryTradeGoodsRequestDto.setKeyword(keyword);
             queryTransGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryTransGoodsResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryTransGoodsResponseDto;
@@ -293,9 +292,9 @@ public class AddTransDialog extends WebDialog {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
         webPanel.setLayout(new GridBagLayout());
-        SwingUtil.setupComponent(webPanel, resetTransButton, 0, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, transButton, 0, 1, 2, 1);
+        LafUtil.setupComponent(webPanel, resetTransButton, 0, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, transButton, 0, 1, 2, 1);
         return webPanel;
     }
 
@@ -328,7 +327,7 @@ public class AddTransDialog extends WebDialog {
         WebButton webButton = new WebButton(text, icon);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("brown.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("brown.xml"));
         return webButton;
     }
 
@@ -336,7 +335,7 @@ public class AddTransDialog extends WebDialog {
         WebButton webButton = new WebButton();
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("green.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("green.xml"));
         return webButton;
     }
 

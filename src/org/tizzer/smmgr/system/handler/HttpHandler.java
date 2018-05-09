@@ -1,8 +1,8 @@
 package org.tizzer.smmgr.system.handler;
 
 import com.alibaba.fastjson.JSONObject;
-import org.tizzer.smmgr.system.utils.StreamUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.IOUtil;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -37,7 +37,7 @@ public class HttpHandler {
         BufferedReader reader = null;
         StringBuilder result = new StringBuilder();
         String tempLine;
-        if (httpURLConnection.getResponseCode() != 200) {
+        if (httpURLConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
             throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
         }
         try {
@@ -48,9 +48,9 @@ public class HttpHandler {
                 result.append(tempLine);
             }
         } catch (Exception e) {
-            SwingUtil.showNotification("访问服务器异常，" + e.getMessage());
+            LafUtil.showNotification("访问服务器异常，" + e.getMessage());
         } finally {
-            StreamUtil.close(reader, inputStreamReader, inputStream);
+            IOUtil.close(reader, inputStreamReader, inputStream);
         }
         return result.toString();
     }
@@ -85,7 +85,7 @@ public class HttpHandler {
             outputStreamWriter = new OutputStreamWriter(outputStream);
             outputStreamWriter.write(param);
             outputStreamWriter.flush();
-            if (httpURLConnection.getResponseCode() >= 300) {
+            if (httpURLConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
             }
             inputStream = httpURLConnection.getInputStream();
@@ -95,9 +95,9 @@ public class HttpHandler {
                 result.append(tempLine);
             }
         } catch (Exception e) {
-            SwingUtil.showNotification("访问服务器异常，" + e.getMessage());
+            LafUtil.showNotification("访问服务器异常，" + e.getMessage());
         } finally {
-            StreamUtil.close(outputStreamWriter, outputStream, reader, inputStreamReader, inputStream);
+            IOUtil.close(outputStreamWriter, outputStream, reader, inputStreamReader, inputStream);
         }
         return result.toString();
     }

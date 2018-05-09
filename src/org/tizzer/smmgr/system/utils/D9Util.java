@@ -10,7 +10,7 @@ import java.util.Map;
  * @author tizzer
  * @version 1.0
  */
-public class NPatchUtil {
+public class D9Util {
 
     private static Map<String, NinePatchStatePainter> ninePatchStatePainterCache = new HashMap<>();
 
@@ -22,7 +22,7 @@ public class NPatchUtil {
      */
     public static NinePatchStatePainter getNinePatchPainter(String name) {
         if (!ninePatchStatePainterCache.containsKey(name)) {
-            ninePatchStatePainterCache.put(name, NinePatchUtils.loadNinePatchStatePainter(NPatchUtil.class.getResource("/org/tizzer/smmgr/config/nppainter/" + name)));
+            ninePatchStatePainterCache.put(name, NinePatchUtils.loadNinePatchStatePainter(D9Util.class.getResource("/org/tizzer/smmgr/config/nppainter/" + name)));
         }
         return ninePatchStatePainterCache.get(name);
     }

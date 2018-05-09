@@ -7,10 +7,6 @@ public class PayTypeCostResponseDto {
 
     private DataSet[] data;
 
-    public void setData(DataSet[] data) {
-        this.data = data;
-    }
-
     public Map<String, Double> getData() {
         if (data != null) {
             Map<String, Double> map = new HashMap<>();
@@ -21,6 +17,10 @@ public class PayTypeCostResponseDto {
             return map;
         }
         return null;
+    }
+
+    public void setData(DataSet[] data) {
+        this.data = data;
     }
 
     static class DataSet {

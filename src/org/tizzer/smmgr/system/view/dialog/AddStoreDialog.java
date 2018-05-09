@@ -11,8 +11,8 @@ import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.SaveStoreRequestDto;
 import org.tizzer.smmgr.system.model.response.SaveStoreResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -54,17 +54,17 @@ public class AddStoreDialog extends WebDialog {
         addButton.addActionListener(e -> {
             String name = nameField.getText().trim();
             if (name.equals("")) {
-                SwingUtil.showTip(nameField, "门店名不能为空");
+                LafUtil.showTip(nameField, "门店名不能为空");
                 return;
             }
             String address = addressField.getText().trim();
             if (address.equals("")) {
-                SwingUtil.showTip(addressField, "地址不能为空");
+                LafUtil.showTip(addressField, "地址不能为空");
                 return;
             }
             SaveStoreResponseDto saveStoreResponseDto = saveStore(name, address);
             if (saveStoreResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(addButton, saveStoreResponseDto.getMessage());
+                LafUtil.showTip(addButton, saveStoreResponseDto.getMessage());
             } else {
                 isRefresh = true;
                 dispose();
@@ -102,10 +102,10 @@ public class AddStoreDialog extends WebDialog {
         List<String> stringList = Arrays.asList("门店名：", "地址：");
         List<Container> containerList = Arrays.asList(nameField, addressField);
         for (int i = 0; i < stringList.size(); i++) {
-            SwingUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
-            SwingUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
+            LafUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
+            LafUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
         }
-        SwingUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
+        LafUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
         return webPanel;
     }
 
@@ -128,7 +128,7 @@ public class AddStoreDialog extends WebDialog {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 

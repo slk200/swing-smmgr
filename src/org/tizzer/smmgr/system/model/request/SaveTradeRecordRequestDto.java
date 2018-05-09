@@ -69,25 +69,20 @@ public class SaveTradeRecordRequestDto {
 
     @Override
     public String toString() {
-        String param = "staffNo=" + staffNo +
+        StringBuilder param = new StringBuilder("staffNo=" + staffNo +
                 "&discount=" + discount +
                 "&payType=" + payType +
                 "&cost=" + cost +
-                "&type=" + type;
+                "&type=" + type);
         for (int i = 0; i < upc.length; i++) {
-            param += "&upc=" + upc[i] +
-                    "&name=" + name[i] +
-                    "&primeCost=" + primeCost[i] +
-                    "&presentCost=" + presentCost[i] +
-                    "&quantity=" + quantity[i];
+            param.append("&upc=").append(upc[i]).append("&name=").append(name[i]).append("&primeCost=").append(primeCost[i]).append("&presentCost=").append(presentCost[i]).append("&quantity=").append(quantity[i]);
         }
         if (cardNo != null) {
-            param += "&cardNo=" + cardNo +
-                    "&phone=" + phone;
+            param.append("&cardNo=").append(cardNo).append("&phone=").append(phone);
         }
         if (serialNo != null) {
-            param += "&serialNo=" + serialNo;
+            param.append("&serialNo=").append(serialNo);
         }
-        return param;
+        return param.toString();
     }
 }

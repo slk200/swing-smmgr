@@ -5,7 +5,6 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.IconManager;
 import org.tizzer.smmgr.system.constant.ResultCode;
@@ -15,8 +14,8 @@ import org.tizzer.smmgr.system.model.request.QueryTradeGoodsRequestDto;
 import org.tizzer.smmgr.system.model.request.SaveLossRecordRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryLossGoodsResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveLossRecordResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.dialog.ChooseGoodsDialog;
 import org.tizzer.smmgr.system.view.listener.TableCellListener;
 
@@ -95,7 +94,7 @@ class StandardLossBoundary extends WebPanel {
 
         deleteRowButton.addActionListener(e -> {
             if (lossGoodsTable.getSelectedRow() == -1) {
-                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                LafUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
                 return;
             }
             int[] rows = lossGoodsTable.getSelectedRows();
@@ -138,7 +137,7 @@ class StandardLossBoundary extends WebPanel {
             String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入报损备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
             SaveLossRecordResponseDto saveLossRecordResponseDto = saveLossRecord(note);
             if (saveLossRecordResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(lossButton, saveLossRecordResponseDto.getMessage());
+                LafUtil.showTip(lossButton, saveLossRecordResponseDto.getMessage());
             } else {
                 reset();
             }
@@ -177,7 +176,7 @@ class StandardLossBoundary extends WebPanel {
             saveLossRecordRequestDto.setQuantity(quantity);
             saveLossRecordResponseDto = HttpHandler.post("/save/loss/record", saveLossRecordRequestDto.toString(), SaveLossRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return saveLossRecordResponseDto;
@@ -196,7 +195,7 @@ class StandardLossBoundary extends WebPanel {
             queryTradeGoodsRequestDto.setKeyword(keyword);
             queryLossGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryLossGoodsResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryLossGoodsResponseDto;
@@ -280,9 +279,9 @@ class StandardLossBoundary extends WebPanel {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
         webPanel.setLayout(new GridBagLayout());
-        SwingUtil.setupComponent(webPanel, resetLossButton, 0, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, lossButton, 0, 1, 2, 1);
+        LafUtil.setupComponent(webPanel, resetLossButton, 0, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, lossButton, 0, 1, 2, 1);
         return webPanel;
     }
 
@@ -316,7 +315,7 @@ class StandardLossBoundary extends WebPanel {
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("brown.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("brown.xml"));
         return webButton;
     }
 
@@ -324,7 +323,7 @@ class StandardLossBoundary extends WebPanel {
         WebButton webButton = new WebButton();
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("green.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("green.xml"));
         return webButton;
     }
 

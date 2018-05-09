@@ -3,18 +3,16 @@ package org.tizzer.smmgr.system.view;
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.panel.WebPanel;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryEmployeeRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryEmployeeResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.component.JPageView;
 import org.tizzer.smmgr.system.view.dialog.AddEmployeeDialog;
 import org.tizzer.smmgr.system.view.dialog.UpdateEmployeeDialog;
-import org.tizzer.smmgr.system.view.listener.PageListener;
 import org.tizzer.smmgr.system.view.renderer.AuthorityRenderer;
 import org.tizzer.smmgr.system.view.renderer.StateRenderer;
 
@@ -25,7 +23,7 @@ import java.awt.*;
  * @author tizzer
  * @version 1.0
  */
-public class ManageEmployeeBoundary extends WebPanel implements PageListener {
+public class ManageEmployeeBoundary extends WebPanel implements JPageView.PageListener {
 
     private final static Object[] tableHead = {"员工号", "姓名", "电话", "地址", "所属门店", "注册时间", "权限", "状态"};
 
@@ -55,7 +53,7 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
 
         editButton.addActionListener(e -> {
             if (pageView.getSelectedRow() == -1) {
-                SwingUtil.showTip(editButton, "请先选择一条数据");
+                LafUtil.showTip(editButton, "请先选择一条数据");
                 return;
             }
             if (UpdateEmployeeDialog.newInstance(pageView.getSelectedRowData(pageView.getSelectedRow()))) {
@@ -70,7 +68,7 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
         if (queryEmployeeResponseDto.getCode() == ResultCode.OK) {
             refreshData(queryEmployeeResponseDto);
         } else {
-            SwingUtil.showNotification("访问出错，" + queryEmployeeResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryEmployeeResponseDto.getMessage());
         }
     }
 
@@ -95,7 +93,7 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
             queryEmployeeRequestDto.setCurrentPage(currentPage - 1);
             queryEmployeeResponseDto = HttpHandler.get("/query/employee?" + queryEmployeeRequestDto.toString(), QueryEmployeeResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryEmployeeResponseDto;
@@ -120,7 +118,7 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
         if (queryEmployeeResponseDto.getCode() == ResultCode.OK) {
             pageView.prepareData(tableHead, queryEmployeeResponseDto.getData(), queryEmployeeResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryEmployeeResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryEmployeeResponseDto.getMessage());
         }
         this.setRenderer();
     }
@@ -154,7 +152,7 @@ public class ManageEmployeeBoundary extends WebPanel implements PageListener {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 

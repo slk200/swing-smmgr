@@ -13,7 +13,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
@@ -86,7 +85,7 @@ public class ManageStateBoundary extends WebPanel implements ActionListener {
         try {
             identityCostResponseDto = HttpHandler.get("/analysis/identity", IdentityCostResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return identityCostResponseDto;
@@ -97,7 +96,7 @@ public class ManageStateBoundary extends WebPanel implements ActionListener {
         try {
             payTypeCostResponseDto = HttpHandler.get("/analysis/pay", PayTypeCostResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return payTypeCostResponseDto;

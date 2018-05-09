@@ -9,8 +9,7 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
 import org.tizzer.smmgr.system.constant.IconManager;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.view.listener.PageListener;
+import org.tizzer.smmgr.system.utils.D9Util;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -409,7 +408,7 @@ public class JPageView extends WebPanel {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 
@@ -434,4 +433,21 @@ public class JPageView extends WebPanel {
         PREVIOUS, GOTO, NEXT;
     }
 
+    /**
+     * 回调
+     */
+    public interface PageListener {
+
+        /**
+         * monitor the params' change of the Component<br/>
+         * change the component's page data
+         *
+         * @param startDate
+         * @param endDate
+         * @param keyword
+         * @param pageSize
+         * @param currentPage
+         */
+        void pagePerformed(String startDate, String endDate, String keyword, int pageSize, int currentPage);
+    }
 }

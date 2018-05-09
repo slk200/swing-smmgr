@@ -64,7 +64,7 @@ public class SpellWorker {
         try {
             chinese = new String(chinese.getBytes(oldCharset), newCharset);
         } catch (UnsupportedEncodingException ex) {
-            Logcat.type(clazz, "字符串编码转换异常：" + ex.getMessage(), LogLevel.ERROR);
+            Logcat.type(clazz, "字符串编码转换异常：" + ex.getMessage(), Logcat.LogLevel.ERROR);
         }
         return chinese;
     }

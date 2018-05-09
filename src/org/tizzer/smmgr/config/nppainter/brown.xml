@@ -3,26 +3,26 @@
     <entry>
         <string>normal</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/brown.9.png"
-                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.D9Util"/>
     </entry>
     <entry>
         <string>focused</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/brown.9.png"
-                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.D9Util"/>
     </entry>
     <entry>
         <string>pressed</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/brown.9.png"
-                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.D9Util"/>
     </entry>
     <entry>
         <string>selected</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/brown.9.png"
-                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.D9Util"/>
     </entry>
     <entry>
         <string>disabled</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/brown.9.png"
-                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.D9Util"/>
     </entry>
 </ResourceMap>

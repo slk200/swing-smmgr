@@ -2,7 +2,6 @@ package org.tizzer.smmgr.system.view;
 
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
@@ -10,9 +9,8 @@ import org.tizzer.smmgr.system.model.request.QueryLossRecordRequestDto;
 import org.tizzer.smmgr.system.model.request.QueryLossSpecRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryLossRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryLossSpecResponseDto;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.component.JRecordView;
-import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.LossRecordRenderer;
 
 import java.awt.*;
@@ -22,7 +20,7 @@ import java.util.Objects;
  * @author tizzer
  * @version 1.0
  */
-public class ManageLossBoundary extends WebPanel implements RecordListener {
+public class ManageLossBoundary extends WebPanel implements JRecordView.RecordListener {
 
     private static final Object[] tableHead = {"条码", "名称", "进价", "数量"};
 
@@ -52,7 +50,7 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
             recordView.setListItem(queryLossRecordResponseDto.getData());
             recordView.setLoadPage(queryLossRecordResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryLossRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryLossRecordResponseDto.getMessage());
         }
     }
 
@@ -62,7 +60,7 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
         if (queryLossRecordResponseDto.getCode() == ResultCode.OK) {
             recordView.addListItem(queryLossRecordResponseDto.getData());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryLossRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryLossRecordResponseDto.getMessage());
         }
     }
 
@@ -79,7 +77,7 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
                     costLabel.setText(getBoldOrangeText(String.valueOf(queryLossSpecResponseDto.getCost())));
                     noteLabel.setText("备注：" + queryLossSpecResponseDto.getNote());
                 } else {
-                    SwingUtil.showNotification("访问出错，" + queryLossSpecResponseDto.getMessage());
+                    LafUtil.showNotification("访问出错，" + queryLossSpecResponseDto.getMessage());
                 }
             }
         }
@@ -98,7 +96,7 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
             queryLossSpecRequestDto.setId(id);
             queryLossSpecResponseDto = HttpHandler.get("/query/loss/spec?" + queryLossSpecRequestDto.toString(), QueryLossSpecResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryLossSpecResponseDto;
@@ -125,7 +123,7 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
             queryTradeGoodsRequestDto.setPageSize(loadSize);
             queryTradeRecordResponseDto = HttpHandler.get("/query/loss/record?" + queryTradeGoodsRequestDto.toString(), QueryLossRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryTradeRecordResponseDto;
@@ -160,7 +158,7 @@ public class ManageLossBoundary extends WebPanel implements RecordListener {
             recordView.addListItem(queryLossRecordResponseDto.getData());
             recordView.setLoadPage(queryLossRecordResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryLossRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryLossRecordResponseDto.getMessage());
         }
     }
 

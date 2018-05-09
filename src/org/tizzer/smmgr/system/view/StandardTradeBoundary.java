@@ -2,7 +2,6 @@ package org.tizzer.smmgr.system.view;
 
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
@@ -11,9 +10,8 @@ import org.tizzer.smmgr.system.model.request.QueryTradeRecordRequestDto;
 import org.tizzer.smmgr.system.model.request.QueryTradeSpecRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryTradeRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryTradeSpecResponseDto;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.component.JRecordView;
-import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.TradeRecordRenderer;
 
 import java.awt.*;
@@ -23,7 +21,7 @@ import java.util.Objects;
  * @author tizzer
  * @version 1.0
  */
-public class StandardTradeBoundary extends WebPanel implements RecordListener {
+public class StandardTradeBoundary extends WebPanel implements JRecordView.RecordListener {
 
     private static final Object[] tableHead = {"条码", "名称", "售价", "折扣价", "数量"};
 
@@ -55,7 +53,7 @@ public class StandardTradeBoundary extends WebPanel implements RecordListener {
             recordView.setListItem(queryTradeRecordResponseDto.getData());
             recordView.setLoadPage(queryTradeRecordResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryTradeRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryTradeRecordResponseDto.getMessage());
         }
     }
 
@@ -65,7 +63,7 @@ public class StandardTradeBoundary extends WebPanel implements RecordListener {
         if (queryTradeRecordResponseDto.getCode() == ResultCode.OK) {
             recordView.addListItem(queryTradeRecordResponseDto.getData());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryTradeRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryTradeRecordResponseDto.getMessage());
         }
     }
 
@@ -83,7 +81,7 @@ public class StandardTradeBoundary extends WebPanel implements RecordListener {
                     cardNoLabel.setText("会员：" + queryTradeSpecResponseDto.getCardNo());
                     phoneLabel.setText("电话：" + queryTradeSpecResponseDto.getPhone());
                 } else {
-                    SwingUtil.showNotification("访问出错，" + queryTradeSpecResponseDto.getMessage());
+                    LafUtil.showNotification("访问出错，" + queryTradeSpecResponseDto.getMessage());
                 }
             }
         }
@@ -111,7 +109,7 @@ public class StandardTradeBoundary extends WebPanel implements RecordListener {
             queryTradeGoodsRequestDto.setStaffNo(RuntimeConstants.staffNo);
             queryTradeRecordResponseDto = HttpHandler.get("/query/trade/record?" + queryTradeGoodsRequestDto.toString(), QueryTradeRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryTradeRecordResponseDto;
@@ -130,7 +128,7 @@ public class StandardTradeBoundary extends WebPanel implements RecordListener {
             queryTradeSpecRequestDto.setSerialNo(serialNo);
             queryTradeSpecResponseDto = HttpHandler.get("/query/trade/spec?" + queryTradeSpecRequestDto.toString(), QueryTradeSpecResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryTradeSpecResponseDto;

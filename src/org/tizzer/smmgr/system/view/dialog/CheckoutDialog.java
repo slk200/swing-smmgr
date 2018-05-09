@@ -7,14 +7,13 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.spinner.WebSpinner;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.response.QueryPayTypeResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,7 +65,7 @@ public class CheckoutDialog extends WebDialog {
         confirmButton.addActionListener(e -> {
             double payment = (double) paySpinner.getValue();
             if (payment < cost) {
-                SwingUtil.showTip(confirmButton, "请核对收款");
+                LafUtil.showTip(confirmButton, "请核对收款");
                 return;
             }
             payType = typeComboBox.getSelectedItem();
@@ -106,7 +105,7 @@ public class CheckoutDialog extends WebDialog {
         try {
             queryPayTypeResponseDto = HttpHandler.get("/query/pay/type", QueryPayTypeResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryPayTypeResponseDto;
@@ -125,13 +124,13 @@ public class CheckoutDialog extends WebDialog {
         webPanel.setLayout(new GridBagLayout());
         webPanel.setMargin(20);
         webPanel.setBackground(ColorManager._241_246_253);
-        SwingUtil.setupComponent(webPanel, createTitleLabel("总额："), 0, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, costLabel, 1, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, typeComboBox, 0, 1, 1, 1);
-        SwingUtil.setupComponent(webPanel, paySpinner, 1, 1, 1, 1);
-        SwingUtil.setupComponent(webPanel, createTitleLabel("找零："), 0, 2, 1, 1);
-        SwingUtil.setupComponent(webPanel, changeField, 1, 2, 1, 1);
-        SwingUtil.setupComponent(webPanel, createButtonPane(), 0, 3, 2, 1);
+        LafUtil.setupComponent(webPanel, createTitleLabel("总额："), 0, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, costLabel, 1, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, typeComboBox, 0, 1, 1, 1);
+        LafUtil.setupComponent(webPanel, paySpinner, 1, 1, 1, 1);
+        LafUtil.setupComponent(webPanel, createTitleLabel("找零："), 0, 2, 1, 1);
+        LafUtil.setupComponent(webPanel, changeField, 1, 2, 1, 1);
+        LafUtil.setupComponent(webPanel, createButtonPane(), 0, 3, 2, 1);
         return webPanel;
     }
 
@@ -173,7 +172,7 @@ public class CheckoutDialog extends WebDialog {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 

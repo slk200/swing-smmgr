@@ -8,7 +8,6 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.spinner.WebSpinner;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.common.SpellWorker;
 import org.tizzer.smmgr.system.common.UPCWorker;
@@ -19,8 +18,8 @@ import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.SaveGoodsRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryAllGoodsTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveGoodsResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,12 +88,12 @@ public class AddGoodsDialog extends WebDialog {
         addButton.addActionListener(e -> {
             String upc = upcField.getText();
             if (upc.equals("")) {
-                SwingUtil.showTip(upcField, "条码不能为空");
+                LafUtil.showTip(upcField, "条码不能为空");
                 return;
             }
             String name = nameField.getText().trim();
             if (name.equals("")) {
-                SwingUtil.showTip(nameField, "名称不能为空");
+                LafUtil.showTip(nameField, "名称不能为空");
                 return;
             }
             String type = String.valueOf(typeComboBox.getEditor().getItem()).trim();
@@ -106,7 +105,7 @@ public class AddGoodsDialog extends WebDialog {
             }
             SaveGoodsResponseDto saveGoodsResponseDto = saveGoods(upc, name, type);
             if (saveGoodsResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(addButton, saveGoodsResponseDto.getMessage());
+                LafUtil.showTip(addButton, saveGoodsResponseDto.getMessage());
             } else {
                 dispose();
             }
@@ -140,7 +139,7 @@ public class AddGoodsDialog extends WebDialog {
             System.out.println(saveGoodsRequestDto);
             saveGoodsResponseDto = HttpHandler.post("/save/goods", saveGoodsRequestDto.toString(), SaveGoodsResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return saveGoodsResponseDto;
@@ -157,7 +156,7 @@ public class AddGoodsDialog extends WebDialog {
             this.nameCache = queryAllGoodsTypeResponseDto.getName();
             typeComboBox.setModel(new DefaultComboBoxModel(nameCache));
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
     }
@@ -170,10 +169,10 @@ public class AddGoodsDialog extends WebDialog {
         List<String> stringList = Arrays.asList("条码：", "名称：", "类型：", "进价：", "售价：", "生产期：", "保质期(天)：");
         List<Container> containerList = Arrays.asList(upcField, nameField, typeComboBox, jPriceSpinner, sPriceSpinner, scDateField, bzDateSpinner);
         for (int i = 0; i < stringList.size(); i++) {
-            SwingUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
-            SwingUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
+            LafUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
+            LafUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
         }
-        SwingUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
+        LafUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
         return webPanel;
     }
 
@@ -227,7 +226,7 @@ public class AddGoodsDialog extends WebDialog {
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 

@@ -3,11 +3,11 @@
     <entry>
         <string>normal</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/off.9.png"
-                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.D9Util"/>
     </entry>
     <entry>
         <string>selected</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/button/on.9.png"
-                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.D9Util"/>
     </entry>
 </ResourceMap>

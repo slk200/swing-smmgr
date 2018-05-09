@@ -8,7 +8,7 @@ import com.alee.utils.SwingUtils;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
 
 import javax.swing.*;
 import java.awt.*;
@@ -130,7 +130,7 @@ class LaunchManageMode extends WebPanel {
         webToggleButton.setSelectedForeground(Color.WHITE);
         webToggleButton.setHorizontalAlignment(SwingConstants.LEFT);
         webToggleButton.setMargin(0, 10, 0, 20);
-        webToggleButton.setPainter(NPatchUtil.getNinePatchPainter("navigation.xml"));
+        webToggleButton.setPainter(D9Util.getNinePatchPainter("navigation.xml"));
         return webToggleButton;
     }
 

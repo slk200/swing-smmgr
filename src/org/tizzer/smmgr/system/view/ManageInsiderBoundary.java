@@ -3,17 +3,15 @@ package org.tizzer.smmgr.system.view;
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.panel.WebPanel;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryInsiderRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryInsiderResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.component.JPageView;
 import org.tizzer.smmgr.system.view.dialog.UpdateInsiderTypeDialog;
-import org.tizzer.smmgr.system.view.listener.PageListener;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,7 +21,7 @@ import java.awt.event.ActionListener;
  * @author tizzer
  * @version 1.0
  */
-public class ManageInsiderBoundary extends WebPanel implements PageListener {
+public class ManageInsiderBoundary extends WebPanel implements JPageView.PageListener {
 
     private final static Class clazz = ManageStoreBoundary.class;
     private final static Object[] tableHead = {"会员卡号", "会员姓名", "会员电话", "会员地址", "会员类型", "备注", "会员生日", "录入时间"};
@@ -60,7 +58,7 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
         if (queryInsiderResponseDto.getCode() == ResultCode.OK) {
             refreshData(queryInsiderResponseDto);
         } else {
-            SwingUtil.showNotification("访问出错，" + queryInsiderResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryInsiderResponseDto.getMessage());
         }
     }
 
@@ -85,7 +83,7 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
             queryInsiderRequestDto.setCurrentPage(currentPage - 1);
             querySomeStoreResponseDto = HttpHandler.get("/query/insider?" + queryInsiderRequestDto.toString(), QueryInsiderResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(clazz, e.getMessage(), LogLevel.ERROR);
+            Logcat.type(clazz, e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return querySomeStoreResponseDto;
@@ -109,7 +107,7 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
         if (queryInsiderResponseDto.getCode() == ResultCode.OK) {
             pageView.prepareData(tableHead, queryInsiderResponseDto.getData(), queryInsiderResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryInsiderResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryInsiderResponseDto.getMessage());
         }
     }
 
@@ -133,7 +131,7 @@ public class ManageInsiderBoundary extends WebPanel implements PageListener {
         WebButton webButton = new WebButton("设置");
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 

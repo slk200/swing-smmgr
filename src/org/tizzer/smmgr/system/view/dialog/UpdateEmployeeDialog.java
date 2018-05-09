@@ -12,8 +12,8 @@ import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.UpdateEmployeeRequestDto;
 import org.tizzer.smmgr.system.model.response.UpdateEmployeeResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import java.awt.*;
 
@@ -83,12 +83,12 @@ public class UpdateEmployeeDialog extends WebDialog {
         updateButton.addActionListener(e -> {
             String phone = phoneField.getText().trim();
             if (phone.equals("")) {
-                SwingUtil.showTip(phoneField, "电话不能为空");
+                LafUtil.showTip(phoneField, "电话不能为空");
                 return;
             }
             String address = addressField.getText().trim();
             if (address.equals("")) {
-                SwingUtil.showTip(addressField, "地址不能为空");
+                LafUtil.showTip(addressField, "地址不能为空");
                 return;
             }
             if (phone.equals(dataCache[2]) && address.equals(dataCache[3]) && dataCache[7].equals(enableBox.isSelected())) {
@@ -97,7 +97,7 @@ public class UpdateEmployeeDialog extends WebDialog {
             }
             UpdateEmployeeResponseDto updateEmployeeResponseDto = updateEmployee(phone, address);
             if (updateEmployeeResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(updateButton, updateEmployeeResponseDto.getMessage());
+                LafUtil.showTip(updateButton, updateEmployeeResponseDto.getMessage());
             } else {
                 isRefresh = true;
                 dispose();
@@ -135,21 +135,21 @@ public class UpdateEmployeeDialog extends WebDialog {
         webPanel.setLayout(new GridBagLayout());
         webPanel.setMargin(20);
         webPanel.setBackground(ColorManager._241_246_253);
-        SwingUtil.setupComponent(webPanel, new WebLabel("员工号："), 0, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, staffNoField, 1, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, new WebLabel("姓名："), 0, 1, 1, 1);
-        SwingUtil.setupComponent(webPanel, nameField, 1, 1, 1, 1);
-        SwingUtil.setupComponent(webPanel, new WebLabel("电话："), 0, 2, 1, 1);
-        SwingUtil.setupComponent(webPanel, phoneField, 1, 2, 1, 1);
-        SwingUtil.setupComponent(webPanel, new WebLabel("地址："), 0, 3, 1, 1);
-        SwingUtil.setupComponent(webPanel, addressField, 1, 3, 1, 1);
-        SwingUtil.setupComponent(webPanel, new WebLabel("注册时间："), 0, 4, 1, 1);
-        SwingUtil.setupComponent(webPanel, createAtField, 1, 4, 1, 1);
-        SwingUtil.setupComponent(webPanel, new WebLabel("所属门店："), 0, 5, 1, 1);
-        SwingUtil.setupComponent(webPanel, storeField, 1, 5, 1, 1);
-        SwingUtil.setupComponent(webPanel, new WebLabel("状态："), 0, 7, 1, 1);
-        SwingUtil.setupComponent(webPanel, enableBox, 1, 6, 1, 1);
-        SwingUtil.setupComponent(webPanel, createButtonPane(), 0, 7, 2, 1);
+        LafUtil.setupComponent(webPanel, new WebLabel("员工号："), 0, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, staffNoField, 1, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, new WebLabel("姓名："), 0, 1, 1, 1);
+        LafUtil.setupComponent(webPanel, nameField, 1, 1, 1, 1);
+        LafUtil.setupComponent(webPanel, new WebLabel("电话："), 0, 2, 1, 1);
+        LafUtil.setupComponent(webPanel, phoneField, 1, 2, 1, 1);
+        LafUtil.setupComponent(webPanel, new WebLabel("地址："), 0, 3, 1, 1);
+        LafUtil.setupComponent(webPanel, addressField, 1, 3, 1, 1);
+        LafUtil.setupComponent(webPanel, new WebLabel("注册时间："), 0, 4, 1, 1);
+        LafUtil.setupComponent(webPanel, createAtField, 1, 4, 1, 1);
+        LafUtil.setupComponent(webPanel, new WebLabel("所属门店："), 0, 5, 1, 1);
+        LafUtil.setupComponent(webPanel, storeField, 1, 5, 1, 1);
+        LafUtil.setupComponent(webPanel, new WebLabel("状态："), 0, 7, 1, 1);
+        LafUtil.setupComponent(webPanel, enableBox, 1, 6, 1, 1);
+        LafUtil.setupComponent(webPanel, createButtonPane(), 0, 7, 2, 1);
         return webPanel;
     }
 
@@ -182,7 +182,7 @@ public class UpdateEmployeeDialog extends WebDialog {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 }

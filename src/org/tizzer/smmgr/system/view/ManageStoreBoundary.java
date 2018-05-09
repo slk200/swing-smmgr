@@ -3,7 +3,6 @@ package org.tizzer.smmgr.system.view;
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.panel.WebPanel;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.constant.RuntimeConstants;
@@ -14,12 +13,11 @@ import org.tizzer.smmgr.system.model.request.QueryStoreRequestDto;
 import org.tizzer.smmgr.system.model.response.DeleteStoreResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryOneStoreResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryStoreResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.component.JPageView;
 import org.tizzer.smmgr.system.view.dialog.AddStoreDialog;
 import org.tizzer.smmgr.system.view.dialog.UpdateStoreDialog;
-import org.tizzer.smmgr.system.view.listener.PageListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +27,7 @@ import java.util.Vector;
  * @author tizzer
  * @version 1.0
  */
-public class ManageStoreBoundary extends WebPanel implements PageListener {
+public class ManageStoreBoundary extends WebPanel implements JPageView.PageListener {
 
     private final static Object[] tableHead = {"序号", "门店名", "地址", "录入时间"};
 
@@ -66,25 +64,25 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
                     pageView.refresh();
                 }
             } else {
-                SwingUtil.showTip(editButton, queryOneStoreResponseDto.getMessage());
+                LafUtil.showTip(editButton, queryOneStoreResponseDto.getMessage());
             }
         });
 
         delButton.addActionListener(e -> {
             if (pageView.getSelectedRow() == -1) {
-                SwingUtil.showTip(delButton, "请至少选择一条数据");
+                LafUtil.showTip(delButton, "请至少选择一条数据");
                 return;
             }
             Vector<Integer> id = pageView.getSelectedRowsColumnIndexData(0);
             for (Integer row : id) {
                 if (row.equals(RuntimeConstants.storeId)) {
-                    SwingUtil.showTip(delButton, "所在门店不可删除");
+                    LafUtil.showTip(delButton, "所在门店不可删除");
                     return;
                 }
             }
             DeleteStoreResponseDto deleteStoreResponseDto = deleteStore(id);
             if (deleteStoreResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(delButton, deleteStoreResponseDto.getMessage());
+                LafUtil.showTip(delButton, deleteStoreResponseDto.getMessage());
             } else {
                 pageView.refresh();
             }
@@ -97,7 +95,7 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
         if (queryStoreResponseDto.getCode() == ResultCode.OK) {
             refreshData(queryStoreResponseDto);
         } else {
-            SwingUtil.showNotification("访问出错，" + queryStoreResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryStoreResponseDto.getMessage());
         }
     }
 
@@ -157,7 +155,7 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
             queryStoreRequestDto.setCurrentPage(currentPage - 1);
             queryStoreResponseDto = HttpHandler.get("/query/store?" + queryStoreRequestDto.toString(), QueryStoreResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryStoreResponseDto;
@@ -181,7 +179,7 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
         if (queryStoreResponseDto.getCode() == ResultCode.OK) {
             pageView.prepareData(tableHead, queryStoreResponseDto.getData(), queryStoreResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryStoreResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryStoreResponseDto.getMessage());
         }
     }
 
@@ -205,7 +203,7 @@ public class ManageStoreBoundary extends WebPanel implements PageListener {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 

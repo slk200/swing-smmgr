@@ -8,7 +8,6 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.spinner.WebSpinner;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.common.SpellWorker;
 import org.tizzer.smmgr.system.constant.ColorManager;
@@ -20,8 +19,8 @@ import org.tizzer.smmgr.system.model.request.SaveGoodsRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryAllGoodsTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryOneGoodsResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveGoodsResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,7 +83,7 @@ public class UpdateGoodsDialog extends WebDialog {
         updateButton.addActionListener(e -> {
             String name = nameField.getText().trim();
             if (name.equals("")) {
-                SwingUtil.showTip(nameField, "名称不能为空");
+                LafUtil.showTip(nameField, "名称不能为空");
                 return;
             }
             String type = String.valueOf(typeComboBox.getEditor().getItem()).trim();
@@ -96,7 +95,7 @@ public class UpdateGoodsDialog extends WebDialog {
             }
             SaveGoodsResponseDto saveGoodsResponseDto = saveGoods(name, type);
             if (saveGoodsResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(updateButton, saveGoodsResponseDto.getMessage());
+                LafUtil.showTip(updateButton, saveGoodsResponseDto.getMessage());
             } else {
                 if (chooseId == -1) {
                     flag = 2;
@@ -134,7 +133,7 @@ public class UpdateGoodsDialog extends WebDialog {
             System.out.println(saveGoodsRequestDto);
             saveGoodsResponseDto = HttpHandler.post("/save/goods", saveGoodsRequestDto.toString(), SaveGoodsResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return saveGoodsResponseDto;
@@ -153,7 +152,7 @@ public class UpdateGoodsDialog extends WebDialog {
             queryOneGoodsRequestDto.setUpc(upc);
             queryOneGoodsResponseDto = HttpHandler.get("/query/goods/one?" + queryOneGoodsRequestDto.toString(), QueryOneGoodsResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryOneGoodsResponseDto;
@@ -169,7 +168,7 @@ public class UpdateGoodsDialog extends WebDialog {
         try {
             queryAllGoodsTypeResponseDto = HttpHandler.get("/query/goods/type", QueryAllGoodsTypeResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryAllGoodsTypeResponseDto;
@@ -205,10 +204,10 @@ public class UpdateGoodsDialog extends WebDialog {
         List<String> stringList = Arrays.asList("条码：", "名称：", "类型：", "进价：", "售价：", "库存：", "生产期：", "保质期(天)：");
         List<Container> containerList = Arrays.asList(upcField, nameField, typeComboBox, jPriceSpinner, sPriceSpinner, inventorySpinner, scDateField, bzDateSpinner);
         for (int i = 0; i < stringList.size(); i++) {
-            SwingUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
-            SwingUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
+            LafUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
+            LafUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
         }
-        SwingUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
+        LafUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
         return webPanel;
     }
 
@@ -268,7 +267,7 @@ public class UpdateGoodsDialog extends WebDialog {
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 }

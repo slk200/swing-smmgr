@@ -7,7 +7,6 @@ import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.ResultCode;
@@ -16,8 +15,8 @@ import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.UpdateInsiderRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryAllInsiderTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.UpdateInsiderResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,19 +79,19 @@ public class UpdateInsiderDialog extends WebDialog {
             if (birthField.isEnabled()) {
                 if (birthField.getDate() == null) {
                     if (Objects.equals(typeComboBox.getSelectedItem(), dataCache[4])) {
-                        SwingUtil.showTip(updateButton, "并没有修改信息");
+                        LafUtil.showTip(updateButton, "并没有修改信息");
                         return;
                     }
                 }
                 updateInsider();
             } else {
                 if (Objects.equals(typeComboBox.getSelectedItem(), dataCache[4])) {
-                    SwingUtil.showTip(updateButton, "并没有修改信息");
+                    LafUtil.showTip(updateButton, "并没有修改信息");
                     return;
                 }
                 UpdateInsiderResponseDto updateInsiderResponseDto = updateInsider();
                 if (updateInsiderResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(updateButton, updateInsiderResponseDto.getMessage());
+                    LafUtil.showTip(updateButton, updateInsiderResponseDto.getMessage());
                 } else {
                     newDiscount = discountCache[typeComboBox.getSelectedIndex()];
                     dispose();
@@ -117,7 +116,7 @@ public class UpdateInsiderDialog extends WebDialog {
             updateInsiderRequestDto.setBirth(birthField.getText());
             updateInsiderResponseDto = HttpHandler.post("/update/insider", updateInsiderRequestDto.toString(), UpdateInsiderResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return updateInsiderResponseDto;
@@ -165,10 +164,10 @@ public class UpdateInsiderDialog extends WebDialog {
         List<String> stringList = Arrays.asList("会员卡号：", "会员姓名：", "会员电话：", "会员地址：", "备注：", "会员类型：", "会员生日：");
         List<Container> containerList = Arrays.asList(cardNoField, nameField, phoneField, addressField, noteField, typeComboBox, birthField);
         for (int i = 0; i < stringList.size(); i++) {
-            SwingUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
-            SwingUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
+            LafUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
+            LafUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
         }
-        SwingUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
+        LafUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
         return webPanel;
     }
 
@@ -198,7 +197,7 @@ public class UpdateInsiderDialog extends WebDialog {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 }

@@ -1,7 +1,7 @@
 package org.tizzer.smmgr.system;
 
 import org.tizzer.smmgr.system.handler.XMLHandler;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import javax.swing.*;
 
@@ -17,7 +17,7 @@ public class BootApplication {
     }
 
     public void entry() {
-        SwingUtil.setWebLaF();
+        LafUtil.setWebLaF();
         XMLHandler xmlHandler = new XMLHandler("data-init.xml");
         if (xmlHandler.getBoolean("guide")) {
             SwingUtilities.invokeLater(SmmgrApplication::new);

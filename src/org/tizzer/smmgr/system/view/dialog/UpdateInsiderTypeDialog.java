@@ -7,7 +7,6 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.spinner.WebSpinner;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.ResultCode;
@@ -20,8 +19,8 @@ import org.tizzer.smmgr.system.model.response.DeleteInsiderTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryAllInsiderTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveInsiderTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.UpdateInsiderTypeResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -86,7 +85,7 @@ public class UpdateInsiderTypeDialog extends WebDialog {
 
         delButton.addActionListener(e -> {
             if (table.getSelectedRow() == -1) {
-                SwingUtil.showTip(delButton, "请至少选择一条数据");
+                LafUtil.showTip(delButton, "请至少选择一条数据");
                 return;
             }
             Vector<Integer> id = new Vector<>();
@@ -95,7 +94,7 @@ public class UpdateInsiderTypeDialog extends WebDialog {
             }
             DeleteInsiderTypeResponseDto deleteInsiderTypeResponseDto = deleteInsiderType(id);
             if (deleteInsiderTypeResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(delButton, deleteInsiderTypeResponseDto.getMessage());
+                LafUtil.showTip(delButton, deleteInsiderTypeResponseDto.getMessage());
             } else {
                 refreshData();
             }
@@ -104,22 +103,22 @@ public class UpdateInsiderTypeDialog extends WebDialog {
         addButton.addActionListener(e -> {
             String name = nameField.getText().trim();
             if (name.equals("")) {
-                SwingUtil.showTip(nameField, "会员等级不能为空");
+                LafUtil.showTip(nameField, "会员等级不能为空");
                 return;
             }
             for (int i = 0; i < table.getRowCount(); i++) {
                 if (name.equals(table.getValueAt(i, 1))) {
-                    SwingUtil.showTip(addButton, "会员等级与第" + (i + 1) + "行重复");
+                    LafUtil.showTip(addButton, "会员等级与第" + (i + 1) + "行重复");
                     return;
                 }
                 if (discountField.getValue().equals(table.getValueAt(i, 2))) {
-                    SwingUtil.showTip(addButton, "会员折扣与第" + (i + 1) + "行重复");
+                    LafUtil.showTip(addButton, "会员折扣与第" + (i + 1) + "行重复");
                     return;
                 }
             }
             SaveInsiderTypeResponseDto saveInsiderTypeResponseDto = saveInsiderType(name);
             if (saveInsiderTypeResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(addButton, saveInsiderTypeResponseDto.getMessage());
+                LafUtil.showTip(addButton, saveInsiderTypeResponseDto.getMessage());
             } else {
                 refreshData();
             }
@@ -128,12 +127,12 @@ public class UpdateInsiderTypeDialog extends WebDialog {
         updateButton.addActionListener(e -> {
             String name = nameField.getText().trim();
             if (name.equals("")) {
-                SwingUtil.showTip(nameField, "会员等级不能为空");
+                LafUtil.showTip(nameField, "会员等级不能为空");
                 return;
             }
             int row = table.getSelectedRow();
             if (name.equals(table.getValueAt(row, 1)) && discountField.getValue().equals(table.getValueAt(row, 2))) {
-                SwingUtil.showTip(updateButton, "并没有修改信息");
+                LafUtil.showTip(updateButton, "并没有修改信息");
                 return;
             }
             for (int i = 0; i < table.getRowCount(); i++) {
@@ -141,17 +140,17 @@ public class UpdateInsiderTypeDialog extends WebDialog {
                     continue;
                 }
                 if (name.equals(table.getValueAt(i, 1))) {
-                    SwingUtil.showTip(updateButton, "会员等级与第" + (i + 1) + "行重复");
+                    LafUtil.showTip(updateButton, "会员等级与第" + (i + 1) + "行重复");
                     return;
                 }
                 if (discountField.getValue().equals(table.getValueAt(i, 2))) {
-                    SwingUtil.showTip(updateButton, "会员折扣与第" + (i + 1) + "行重复");
+                    LafUtil.showTip(updateButton, "会员折扣与第" + (i + 1) + "行重复");
                     return;
                 }
             }
             UpdateInsiderTypeResponseDto updateInsiderTypeResponseDto = updateInsiderType(name);
             if (updateInsiderTypeResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(updateButton, updateInsiderTypeResponseDto.getMessage());
+                LafUtil.showTip(updateButton, updateInsiderTypeResponseDto.getMessage());
             } else {
                 refreshData();
                 isRefresh = true;
@@ -174,7 +173,7 @@ public class UpdateInsiderTypeDialog extends WebDialog {
             deleteInsiderTypeRequestDto.setId(id);
             deleteInsiderTypeResponseDto = HttpHandler.post("/delete/insider/type", deleteInsiderTypeRequestDto.toString(), DeleteInsiderTypeResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return deleteInsiderTypeResponseDto;
@@ -194,7 +193,7 @@ public class UpdateInsiderTypeDialog extends WebDialog {
             saveInsiderTypeRequestDto.setDiscount((Integer) discountField.getValue());
             saveInsiderTypeResponseDto = HttpHandler.post("/save/insider/type", saveInsiderTypeRequestDto.toString(), SaveInsiderTypeResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return saveInsiderTypeResponseDto;
@@ -215,7 +214,7 @@ public class UpdateInsiderTypeDialog extends WebDialog {
             updateInsiderTypeRequestDto.setDiscount((Integer) discountField.getValue());
             updateInsiderTypeResponseDto = HttpHandler.post("/update/insider/type", updateInsiderTypeRequestDto.toString(), UpdateInsiderTypeResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return updateInsiderTypeResponseDto;
@@ -268,7 +267,7 @@ public class UpdateInsiderTypeDialog extends WebDialog {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 

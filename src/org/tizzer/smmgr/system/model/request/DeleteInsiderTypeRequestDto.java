@@ -11,11 +11,11 @@ public class DeleteInsiderTypeRequestDto {
 
     @Override
     public String toString() {
-        String param = "";
+        StringBuilder param = new StringBuilder();
         for (int i = 0; i < id.size() - 1; i++) {
-            param += "id=" + id.get(i) + "&";
+            param.append("id=").append(id.get(i)).append("&");
         }
-        param += "id=" + id.get(id.size() - 1);
-        return param;
+        param.append("id=").append(id.get(id.size() - 1));
+        return param.toString();
     }
 }

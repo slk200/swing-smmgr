@@ -3,7 +3,6 @@ package org.tizzer.smmgr.system.view;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
@@ -11,11 +10,10 @@ import org.tizzer.smmgr.system.model.request.QueryBookRecordRequestDto;
 import org.tizzer.smmgr.system.model.request.QueryBookSpecRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryBookRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryBookSpecResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.component.JRecordView;
 import org.tizzer.smmgr.system.view.dialog.AddBookDialog;
-import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.RecordRenderer;
 
 import java.awt.*;
@@ -27,7 +25,7 @@ import java.util.Objects;
  * @author tizzer
  * @version 1.0
  */
-public class ManageBookBoundary extends WebPanel implements RecordListener, ActionListener {
+public class ManageBookBoundary extends WebPanel implements JRecordView.RecordListener, ActionListener {
     private static final Object[] tableHead = {"条码", "名称", "进价", "数量"};
 
     private WebLabel quantityLabel;
@@ -67,7 +65,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
             recordView.setListItem(queryBookRecordResponseDto.getData());
             recordView.setLoadPage(queryBookRecordResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryBookRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryBookRecordResponseDto.getMessage());
         }
     }
 
@@ -77,7 +75,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
         if (queryBookRecordResponseDto.getCode() == ResultCode.OK) {
             recordView.addListItem(queryBookRecordResponseDto.getData());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryBookRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryBookRecordResponseDto.getMessage());
         }
     }
 
@@ -94,7 +92,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
                     costLabel.setText(getBoldOrangeText(String.valueOf(queryBookSpecResponseDto.getCost())));
                     noteLabel.setText("备注：" + queryBookSpecResponseDto.getNote());
                 } else {
-                    SwingUtil.showNotification("访问出错，" + queryBookSpecResponseDto.getMessage());
+                    LafUtil.showNotification("访问出错，" + queryBookSpecResponseDto.getMessage());
                 }
             }
         }
@@ -113,7 +111,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
             queryBookSpecRequestDto.setId(serialNo);
             queryBookSpecResponseDto = HttpHandler.get("/query/book/spec?" + queryBookSpecRequestDto.toString(), QueryBookSpecResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryBookSpecResponseDto;
@@ -138,7 +136,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
             queryBookRecordRequestDto.setPageSize(loadSize);
             queryBookRecordResponseDto = HttpHandler.get("/query/book/record?" + queryBookRecordRequestDto.toString(), QueryBookRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryBookRecordResponseDto;
@@ -173,7 +171,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
             recordView.setListItem(queryBookRecordResponseDto.getData());
             recordView.setLoadPage(queryBookRecordResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryBookRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryBookRecordResponseDto.getMessage());
         }
     }
 
@@ -207,7 +205,7 @@ public class ManageBookBoundary extends WebPanel implements RecordListener, Acti
         WebButton webButton = new WebButton(" 订货 ");
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 }

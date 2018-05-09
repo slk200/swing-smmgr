@@ -11,7 +11,6 @@ import com.alee.laf.splitpane.WebSplitPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
 import org.tizzer.smmgr.system.constant.IconManager;
-import org.tizzer.smmgr.system.view.listener.RecordListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -303,5 +302,42 @@ public class JRecordView extends WebPanel {
 
     private Component createHSpace(int width) {
         return Box.createHorizontalStrut(width);
+    }
+
+    /**
+     * 回调
+     */
+    public interface RecordListener {
+        /**
+         * monitor the params' change of the component<br/>
+         * to obtain and refresh the component's list data
+         *
+         * @param startDate
+         * @param endDate
+         * @param keyword
+         * @param curLoadIndex
+         * @param loadSize
+         */
+        void searchPerformed(String startDate, String endDate, String keyword, int curLoadIndex, int loadSize);
+
+        /**
+         * monitor the scrollbar's change<br/>
+         * to obtain and refresh the component's list data
+         *
+         * @param startDate
+         * @param endDate
+         * @param keyword
+         * @param curLoadIndex
+         * @param loadSize
+         */
+        void loadPerformed(String startDate, String endDate, String keyword, int curLoadIndex, int loadSize);
+
+        /**
+         * perform of the list's selection<br/>
+         *
+         * @param index
+         */
+        void selectPerformed(int index);
+
     }
 }

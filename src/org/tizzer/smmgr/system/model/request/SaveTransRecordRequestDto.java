@@ -34,15 +34,12 @@ public class SaveTransRecordRequestDto {
 
     @Override
     public String toString() {
-        String param = "cost=" + cost +
-                "&storeId=" + storeId;
+        StringBuilder param = new StringBuilder("cost=" + cost +
+                "&storeId=" + storeId);
         for (int i = 0; i < upc.length; i++) {
-            param += "&upc=" + upc[i] +
-                    "&name=" + name[i] +
-                    "&primeCost=" + primeCost[i] +
-                    "&quantity=" + quantity[i];
+            param.append("&upc=").append(upc[i]).append("&name=").append(name[i]).append("&primeCost=").append(primeCost[i]).append("&quantity=").append(quantity[i]);
         }
-        return param;
+        return param.toString();
     }
 
 }

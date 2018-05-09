@@ -51,4 +51,7 @@ public class Logcat {
 
     }
 
+    public enum LogLevel {
+        TRACE, DEBUG, INFO, WARN, ERROR
+    }
 }

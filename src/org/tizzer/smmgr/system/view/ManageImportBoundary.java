@@ -3,7 +3,6 @@ package org.tizzer.smmgr.system.view;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
@@ -11,11 +10,10 @@ import org.tizzer.smmgr.system.model.request.QueryBookSpecRequestDto;
 import org.tizzer.smmgr.system.model.request.QueryImportRecordRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryImportRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryImportSpecResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.component.JRecordView;
 import org.tizzer.smmgr.system.view.dialog.AddImportDialog;
-import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.RecordRenderer;
 
 import java.awt.*;
@@ -27,7 +25,7 @@ import java.util.Objects;
  * @author tizzer
  * @version 1.0
  */
-public class ManageImportBoundary extends WebPanel implements RecordListener, ActionListener {
+public class ManageImportBoundary extends WebPanel implements JRecordView.RecordListener, ActionListener {
     private static final Object[] tableHead = {"条码", "名称", "进价", "数量"};
 
     private WebLabel quantityLabel;
@@ -67,7 +65,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
             recordView.setListItem(queryImportRecordResponseDto.getData());
             recordView.setLoadPage(queryImportRecordResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryImportRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryImportRecordResponseDto.getMessage());
         }
     }
 
@@ -77,7 +75,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
         if (queryImportRecordResponseDto.getCode() == ResultCode.OK) {
             recordView.addListItem(queryImportRecordResponseDto.getData());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryImportRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryImportRecordResponseDto.getMessage());
         }
     }
 
@@ -94,7 +92,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
                     costLabel.setText(getBoldOrangeText(String.valueOf(queryImportSpecResponseDto.getCost())));
                     noteLabel.setText("备注：" + queryImportSpecResponseDto.getNote());
                 } else {
-                    SwingUtil.showNotification("访问出错，" + queryImportSpecResponseDto.getMessage());
+                    LafUtil.showNotification("访问出错，" + queryImportSpecResponseDto.getMessage());
                 }
             }
         }
@@ -113,7 +111,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
             queryBookSpecRequestDto.setId(serialNo);
             queryImportSpecResponseDto = HttpHandler.get("/query/import/spec?" + queryBookSpecRequestDto.toString(), QueryImportSpecResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryImportSpecResponseDto;
@@ -138,7 +136,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
             queryImportRecordRequestDto.setPageSize(loadSize);
             queryImportRecordResponseDto = HttpHandler.get("/query/import/record?" + queryImportRecordRequestDto.toString(), QueryImportRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryImportRecordResponseDto;
@@ -173,7 +171,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
             recordView.setListItem(queryImportRecordResponseDto.getData());
             recordView.setLoadPage(queryImportRecordResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryImportRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryImportRecordResponseDto.getMessage());
         }
     }
 
@@ -207,7 +205,7 @@ public class ManageImportBoundary extends WebPanel implements RecordListener, Ac
         WebButton webButton = new WebButton(" 进货 ");
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 }

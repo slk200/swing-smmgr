@@ -14,8 +14,8 @@ import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.SaveInsiderRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryAllInsiderTypeResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveInsiderResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.listener.NavigationListener;
 
 import javax.swing.*;
@@ -69,17 +69,17 @@ class StandardInsiderBoundary extends WebPanel {
         saveInsiderButton.addActionListener(e -> {
             String cardNo = cardNoField.getText().trim();
             if (cardNo.equals("")) {
-                SwingUtil.showTip(cardNoField, "会员卡号不能为空");
+                LafUtil.showTip(cardNoField, "会员卡号不能为空");
                 return;
             }
             String name = nameField.getText().trim();
             if (name.equals("")) {
-                SwingUtil.showTip(nameField, "姓名不能为空");
+                LafUtil.showTip(nameField, "姓名不能为空");
                 return;
             }
             String phone = phoneField.getText().trim();
             if (phone.equals("")) {
-                SwingUtil.showTip(phoneField, "电话不能为空");
+                LafUtil.showTip(phoneField, "电话不能为空");
                 return;
             }
             SaveInsiderResponseDto saveInsiderResponseDto = saveInsider(cardNo, name, phone);
@@ -91,7 +91,7 @@ class StandardInsiderBoundary extends WebPanel {
                     reset();
                 }
             } else {
-                SwingUtil.showTip(saveInsiderButton, saveInsiderResponseDto.getMessage());
+                LafUtil.showTip(saveInsiderButton, saveInsiderResponseDto.getMessage());
             }
         });
     }
@@ -106,7 +106,7 @@ class StandardInsiderBoundary extends WebPanel {
                 this.idCache = queryAllInsiderTypeResponseDto.getId();
                 typeComboBox.setModel(new DefaultComboBoxModel(queryAllInsiderTypeResponseDto.getName()));
             } else {
-                SwingUtil.showNotification("访问出错，" + queryAllInsiderTypeResponseDto.getMessage());
+                LafUtil.showNotification("访问出错，" + queryAllInsiderTypeResponseDto.getMessage());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,26 +189,26 @@ class StandardInsiderBoundary extends WebPanel {
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 
     private void createInsiderPanel() {
-        SwingUtil.setupComponent(this, new WebLabel("会员卡号：", SwingConstants.CENTER), 0, 0, 1, 1);
-        SwingUtil.setupComponent(this, cardNoField, 1, 0, 1, 1);
-        SwingUtil.setupComponent(this, new WebLabel("会员分类：", SwingConstants.CENTER), 2, 0, 1, 1);
-        SwingUtil.setupComponent(this, typeComboBox, 3, 0, 1, 1);
-        SwingUtil.setupComponent(this, new WebLabel("会员姓名：", SwingConstants.CENTER), 0, 1, 1, 1);
-        SwingUtil.setupComponent(this, nameField, 1, 1, 1, 1);
-        SwingUtil.setupComponent(this, new WebLabel("会员电话：", SwingConstants.CENTER), 2, 1, 1, 1);
-        SwingUtil.setupComponent(this, phoneField, 3, 1, 1, 1);
-        SwingUtil.setupComponent(this, new WebLabel("联系地址：", SwingConstants.CENTER), 0, 2, 1, 1);
-        SwingUtil.setupComponent(this, addressField, 1, 2, 1, 1);
-        SwingUtil.setupComponent(this, new WebLabel("会员生日：", SwingConstants.CENTER), 2, 2, 1, 1);
-        SwingUtil.setupComponent(this, birthField, 3, 2, 1, 1);
-        SwingUtil.setupComponent(this, new WebLabel("会员备注：", SwingConstants.CENTER), 0, 3, 1, 1);
-        SwingUtil.setupComponent(this, new WebScrollPane(noteArea), 1, 3, 3, 2);
-        SwingUtil.setupComponent(this, backToSaleButton, 1, 5, 1, 1);
-        SwingUtil.setupComponent(this, saveInsiderButton, 3, 5, 1, 1);
+        LafUtil.setupComponent(this, new WebLabel("会员卡号：", SwingConstants.CENTER), 0, 0, 1, 1);
+        LafUtil.setupComponent(this, cardNoField, 1, 0, 1, 1);
+        LafUtil.setupComponent(this, new WebLabel("会员分类：", SwingConstants.CENTER), 2, 0, 1, 1);
+        LafUtil.setupComponent(this, typeComboBox, 3, 0, 1, 1);
+        LafUtil.setupComponent(this, new WebLabel("会员姓名：", SwingConstants.CENTER), 0, 1, 1, 1);
+        LafUtil.setupComponent(this, nameField, 1, 1, 1, 1);
+        LafUtil.setupComponent(this, new WebLabel("会员电话：", SwingConstants.CENTER), 2, 1, 1, 1);
+        LafUtil.setupComponent(this, phoneField, 3, 1, 1, 1);
+        LafUtil.setupComponent(this, new WebLabel("联系地址：", SwingConstants.CENTER), 0, 2, 1, 1);
+        LafUtil.setupComponent(this, addressField, 1, 2, 1, 1);
+        LafUtil.setupComponent(this, new WebLabel("会员生日：", SwingConstants.CENTER), 2, 2, 1, 1);
+        LafUtil.setupComponent(this, birthField, 3, 2, 1, 1);
+        LafUtil.setupComponent(this, new WebLabel("会员备注：", SwingConstants.CENTER), 0, 3, 1, 1);
+        LafUtil.setupComponent(this, new WebScrollPane(noteArea), 1, 3, 3, 2);
+        LafUtil.setupComponent(this, backToSaleButton, 1, 5, 1, 1);
+        LafUtil.setupComponent(this, saveInsiderButton, 3, 5, 1, 1);
     }
 }

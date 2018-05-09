@@ -6,7 +6,6 @@ import com.alee.laf.list.WebList;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.scroll.WebScrollPane;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.ResultCode;
@@ -14,8 +13,8 @@ import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryOtherStoreRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryOtherStoreResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -94,7 +93,7 @@ public class ChooseStoreDialog extends WebDialog {
             queryOtherStoreRequestDto.setStoreId(RuntimeConstants.storeId);
             queryOtherStoreResponseDto = HttpHandler.get("/query/store/other?" + queryOtherStoreRequestDto.toString(), QueryOtherStoreResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryOtherStoreResponseDto;
@@ -109,7 +108,7 @@ public class ChooseStoreDialog extends WebDialog {
             addListItem(queryOtherStoreResponseDto.getName());
             this.idCache = queryOtherStoreResponseDto.getId();
         } else {
-            SwingUtil.showNotification("访问出错，" + queryOtherStoreResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryOtherStoreResponseDto.getMessage());
         }
     }
 
@@ -154,7 +153,7 @@ public class ChooseStoreDialog extends WebDialog {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("brown.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("brown.xml"));
         return webButton;
     }
 }

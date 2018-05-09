@@ -6,7 +6,6 @@ import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
@@ -17,8 +16,8 @@ import org.tizzer.smmgr.system.model.request.QueryTradeGoodsRequestDto;
 import org.tizzer.smmgr.system.model.request.SaveImportRecordRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryImportGoodsResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveImportRecordResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.listener.TableCellListener;
 
 import javax.swing.*;
@@ -109,7 +108,7 @@ public class AddImportDialog extends WebDialog {
 
         deleteRowButton.addActionListener(e -> {
             if (importGoodsTable.getSelectedRow() == -1) {
-                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                LafUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
                 return;
             }
             int[] rows = importGoodsTable.getSelectedRows();
@@ -152,7 +151,7 @@ public class AddImportDialog extends WebDialog {
             String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入订购备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
             SaveImportRecordResponseDto saveBookRecordResponseDto = saveImportRecord(note);
             if (saveBookRecordResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(importButton, saveBookRecordResponseDto.getMessage());
+                LafUtil.showTip(importButton, saveBookRecordResponseDto.getMessage());
             } else {
                 isRefresh = true;
                 dispose();
@@ -191,7 +190,7 @@ public class AddImportDialog extends WebDialog {
             saveImportRecordRequestDto.setQuantity(quantity);
             saveImportRecordResponseDto = HttpHandler.post("/save/import/record", saveImportRecordRequestDto.toString(), SaveImportRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return saveImportRecordResponseDto;
@@ -210,7 +209,7 @@ public class AddImportDialog extends WebDialog {
             queryTradeGoodsRequestDto.setKeyword(keyword);
             queryImportGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryImportGoodsResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryImportGoodsResponseDto;
@@ -294,10 +293,10 @@ public class AddImportDialog extends WebDialog {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
         webPanel.setLayout(new GridBagLayout());
-        SwingUtil.setupComponent(webPanel, addGoodsButton, 0, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, resetImportButton, 1, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, deleteRowButton, 2, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, importButton, 0, 1, 3, 1);
+        LafUtil.setupComponent(webPanel, addGoodsButton, 0, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, resetImportButton, 1, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, deleteRowButton, 2, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, importButton, 0, 1, 3, 1);
         return webPanel;
     }
 
@@ -330,7 +329,7 @@ public class AddImportDialog extends WebDialog {
         WebButton webButton = new WebButton(text, icon);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("brown.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("brown.xml"));
         return webButton;
     }
 
@@ -338,7 +337,7 @@ public class AddImportDialog extends WebDialog {
         WebButton webButton = new WebButton();
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("green.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("green.xml"));
         return webButton;
     }
 

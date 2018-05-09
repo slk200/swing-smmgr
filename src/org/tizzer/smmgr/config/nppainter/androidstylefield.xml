@@ -3,16 +3,16 @@
     <entry>
         <string>normal</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/field/n.9.png"
-                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.D9Util"/>
     </entry>
     <entry>
         <string>focused</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/field/f.9.png"
-                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.D9Util"/>
     </entry>
     <entry>
         <string>disabled</string>
         <ResourceFile location="nearClass" source="/org/tizzer/smmgr/image/field/d.9.png"
-                      className="org.tizzer.smmgr.system.utils.NPatchUtil"/>
+                      className="org.tizzer.smmgr.system.utils.D9Util"/>
     </entry>
 </ResourceMap>

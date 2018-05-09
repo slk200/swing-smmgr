@@ -18,8 +18,8 @@ import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.LoginRequestDto;
 import org.tizzer.smmgr.system.model.response.LoginResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,17 +73,17 @@ public class LoginBoundary extends WebPanel {
         loginButton.addActionListener(e -> {
             String staffNo = staffNoField.getText();
             if (staffNo.equals("")) {
-                SwingUtil.showTip(staffNoField, "账号不能为空");
+                LafUtil.showTip(staffNoField, "账号不能为空");
                 return;
             }
             String password = passwordField.getText();
             if (password.equals("")) {
-                SwingUtil.showTip(passwordField, "密码不能为空");
+                LafUtil.showTip(passwordField, "密码不能为空");
                 return;
             }
             String securityCode = securityButton.getText().replaceAll(" ", "");
             if (!securityField.getText().equals(securityCode.replaceAll(" ", ""))) {
-                SwingUtil.showTip(securityField, "验证码不正确");
+                LafUtil.showTip(securityField, "验证码不正确");
                 return;
             }
             verify(staffNo, password);
@@ -163,7 +163,7 @@ public class LoginBoundary extends WebPanel {
             }
             if (loginResponseDto.getCode() == ResultCode.ERROR) {
                 securityButton.setText(getSecurityCode());
-                SwingUtil.showTip(loginButton, loginResponseDto.getMessage());
+                LafUtil.showTip(loginButton, loginResponseDto.getMessage());
                 return;
             }
             if (loginResponseDto.getCode() == ResultCode.OK) {
@@ -234,7 +234,7 @@ public class LoginBoundary extends WebPanel {
         webTextField.setFieldMargin(0, 6, 0, 0);
         webTextField.setInputPrompt(inputPrompt);
         webTextField.setLeadingComponent(leadingComponent);
-        webTextField.setPainter(NPatchUtil.getNinePatchPainter("androidstylefield.xml"));
+        webTextField.setPainter(D9Util.getNinePatchPainter("androidstylefield.xml"));
         return webTextField;
     }
 
@@ -243,7 +243,7 @@ public class LoginBoundary extends WebPanel {
         webPasswordField.setFieldMargin(0, 6, 0, 0);
         webPasswordField.setInputPrompt("请输入密码");
         webPasswordField.setLeadingComponent(leadingComponent);
-        webPasswordField.setPainter(NPatchUtil.getNinePatchPainter("androidstylefield.xml"));
+        webPasswordField.setPainter(D9Util.getNinePatchPainter("androidstylefield.xml"));
         return webPasswordField;
     }
 
@@ -253,7 +253,7 @@ public class LoginBoundary extends WebPanel {
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 
@@ -270,7 +270,7 @@ public class LoginBoundary extends WebPanel {
         WebPanel webPanel = new WebPanel();
         webPanel.setLayout(new GridBagLayout());
         webPanel.setOpaque(false);
-        SwingUtil.setupComponent(webPanel, createRoundPanel(), 0, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, createRoundPanel(), 0, 0, 1, 1);
         return webPanel;
     }
 
@@ -284,12 +284,12 @@ public class LoginBoundary extends WebPanel {
         };
         webPanel.setLayout(new GridBagLayout());
         webPanel.setMargin(20);
-        SwingUtil.setupComponent(webPanel, createTitleLabel(), 0, 0, 3, 1);
-        SwingUtil.setupComponent(webPanel, staffNoField, 0, 1, 3, 1);
-        SwingUtil.setupComponent(webPanel, passwordField, 0, 2, 3, 1);
-        SwingUtil.setupComponent(webPanel, securityField, 0, 3, 2, 1);
-        SwingUtil.setupComponent(webPanel, securityButton, 2, 3, 1, 1);
-        SwingUtil.setupComponent(webPanel, loginButton, 0, 4, 3, 1);
+        LafUtil.setupComponent(webPanel, createTitleLabel(), 0, 0, 3, 1);
+        LafUtil.setupComponent(webPanel, staffNoField, 0, 1, 3, 1);
+        LafUtil.setupComponent(webPanel, passwordField, 0, 2, 3, 1);
+        LafUtil.setupComponent(webPanel, securityField, 0, 3, 2, 1);
+        LafUtil.setupComponent(webPanel, securityButton, 2, 3, 1, 1);
+        LafUtil.setupComponent(webPanel, loginButton, 0, 4, 3, 1);
         return webPanel;
     }
 

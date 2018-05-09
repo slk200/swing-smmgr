@@ -6,7 +6,6 @@ import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
@@ -17,8 +16,8 @@ import org.tizzer.smmgr.system.model.request.QueryTradeGoodsRequestDto;
 import org.tizzer.smmgr.system.model.request.SaveBookRecordRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryBookGoodsResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveBookRecordResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.listener.TableCellListener;
 
 import javax.swing.*;
@@ -107,7 +106,7 @@ public class AddBookDialog extends WebDialog {
 
         deleteRowButton.addActionListener(e -> {
             if (bookGoodsTable.getSelectedRow() == -1) {
-                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                LafUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
                 return;
             }
             int[] rows = bookGoodsTable.getSelectedRows();
@@ -150,7 +149,7 @@ public class AddBookDialog extends WebDialog {
             String note = JOptionPane.showInputDialog(RuntimeConstants.root, "请输入订购备注", "填充备注", JOptionPane.QUESTION_MESSAGE);
             SaveBookRecordResponseDto saveBookRecordResponseDto = saveBookRecord(note);
             if (saveBookRecordResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(bookButton, saveBookRecordResponseDto.getMessage());
+                LafUtil.showTip(bookButton, saveBookRecordResponseDto.getMessage());
             } else {
                 isRefresh = true;
                 dispose();
@@ -189,7 +188,7 @@ public class AddBookDialog extends WebDialog {
             saveBookRecordRequestDto.setQuantity(quantity);
             saveBookRecordResponseDto = HttpHandler.post("/save/book/record", saveBookRecordRequestDto.toString(), SaveBookRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return saveBookRecordResponseDto;
@@ -208,7 +207,7 @@ public class AddBookDialog extends WebDialog {
             queryTradeGoodsRequestDto.setKeyword(keyword);
             queryBookGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryBookGoodsResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryBookGoodsResponseDto;
@@ -292,9 +291,9 @@ public class AddBookDialog extends WebDialog {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
         webPanel.setLayout(new GridBagLayout());
-        SwingUtil.setupComponent(webPanel, resetBookButton, 0, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, bookButton, 0, 1, 2, 1);
+        LafUtil.setupComponent(webPanel, resetBookButton, 0, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, bookButton, 0, 1, 2, 1);
         return webPanel;
     }
 
@@ -328,7 +327,7 @@ public class AddBookDialog extends WebDialog {
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("brown.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("brown.xml"));
         return webButton;
     }
 
@@ -336,7 +335,7 @@ public class AddBookDialog extends WebDialog {
         WebButton webButton = new WebButton();
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("green.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("green.xml"));
         return webButton;
     }
 

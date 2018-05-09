@@ -6,7 +6,6 @@ import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ColorManager;
 import org.tizzer.smmgr.system.constant.IconManager;
@@ -14,8 +13,8 @@ import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.QueryTradeGoodsRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryTradeGoodsResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -97,7 +96,7 @@ public class TradeGoodsDialog extends WebDialog {
         chooseButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1) {
-                SwingUtil.showTip(chooseButton, "请先选择一个商品");
+                LafUtil.showTip(chooseButton, "请先选择一个商品");
                 return;
             }
             dataCache = new Object[1][tableHead.length];
@@ -124,7 +123,7 @@ public class TradeGoodsDialog extends WebDialog {
             queryTradeGoodsRequestDto.setKeyword(keyword);
             queryTradeGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryTradeGoodsResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryTradeGoodsResponseDto;
@@ -196,7 +195,7 @@ public class TradeGoodsDialog extends WebDialog {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 }

@@ -11,8 +11,8 @@ import org.tizzer.smmgr.system.constant.RuntimeConstants;
 import org.tizzer.smmgr.system.handler.HttpHandler;
 import org.tizzer.smmgr.system.model.request.SaveEmployeeRequestDto;
 import org.tizzer.smmgr.system.model.response.SaveEmployeeResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -60,32 +60,32 @@ public class AddEmployeeDialog extends WebDialog {
         addButton.addActionListener(e -> {
             String staffNo = staffNoField.getText().trim();
             if (staffNo.equals("")) {
-                SwingUtil.showTip(staffNoField, "员工号不能为空");
+                LafUtil.showTip(staffNoField, "员工号不能为空");
                 return;
             }
             String password = passwordField.getText().trim();
             if (password.equals("")) {
-                SwingUtil.showTip(passwordField, "密码不能为空");
+                LafUtil.showTip(passwordField, "密码不能为空");
                 return;
             }
             String name = nameField.getText().trim();
             if (name.equals("")) {
-                SwingUtil.showTip(nameField, "姓名不能为空");
+                LafUtil.showTip(nameField, "姓名不能为空");
                 return;
             }
             String phone = phoneField.getText().trim();
             if (phone.equals("")) {
-                SwingUtil.showTip(phoneField, "电话不能为空");
+                LafUtil.showTip(phoneField, "电话不能为空");
                 return;
             }
             String address = addressField.getText().trim();
             if (address.equals("")) {
-                SwingUtil.showTip(addressField, "地址不能为空");
+                LafUtil.showTip(addressField, "地址不能为空");
                 return;
             }
             SaveEmployeeResponseDto saveEmployeeResponseDto = saveEmployee(staffNo, password, name, phone, address);
             if (saveEmployeeResponseDto.getCode() != ResultCode.OK) {
-                SwingUtil.showTip(addButton, saveEmployeeResponseDto.getMessage());
+                LafUtil.showTip(addButton, saveEmployeeResponseDto.getMessage());
             } else {
                 isRefresh = true;
                 dispose();
@@ -127,10 +127,10 @@ public class AddEmployeeDialog extends WebDialog {
         List<String> stringList = Arrays.asList("员工号：", "密码：", "姓名：", "电话：", "地址：");
         List<Container> containerList = Arrays.asList(staffNoField, passwordField, nameField, phoneField, addressField);
         for (int i = 0; i < stringList.size(); i++) {
-            SwingUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
-            SwingUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
+            LafUtil.setupComponent(webPanel, new WebLabel(stringList.get(i)), 0, i, 1, 1);
+            LafUtil.setupComponent(webPanel, containerList.get(i), 1, i, 1, 1);
         }
-        SwingUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
+        LafUtil.setupComponent(webPanel, createButtonPane(), 0, stringList.size(), 2, 1);
         return webPanel;
     }
 
@@ -153,7 +153,7 @@ public class AddEmployeeDialog extends WebDialog {
         WebButton webButton = new WebButton(text);
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 }

@@ -14,7 +14,7 @@ import java.awt.*;
  * @author tizzer
  * @version 1.0
  */
-public class SwingUtil {
+public class LafUtil {
     /**
      * 设置weblaf外观
      */

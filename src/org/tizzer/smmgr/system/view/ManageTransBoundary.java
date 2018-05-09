@@ -3,7 +3,6 @@ package org.tizzer.smmgr.system.view;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.ResultCode;
 import org.tizzer.smmgr.system.handler.HttpHandler;
@@ -11,11 +10,10 @@ import org.tizzer.smmgr.system.model.request.QueryTransRecordRequestDto;
 import org.tizzer.smmgr.system.model.request.QueryTransSpecRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryTransRecordResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryTransSpecResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.component.JRecordView;
 import org.tizzer.smmgr.system.view.dialog.AddTransDialog;
-import org.tizzer.smmgr.system.view.listener.RecordListener;
 import org.tizzer.smmgr.system.view.renderer.RecordRenderer;
 
 import java.awt.*;
@@ -27,7 +25,7 @@ import java.util.Objects;
  * @author tizzer
  * @version 1.0
  */
-public class ManageTransBoundary extends WebPanel implements RecordListener, ActionListener {
+public class ManageTransBoundary extends WebPanel implements JRecordView.RecordListener, ActionListener {
 
     private static final Object[] tableHead = {"条码", "名称", "进价", "数量"};
 
@@ -68,7 +66,7 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
             recordView.setListItem(queryTransRecordResponseDto.getData());
             recordView.setLoadPage(queryTransRecordResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryTransRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryTransRecordResponseDto.getMessage());
         }
     }
 
@@ -78,7 +76,7 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
         if (queryTransRecordResponseDto.getCode() == ResultCode.OK) {
             recordView.addListItem(queryTransRecordResponseDto.getData());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryTransRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryTransRecordResponseDto.getMessage());
         }
     }
 
@@ -95,7 +93,7 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
                     costLabel.setText(getBoldOrangeText(String.valueOf(queryTransSpecResponseDto.getCost())));
                     storeLabel.setText("分店：" + queryTransSpecResponseDto.getName());
                 } else {
-                    SwingUtil.showNotification("访问出错，" + queryTransSpecResponseDto.getMessage());
+                    LafUtil.showNotification("访问出错，" + queryTransSpecResponseDto.getMessage());
                 }
             }
         }
@@ -114,7 +112,7 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
             queryTransSpecRequestDto.setId(serialNo);
             queryTransSpecResponseDto = HttpHandler.get("/query/trans/spec?" + queryTransSpecRequestDto.toString(), QueryTransSpecResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryTransSpecResponseDto;
@@ -139,7 +137,7 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
             queryTransRecordRequestDto.setPageSize(loadSize);
             queryTransRecordResponseDto = HttpHandler.get("/query/trans/record?" + queryTransRecordRequestDto.toString(), QueryTransRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryTransRecordResponseDto;
@@ -174,7 +172,7 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
             recordView.setListItem(queryTransRecordResponseDto.getData());
             recordView.setLoadPage(queryTransRecordResponseDto.getPageCount());
         } else {
-            SwingUtil.showNotification("访问出错，" + queryTransRecordResponseDto.getMessage());
+            LafUtil.showNotification("访问出错，" + queryTransRecordResponseDto.getMessage());
         }
     }
 
@@ -208,7 +206,7 @@ public class ManageTransBoundary extends WebPanel implements RecordListener, Act
         WebButton webButton = new WebButton(" 调货 ");
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("default.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("default.xml"));
         return webButton;
     }
 }

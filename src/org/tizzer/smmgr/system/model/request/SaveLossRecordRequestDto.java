@@ -39,17 +39,14 @@ public class SaveLossRecordRequestDto {
 
     @Override
     public String toString() {
-        String param = "staffNo=" + staffNo +
-                "&cost=" + cost;
+        StringBuilder param = new StringBuilder("staffNo=" + staffNo +
+                "&cost=" + cost);
         if (note != null) {
-            param += "&note=" + note;
+            param.append("&note=").append(note);
         }
         for (int i = 0; i < upc.length; i++) {
-            param += "&upc=" + upc[i] +
-                    "&name=" + name[i] +
-                    "&primeCost=" + primeCost[i] +
-                    "&quantity=" + quantity[i];
+            param.append("&upc=").append(upc[i]).append("&name=").append(name[i]).append("&primeCost=").append(primeCost[i]).append("&quantity=").append(quantity[i]);
         }
-        return param;
+        return param.toString();
     }
 }

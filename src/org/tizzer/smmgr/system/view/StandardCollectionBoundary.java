@@ -5,7 +5,6 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebTextField;
-import org.tizzer.smmgr.system.common.LogLevel;
 import org.tizzer.smmgr.system.common.Logcat;
 import org.tizzer.smmgr.system.constant.IconManager;
 import org.tizzer.smmgr.system.constant.ResultCode;
@@ -17,8 +16,8 @@ import org.tizzer.smmgr.system.model.request.SaveTradeRecordRequestDto;
 import org.tizzer.smmgr.system.model.response.QueryOneInsiderResponseDto;
 import org.tizzer.smmgr.system.model.response.QueryTradeGoodsResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveTradeRecordResponseDto;
-import org.tizzer.smmgr.system.utils.NPatchUtil;
-import org.tizzer.smmgr.system.utils.SwingUtil;
+import org.tizzer.smmgr.system.utils.D9Util;
+import org.tizzer.smmgr.system.utils.LafUtil;
 import org.tizzer.smmgr.system.view.dialog.CheckoutDialog;
 import org.tizzer.smmgr.system.view.dialog.TradeGoodsDialog;
 import org.tizzer.smmgr.system.view.dialog.UpdateInsiderDialog;
@@ -110,7 +109,7 @@ class StandardCollectionBoundary extends WebPanel {
 
         deleteRowButton.addActionListener(e -> {
             if (tradeGoodsTable.getSelectedRow() == -1) {
-                SwingUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
+                LafUtil.showTip(deleteRowButton, "请至少选中表格中的一个商品");
                 return;
             }
             int[] rows = tradeGoodsTable.getSelectedRows();
@@ -154,7 +153,7 @@ class StandardCollectionBoundary extends WebPanel {
             if (!keyword.equals("")) {
                 QueryOneInsiderResponseDto queryOneInsiderResponseDto = queryOneInsider(keyword);
                 if (queryOneInsiderResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(searchInsiderField, queryOneInsiderResponseDto.getMessage());
+                    LafUtil.showTip(searchInsiderField, queryOneInsiderResponseDto.getMessage());
                 } else {
                     //缓存会员信息
                     insiderCache = queryOneInsiderResponseDto.getData();
@@ -181,7 +180,7 @@ class StandardCollectionBoundary extends WebPanel {
                     insiderCache = queryOneInsiderResponseDto.getData();
                     refreshTable(discount);
                 } else {
-                    SwingUtil.showNotification("访问出错，" + queryOneInsiderResponseDto.getMessage());
+                    LafUtil.showNotification("访问出错，" + queryOneInsiderResponseDto.getMessage());
                 }
             }
         });
@@ -214,7 +213,7 @@ class StandardCollectionBoundary extends WebPanel {
                 }
                 SaveTradeRecordResponseDto saveTradeRecordResponseDto = saveTradeRecord(payType, cardNo, phone);
                 if (saveTradeRecordResponseDto.getCode() != ResultCode.OK) {
-                    SwingUtil.showTip(checkoutButton, saveTradeRecordResponseDto.getMessage());
+                    LafUtil.showTip(checkoutButton, saveTradeRecordResponseDto.getMessage());
                 } else {
                     reset();
                 }
@@ -235,7 +234,7 @@ class StandardCollectionBoundary extends WebPanel {
             queryTradeGoodsRequestDto.setKeyword(keyword);
             queryTradeGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryTradeGoodsResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryTradeGoodsResponseDto;
@@ -254,7 +253,7 @@ class StandardCollectionBoundary extends WebPanel {
             queryOneInsiderRequestDto.setKeyword(keyword);
             queryOneInsiderResponseDto = HttpHandler.get("/query/insider/one?" + queryOneInsiderRequestDto.toString(), QueryOneInsiderResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return queryOneInsiderResponseDto;
@@ -302,7 +301,7 @@ class StandardCollectionBoundary extends WebPanel {
             saveTradeRecordRequestDto.setSerialNo(null);
             saveTradeRecordResponseDto = HttpHandler.post("/save/trade/record", saveTradeRecordRequestDto.toString(), SaveTradeRecordResponseDto.class);
         } catch (Exception e) {
-            Logcat.type(getClass(), e.getMessage(), LogLevel.ERROR);
+            Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
         }
         return saveTradeRecordResponseDto;
@@ -429,7 +428,7 @@ class StandardCollectionBoundary extends WebPanel {
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
         webButton.setCursor(Cursor.getDefaultCursor());
-        webButton.setPainter(NPatchUtil.getNinePatchPainter(colorConfig));
+        webButton.setPainter(D9Util.getNinePatchPainter(colorConfig));
         return webButton;
     }
 
@@ -437,7 +436,7 @@ class StandardCollectionBoundary extends WebPanel {
         WebButton webButton = new WebButton();
         webButton.setForeground(Color.WHITE);
         webButton.setSelectedForeground(Color.WHITE);
-        webButton.setPainter(NPatchUtil.getNinePatchPainter("red.xml"));
+        webButton.setPainter(D9Util.getNinePatchPainter("red.xml"));
         return webButton;
     }
 
@@ -445,9 +444,9 @@ class StandardCollectionBoundary extends WebPanel {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
         webPanel.setLayout(new GridBagLayout());
-        SwingUtil.setupComponent(webPanel, resetTradeButton, 0, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
-        SwingUtil.setupComponent(webPanel, checkoutButton, 0, 1, 2, 1);
+        LafUtil.setupComponent(webPanel, resetTradeButton, 0, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, checkoutButton, 0, 1, 2, 1);
         return webPanel;
     }
 
