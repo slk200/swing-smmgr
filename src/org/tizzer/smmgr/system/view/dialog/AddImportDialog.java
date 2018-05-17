@@ -188,6 +188,7 @@ public class AddImportDialog extends WebDialog {
             saveImportRecordRequestDto.setName(name);
             saveImportRecordRequestDto.setPrimeCost(primeCost);
             saveImportRecordRequestDto.setQuantity(quantity);
+            System.out.println(saveImportRecordRequestDto);
             saveImportRecordResponseDto = HttpHandler.post("/save/import/record", saveImportRecordRequestDto.toString(), SaveImportRecordResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);

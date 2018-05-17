@@ -69,11 +69,11 @@ class LaunchManageMode extends WebPanel {
         recordButton.addActionListener(e -> changeView(new ManageTradeBoundary()));
         lossButton.addActionListener(e -> changeView(new ManageLossBoundary()));
         settingButton.addActionListener(e -> {
-
+            //TODO
         });
 
         helpButton.addActionListener(e -> {
-
+            //TODO
         });
     }
 

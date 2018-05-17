@@ -228,6 +228,7 @@ class StandardRefundBoundary extends WebPanel {
         setLabelText("");
         setRefundButton("0.0");
         tableModel.setDataVector(null, tableHead);
+        searchRecordField.setText("");
     }
 
     /**

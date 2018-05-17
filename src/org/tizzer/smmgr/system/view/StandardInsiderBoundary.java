@@ -131,6 +131,7 @@ class StandardInsiderBoundary extends WebPanel {
             saveInsiderRequestDto.setNote(noteArea.getText().trim());
             saveInsiderRequestDto.setType(idCache[typeComboBox.getSelectedIndex()]);
             saveInsiderRequestDto.setBirth(birthField.getText());
+            System.out.println(saveInsiderRequestDto);
             saveInsiderResponseDto = HttpHandler.post("/save/insider", saveInsiderRequestDto.toString(), SaveInsiderResponseDto.class);
         } catch (Exception e) {
             e.printStackTrace();

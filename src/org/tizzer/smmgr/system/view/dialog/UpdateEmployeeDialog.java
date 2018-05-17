@@ -73,8 +73,8 @@ public class UpdateEmployeeDialog extends WebDialog {
         addressField.setText(editData[3].toString());
         createAtField.setText(editData[5].toString());
         storeField.setText(editData[4].toString());
+        enableBox.setSelected((Boolean) editData[7]);
         if (editData[0].equals(RuntimeConstants.staffNo)) {
-            enableBox.setSelected((Boolean) editData[7]);
             enableBox.setEnabled(false);
         }
     }

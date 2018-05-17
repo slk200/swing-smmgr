@@ -55,11 +55,11 @@ public class LaunchStandardMode extends WebPanel implements NavigationListener {
         lossButton.addActionListener(e -> changeView(new StandardLossBoundary(), "Center"));
         recordButton.addActionListener(e -> changeView(new StandardTradeBoundary(), "Center"));
         settingButton.addActionListener(e -> {
-
+            //TODO
         });
 
         helpButton.addActionListener(e -> {
-
+            //TODO
         });
     }
 

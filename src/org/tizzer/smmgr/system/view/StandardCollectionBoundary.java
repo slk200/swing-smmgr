@@ -18,6 +18,7 @@ import org.tizzer.smmgr.system.model.response.QueryTradeGoodsResponseDto;
 import org.tizzer.smmgr.system.model.response.SaveTradeRecordResponseDto;
 import org.tizzer.smmgr.system.utils.D9Util;
 import org.tizzer.smmgr.system.utils.LafUtil;
+import org.tizzer.smmgr.system.view.dialog.AddGoodsDialog;
 import org.tizzer.smmgr.system.view.dialog.CheckoutDialog;
 import org.tizzer.smmgr.system.view.dialog.TradeGoodsDialog;
 import org.tizzer.smmgr.system.view.dialog.UpdateInsiderDialog;
@@ -39,6 +40,7 @@ class StandardCollectionBoundary extends WebPanel {
 
     private DefaultTableModel tableModel;
     private WebTable tradeGoodsTable;
+    private WebButton addGoodsButton;
     private WebButton resetTradeButton;
     private WebButton deleteRowButton;
     private WebButton seeInsiderButton;
@@ -58,6 +60,7 @@ class StandardCollectionBoundary extends WebPanel {
 
     StandardCollectionBoundary() {
         tradeGoodsTable = createTransactionTable();
+        addGoodsButton = createBootstrapButton("新增商品", IconManager.ADDGOODS, "brown.xml");
         resetTradeButton = createBootstrapButton("清理台面", IconManager.RESETDESK, "brown.xml");
         deleteRowButton = createBootstrapButton("删除记录", IconManager.DELETERECORD, "brown.xml");
         searchGoodsField = createTrailingField("条码/名称/拼音码", null, null);
@@ -99,6 +102,8 @@ class StandardCollectionBoundary extends WebPanel {
                 tradeGoodsTable.setValueAt(tcl.getOldValue(), tcl.getRow(), tcl.getColumn());
             }
         });
+
+        addGoodsButton.addActionListener(e -> AddGoodsDialog.newInstance());
 
         resetTradeButton.addActionListener(e -> {
             int operation = JOptionPane.showConfirmDialog(RuntimeConstants.root, "<html><h3>确定要清理台面吗？</h3></html>", "询问", JOptionPane.OK_CANCEL_OPTION);
@@ -444,9 +449,10 @@ class StandardCollectionBoundary extends WebPanel {
         WebPanel webPanel = new WebPanel();
         webPanel.setOpaque(false);
         webPanel.setLayout(new GridBagLayout());
-        LafUtil.setupComponent(webPanel, resetTradeButton, 0, 0, 1, 1);
-        LafUtil.setupComponent(webPanel, deleteRowButton, 1, 0, 1, 1);
-        LafUtil.setupComponent(webPanel, checkoutButton, 0, 1, 2, 1);
+        LafUtil.setupComponent(webPanel, addGoodsButton, 0, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, resetTradeButton, 1, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, deleteRowButton, 2, 0, 1, 1);
+        LafUtil.setupComponent(webPanel, checkoutButton, 0, 1, 3, 1);
         return webPanel;
     }
 
