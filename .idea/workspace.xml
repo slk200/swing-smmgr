@@ -3,14 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="943173d8-beb4-4e76-8e31-5c53cad1a4e0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/system/data-init.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/system/data-init.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LaunchManageMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LaunchManageMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LaunchStandardMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LaunchStandardMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardCollectionBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardCollectionBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardInsiderBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardInsiderBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardRefundBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardRefundBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddImportDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddImportDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/UpdateEmployeeDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/UpdateEmployeeDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/androidstylefield.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/style/androidstylefield.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/brown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/style/brown.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/style/default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/green.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/style/green.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/navigation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/style/navigation.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/recred.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/style/recred.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/red.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/style/red.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/toggle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/style/toggle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/transparent.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/style/transparent.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/BootApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/BootApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/XMLHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/XMLHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/utils/D9Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/utils/D9Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/system/data-init.xml" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,17 +26,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="StandardRefundBoundary.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardRefundBoundary.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4968">
-              <caret line="230" column="23" selection-start-line="230" selection-start-column="23" selection-end-line="230" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -43,7 +38,9 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>org.tizzer.smmgr.system.component.WebBSButton</find>
-      <find>new WebTextField</find>
+      <find />
+      <find>org/tizzer/smmgr/</find>
+      <find>/org/tizzer/smmgr/</find>
     </findStrings>
     <replaceStrings>
       <replace>org.tizzer.smmgr.system.util.NPatchUtil</replace>
@@ -57,12 +54,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/component/InfoCard.java" />
-        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/component/WebInfoCard.java" />
-        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/admin/ManageEmployeeBoundary.java" />
-        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/AddInsiderBoundary.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/TransactionBoundary.java" />
-        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/constant/IconManager.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/Launcher.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/TransUserBoundary.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/FunctionsBoundary.java" />
@@ -108,6 +100,11 @@
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddGoodsDialog.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddImportDialog.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardRefundBoundary.java" />
+        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/common/SnowflakeIdWorker.java" />
+        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/XMLHandler.java" />
+        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/BootApplication.java" />
+        <option value="$PROJECT_DIR$/image/button/SnowflakeIdWorker.java" />
+        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/constant/IconManager.java" />
       </list>
     </option>
   </component>
@@ -134,10 +131,11 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator currentView="PackagesPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -148,6 +146,11 @@
             <path>
               <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
               <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -155,13 +158,6 @@
               <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="smmgr" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
-              <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="smmgr" type="462c0819:PsiDirectoryNode" />
-              <item name="system" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -174,29 +170,10 @@
               <item name="swing-smmgr" type="58d84e3e:PackageViewProjectNode" />
               <item name="swing-smmgr" type="616d4139:PackageViewModuleNode" />
             </path>
-            <path>
-              <item name="swing-smmgr" type="58d84e3e:PackageViewProjectNode" />
-              <item name="swing-smmgr" type="616d4139:PackageViewModuleNode" />
-              <item name="org.tizzer.smmgr" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="swing-smmgr" type="58d84e3e:PackageViewProjectNode" />
-              <item name="swing-smmgr" type="616d4139:PackageViewModuleNode" />
-              <item name="org.tizzer.smmgr" type="1f31426a:PackageElementNode" />
-              <item name="system" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="swing-smmgr" type="58d84e3e:PackageViewProjectNode" />
-              <item name="swing-smmgr" type="616d4139:PackageViewModuleNode" />
-              <item name="org.tizzer.smmgr" type="1f31426a:PackageElementNode" />
-              <item name="system" type="1f31426a:PackageElementNode" />
-              <item name="view" type="1f31426a:PackageElementNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -204,7 +181,7 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://D:/Project/IdeaProjects/swing-smmgr/src/org/tizzer/smmgr/system/view/LoginBoundary.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="D:/" />
+    <property name="last_opened_file_path" value="F:/" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
@@ -212,17 +189,19 @@
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Project\IdeaProjects\swing-smmgr\src\org\tizzer\smmgr\image\other" />
-      <recent name="D:\Project\IdeaProjects\swing-smmgr\src\org\tizzer\smmgr\system" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\Project\IDEAProjects\swing-smmgr\src\org\tizzer\smmgr" />
       <recent name="F:\Project\IDEAProjects\swing-smmgr" />
+      <recent name="D:\Project\IdeaProjects\swing-smmgr\src\org\tizzer\smmgr\image\other" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.tizzer.smmgr.system.model.response" />
       <recent name="org.tizzer.smmgr.system.component" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Project\IdeaProjects\swing-smmgr\src\org\tizzer\smmgr\image\other" />
+      <recent name="D:\Project\IdeaProjects\swing-smmgr\src\org\tizzer\smmgr\system" />
+      <recent name="F:\Project\IDEAProjects\swing-smmgr" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -354,7 +333,9 @@
       <workItem from="1525847187542" duration="1436000" />
       <workItem from="1526108527428" duration="4716000" />
       <workItem from="1526447954541" duration="8125000" />
-      <workItem from="1526523454181" duration="3025000" />
+      <workItem from="1526523454181" duration="3189000" />
+      <workItem from="1526613701444" duration="615000" />
+      <workItem from="1526647087141" duration="3673000" />
     </task>
     <task id="LOCAL-00001" summary="team commit">
       <created>1521178982060</created>
@@ -398,15 +379,21 @@
       <option name="project" value="LOCAL" />
       <updated>1525166706222</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="team commit">
+      <created>1526533917611</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1526533917611</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="117026000" />
+    <option name="totallyTimeSpent" value="121478000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="274" y="27" width="1360" height="994" extended-state="1" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info anchor="right" id="Palette" order="2" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -417,13 +404,14 @@
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32905483" />
       <window_info anchor="right" id="Maven Projects" order="7" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.2813212" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.26276594" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.30264673" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="6" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22098215" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1546875" />
       <window_info anchor="right" id="Database" order="5" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.30523917" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="8" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -435,7 +423,6 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.30549684" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -494,49 +481,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/response/QueryAllInsiderTypeResponseDto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="48">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/response/QueryBookGoodsResponseDto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="48">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/response/QueryBookRecordResponseDto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/response/QueryBookSpecResponseDto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="48">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/constant/ColorManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/constant/IconManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/common/LogLevel.java" />
     <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/common/SpellWorker.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
@@ -558,34 +502,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/config/system/data-init.xml">
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/style/androidstylefield.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/androidstylefield.xml">
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/style/brown.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/brown.xml">
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/style/default.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/default.xml">
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/style/green.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/green.xml">
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/style/navigation.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/navigation.xml">
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/style/recred.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/recred.xml">
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/style/red.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/red.xml">
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/style/toggle.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/toggle.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/config/nppainter/transparent.xml">
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/style/transparent.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/image/button/brown.9.png">
@@ -654,24 +595,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LoginBoundary.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="35" column="13" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://D:/Component/Java/jdk1.8.0_162/src.zip!/javax/swing/SwingUtilities.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="284">
           <caret line="1288" column="23" selection-start-line="1288" selection-start-column="23" selection-end-line="1288" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/BootApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="22" column="33" lean-forward="true" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -773,17 +700,75 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/common/SnowflakeIdWorker.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/system/data-init.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/data-init.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/META-INF/MANIFEST.MF">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/BootApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/XMLHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LoginBoundary.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="48" column="51" selection-start-line="48" selection-start-column="51" selection-end-line="48" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/image/button/SnowflakeIdWorker.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/constant/IconManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/SmmgrApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
   </component>
   <component name="masterDetails">
     <states>
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
-          <artifact-editor />
+          <artifact-editor>
+            <show-content>
+              <type id="artifact" />
+              <type id="library" />
+              <type id="jpa-descriptors" />
+              <type id="javaee-facet-resources" />
+            </show-content>
+          </artifact-editor>
           <last-edited>swing-smmgr:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
@@ -791,7 +776,7 @@
       </state>
       <state key="FacetStructureConfigurable.UI">
         <settings>
-          <last-edited>No facets are configured</last-edited>
+          <last-edited />
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -803,6 +788,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
+          <last-edited>com.squareup.okio:okio:1.12.0</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -831,6 +817,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>
@@ -850,7 +837,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>External Libraries</last-edited>
+          <last-edited />
           <splitter-proportions>
             <option name="proportions">
               <list>

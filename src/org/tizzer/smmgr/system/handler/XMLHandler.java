@@ -27,7 +27,7 @@ public class XMLHandler {
     private Element root;
 
     public XMLHandler(String xmlName) {
-        file = new File("src/org/tizzer/smmgr/config/system/" + xmlName);
+        file = new File("config/" + xmlName);
         try {
             doc = new SAXReader().read(file);
         } catch (DocumentException e) {

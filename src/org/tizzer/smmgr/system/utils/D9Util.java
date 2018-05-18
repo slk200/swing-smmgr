@@ -22,7 +22,7 @@ public class D9Util {
      */
     public static NinePatchStatePainter getNinePatchPainter(String name) {
         if (!ninePatchStatePainterCache.containsKey(name)) {
-            ninePatchStatePainterCache.put(name, NinePatchUtils.loadNinePatchStatePainter(D9Util.class.getResource("/org/tizzer/smmgr/config/nppainter/" + name)));
+            ninePatchStatePainterCache.put(name, NinePatchUtils.loadNinePatchStatePainter(D9Util.class.getResource("/org/tizzer/smmgr/style/" + name)));
         }
         return ninePatchStatePainterCache.get(name);
     }

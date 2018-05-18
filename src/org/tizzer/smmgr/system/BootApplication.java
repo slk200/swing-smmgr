@@ -18,7 +18,7 @@ public class BootApplication {
 
     public void entry() {
         LafUtil.setWebLaF();
-        XMLHandler xmlHandler = new XMLHandler("data-init.xml");
+        XMLHandler xmlHandler = new XMLHandler("/data-init.xml");
         if (xmlHandler.getBoolean("guide")) {
             SwingUtilities.invokeLater(SmmgrApplication::new);
         } else {
