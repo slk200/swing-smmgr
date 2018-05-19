@@ -4,7 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import org.tizzer.smmgr.system.utils.IOUtil;
 import org.tizzer.smmgr.system.utils.LafUtil;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -32,27 +35,29 @@ public class HttpHandler {
         httpURLConnection.setRequestProperty("Accept-Charset", charset);
         httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-        InputStream inputStream = null;
-        InputStreamReader inputStreamReader = null;
-        BufferedReader reader = null;
-        StringBuilder result = new StringBuilder();
-        String tempLine;
         if (httpURLConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
             throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
         }
+        InputStream inputStream = null;
+        ByteArrayOutputStream byteArrayOutputStream = null;
+        String result = "";
         try {
             inputStream = httpURLConnection.getInputStream();
-            inputStreamReader = new InputStreamReader(inputStream);
-            reader = new BufferedReader(inputStreamReader);
-            while ((tempLine = reader.readLine()) != null) {
-                result.append(tempLine);
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, len);
             }
+            result = new String(byteArrayOutputStream.toByteArray(), charset);
+            inputStream.close();
+            byteArrayOutputStream.close();
         } catch (Exception e) {
             LafUtil.showNotification("访问服务器异常，" + e.getMessage());
         } finally {
-            IOUtil.close(reader, inputStreamReader, inputStream);
+            IOUtil.close(byteArrayOutputStream, inputStream);
         }
-        return result.toString();
+        return result;
     }
 
     /**
@@ -76,10 +81,8 @@ public class HttpHandler {
         OutputStream outputStream = null;
         OutputStreamWriter outputStreamWriter = null;
         InputStream inputStream = null;
-        InputStreamReader inputStreamReader = null;
-        BufferedReader reader = null;
-        StringBuilder result = new StringBuilder();
-        String tempLine;
+        ByteArrayOutputStream byteArrayOutputStream = null;
+        String result = "";
         try {
             outputStream = httpURLConnection.getOutputStream();
             outputStreamWriter = new OutputStreamWriter(outputStream);
@@ -89,17 +92,19 @@ public class HttpHandler {
                 throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
             }
             inputStream = httpURLConnection.getInputStream();
-            inputStreamReader = new InputStreamReader(inputStream);
-            reader = new BufferedReader(inputStreamReader);
-            while ((tempLine = reader.readLine()) != null) {
-                result.append(tempLine);
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, len);
             }
+            result = new String(byteArrayOutputStream.toByteArray(), charset);
         } catch (Exception e) {
             LafUtil.showNotification("访问服务器异常，" + e.getMessage());
         } finally {
-            IOUtil.close(outputStreamWriter, outputStream, reader, inputStreamReader, inputStream);
+            IOUtil.close(outputStreamWriter, outputStream, byteArrayOutputStream, inputStream);
         }
-        return result.toString();
+        return result;
     }
 
     /**
