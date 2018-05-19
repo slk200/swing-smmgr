@@ -147,7 +147,7 @@ public class UpdateEmployeeDialog extends WebDialog {
         LafUtil.setupComponent(webPanel, createAtField, 1, 4, 1, 1);
         LafUtil.setupComponent(webPanel, new WebLabel("所属门店："), 0, 5, 1, 1);
         LafUtil.setupComponent(webPanel, storeField, 1, 5, 1, 1);
-        LafUtil.setupComponent(webPanel, new WebLabel("状态："), 0, 7, 1, 1);
+        LafUtil.setupComponent(webPanel, new WebLabel("状态："), 0, 6, 1, 1);
         LafUtil.setupComponent(webPanel, enableBox, 1, 6, 1, 1);
         LafUtil.setupComponent(webPanel, createButtonPane(), 0, 7, 2, 1);
         return webPanel;
