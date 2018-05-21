@@ -107,7 +107,7 @@ public class StandardTradeBoundary extends WebPanel implements JRecordView.Recor
             queryTradeGoodsRequestDto.setCurrentPage(curLoadIndex - 1);
             queryTradeGoodsRequestDto.setPageSize(loadSize);
             queryTradeGoodsRequestDto.setStaffNo(RuntimeConstants.staffNo);
-            queryTradeRecordResponseDto = HttpHandler.get("/query/trade/record?" + queryTradeGoodsRequestDto.toString(), QueryTradeRecordResponseDto.class);
+            queryTradeRecordResponseDto = HttpHandler.post("/query/trade/record", queryTradeGoodsRequestDto.toString(), QueryTradeRecordResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();

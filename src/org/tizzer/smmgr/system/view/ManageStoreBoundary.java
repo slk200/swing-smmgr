@@ -153,7 +153,7 @@ public class ManageStoreBoundary extends WebPanel implements JPageView.PageListe
             queryStoreRequestDto.setKeyword(keyword);
             queryStoreRequestDto.setPageSize(pageSize);
             queryStoreRequestDto.setCurrentPage(currentPage - 1);
-            queryStoreResponseDto = HttpHandler.get("/query/store?" + queryStoreRequestDto.toString(), QueryStoreResponseDto.class);
+            queryStoreResponseDto = HttpHandler.post("/query/store", queryStoreRequestDto.toString(), QueryStoreResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();

@@ -130,7 +130,6 @@ public class UpdateGoodsDialog extends WebDialog {
             saveGoodsRequestDto.setBzDate((Integer) bzDateSpinner.getValue());
             saveGoodsRequestDto.setType(type);
             saveGoodsRequestDto.setId(chooseId);
-            System.out.println(saveGoodsRequestDto);
             saveGoodsResponseDto = HttpHandler.post("/save/goods", saveGoodsRequestDto.toString(), SaveGoodsResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);

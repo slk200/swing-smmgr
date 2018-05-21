@@ -30,8 +30,10 @@ public class HttpHandler {
      */
     private static String doGet(String api) throws Exception {
         URL localURL = new URL(header + api);
+        System.out.println("doGet: " + localURL.toString());
         URLConnection connection = localURL.openConnection();
         HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
+        httpURLConnection.setRequestMethod("GET");
         httpURLConnection.setRequestProperty("Accept-Charset", charset);
         httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
@@ -70,6 +72,7 @@ public class HttpHandler {
      */
     private static String doPost(String api, String param) throws Exception {
         URL localURL = new URL(header + api);
+        System.out.println("doPost: " + localURL.toString());
         URLConnection connection = localURL.openConnection();
         HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
         httpURLConnection.setDoOutput(true);

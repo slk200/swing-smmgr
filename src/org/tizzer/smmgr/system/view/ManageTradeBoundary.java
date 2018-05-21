@@ -125,7 +125,7 @@ public class ManageTradeBoundary extends WebPanel implements JRecordView.RecordL
             queryTradeGoodsRequestDto.setCurrentPage(curLoadIndex - 1);
             queryTradeGoodsRequestDto.setPageSize(loadSize);
             queryTradeGoodsRequestDto.setStaffNo("");
-            queryTradeRecordResponseDto = HttpHandler.get("/query/trade/record?" + queryTradeGoodsRequestDto.toString(), QueryTradeRecordResponseDto.class);
+            queryTradeRecordResponseDto = HttpHandler.post("/query/trade/record", queryTradeGoodsRequestDto.toString(), QueryTradeRecordResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();

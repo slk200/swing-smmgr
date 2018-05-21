@@ -165,7 +165,7 @@ class ManageGoodsBoundary extends WebPanel {
             queryGoodsRequestDto.setKeyword(keyword);
             queryGoodsRequestDto.setCurrentPage(currentPage - 1);
             queryGoodsRequestDto.setPageSize(30);
-            queryGoodsResponseDto = HttpHandler.get("/query/goods?" + queryGoodsRequestDto.toString(), QueryGoodsResponseDto.class);
+            queryGoodsResponseDto = HttpHandler.post("/query/goods", queryGoodsRequestDto.toString(), QueryGoodsResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();

@@ -121,7 +121,7 @@ public class ManageLossBoundary extends WebPanel implements JRecordView.RecordLi
             queryTradeGoodsRequestDto.setKeyword(keyword);
             queryTradeGoodsRequestDto.setCurrentPage(curLoadIndex - 1);
             queryTradeGoodsRequestDto.setPageSize(loadSize);
-            queryTradeRecordResponseDto = HttpHandler.get("/query/loss/record?" + queryTradeGoodsRequestDto.toString(), QueryLossRecordResponseDto.class);
+            queryTradeRecordResponseDto = HttpHandler.post("/query/loss/record", queryTradeGoodsRequestDto.toString(), QueryLossRecordResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();

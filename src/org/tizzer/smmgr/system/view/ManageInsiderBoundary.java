@@ -81,7 +81,7 @@ public class ManageInsiderBoundary extends WebPanel implements JPageView.PageLis
             queryInsiderRequestDto.setKeyword(keyword);
             queryInsiderRequestDto.setPageSize(pageSize);
             queryInsiderRequestDto.setCurrentPage(currentPage - 1);
-            querySomeStoreResponseDto = HttpHandler.get("/query/insider?" + queryInsiderRequestDto.toString(), QueryInsiderResponseDto.class);
+            querySomeStoreResponseDto = HttpHandler.post("/query/insider", queryInsiderRequestDto.toString(), QueryInsiderResponseDto.class);
         } catch (Exception e) {
             Logcat.type(clazz, e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();

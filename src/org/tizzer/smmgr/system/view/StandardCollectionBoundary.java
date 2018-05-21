@@ -237,7 +237,7 @@ class StandardCollectionBoundary extends WebPanel {
         try {
             QueryTradeGoodsRequestDto queryTradeGoodsRequestDto = new QueryTradeGoodsRequestDto();
             queryTradeGoodsRequestDto.setKeyword(keyword);
-            queryTradeGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryTradeGoodsResponseDto.class);
+            queryTradeGoodsResponseDto = HttpHandler.post("/query/trade/goods", queryTradeGoodsRequestDto.toString(), QueryTradeGoodsResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
@@ -256,7 +256,7 @@ class StandardCollectionBoundary extends WebPanel {
         try {
             QueryOneInsiderRequestDto queryOneInsiderRequestDto = new QueryOneInsiderRequestDto();
             queryOneInsiderRequestDto.setKeyword(keyword);
-            queryOneInsiderResponseDto = HttpHandler.get("/query/insider/one?" + queryOneInsiderRequestDto.toString(), QueryOneInsiderResponseDto.class);
+            queryOneInsiderResponseDto = HttpHandler.post("/query/insider/one", queryOneInsiderRequestDto.toString(), QueryOneInsiderResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();

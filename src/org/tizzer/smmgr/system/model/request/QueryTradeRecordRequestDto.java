@@ -26,10 +26,10 @@ public class QueryTradeRecordRequestDto extends PageableRequestDto {
     public String toString() {
         String param = "staffNo=" + staffNo +
                 "&keyword=" + keyword;
-        if (startDate != null) {
+        if (startDate != null && !startDate.equals("")) {
             param += "&startDate=" + startDate.replace(" ", "%20");
         }
-        if (endDate != null) {
+        if (endDate != null && !endDate.equals("")) {
             param += "&endDate=" + endDate.replace(" ", "%20");
         }
         return param + "&" + super.toString();

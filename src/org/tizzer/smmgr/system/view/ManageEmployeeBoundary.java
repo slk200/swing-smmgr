@@ -91,7 +91,7 @@ public class ManageEmployeeBoundary extends WebPanel implements JPageView.PageLi
             queryEmployeeRequestDto.setKeyword(keyword);
             queryEmployeeRequestDto.setPageSize(pageSize);
             queryEmployeeRequestDto.setCurrentPage(currentPage - 1);
-            queryEmployeeResponseDto = HttpHandler.get("/query/employee?" + queryEmployeeRequestDto.toString(), QueryEmployeeResponseDto.class);
+            queryEmployeeResponseDto = HttpHandler.post("/query/employee", queryEmployeeRequestDto.toString(), QueryEmployeeResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();

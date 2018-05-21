@@ -15,10 +15,10 @@ public class QueryBookRecordRequestDto extends PageableRequestDto {
     @Override
     public String toString() {
         String param = "";
-        if (startDate != null) {
+        if (startDate != null && !startDate.equals("")) {
             param += "startDate=" + startDate.replace(" ", "%20") + "&";
         }
-        if (endDate != null) {
+        if (endDate != null && !endDate.equals("")) {
             param += "endDate=" + endDate.replace(" ", "%20") + "&";
         }
         return param + super.toString();

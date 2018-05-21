@@ -47,7 +47,7 @@ class LaunchManageMode extends WebPanel {
         bookButton = createNavigationButton("订货管理", IconManager.BOOKGOODS);
         recordButton = createNavigationButton("销售记录", IconManager.TRADERECORD);
         lossButton = createNavigationButton("报损记录", IconManager.GOODSLOSS);
-        settingButton = createNavigationButton("系统设置", IconManager.SETUP);
+        settingButton = createNavigationButton("设置", IconManager.SETUP);
         helpButton = createNavigationButton("帮助", IconManager.HELP);
         handlePanel = createHandlePanel();
 

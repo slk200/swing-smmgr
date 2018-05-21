@@ -165,7 +165,7 @@ class StandardRefundBoundary extends WebPanel {
         try {
             QueryRefundRecordRequestDto queryRefundRecordRequestDto = new QueryRefundRecordRequestDto();
             queryRefundRecordRequestDto.setSerialNo(serialNo);
-            queryRefundRecordResponseDto = HttpHandler.get("/query/refund/record?" + queryRefundRecordRequestDto.toString(), QueryRefundRecordResponseDto.class);
+            queryRefundRecordResponseDto = HttpHandler.post("/query/refund/record", queryRefundRecordRequestDto.toString(), QueryRefundRecordResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();
