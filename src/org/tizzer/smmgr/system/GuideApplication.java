@@ -118,7 +118,7 @@ public class GuideApplication extends WebDialog implements ActionListener {
         WebButton webButton = createSwitchButton(IconManager.ENTER, IconManager.ENTEROVER, IconManager.ENTERPRESS);
         webButton.addActionListener(e -> {
             XMLHandler xmlHandler = new XMLHandler("data-init.xml");
-            xmlHandler.putElementValue("guide", true).apply();
+            xmlHandler.putElementValue("guide", true).commit();
             GuideApplication.this.dispose();
             SwingUtilities.invokeLater(SmmgrApplication::new);
         });

@@ -207,7 +207,7 @@ public class AddImportDialog extends WebDialog {
         try {
             QueryTradeGoodsRequestDto queryTradeGoodsRequestDto = new QueryTradeGoodsRequestDto();
             queryTradeGoodsRequestDto.setKeyword(keyword);
-            queryImportGoodsResponseDto = HttpHandler.get("/query/trade/goods?" + queryTradeGoodsRequestDto.toString(), QueryImportGoodsResponseDto.class);
+            queryImportGoodsResponseDto = HttpHandler.post("/query/trade/goods", queryTradeGoodsRequestDto.toString(), QueryImportGoodsResponseDto.class);
         } catch (Exception e) {
             Logcat.type(getClass(), e.getMessage(), Logcat.LogLevel.ERROR);
             e.printStackTrace();

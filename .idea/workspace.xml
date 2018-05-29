@@ -3,33 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="943173d8-beb4-4e76-8e31-5c53cad1a4e0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/HttpHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/HttpHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryBookRecordRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryBookRecordRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryEmployeeRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryEmployeeRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryImportRecordRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryImportRecordRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryInsiderRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryInsiderRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryLossRecordRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryLossRecordRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryStoreRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryStoreRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryTradeRecordRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryTradeRecordRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryTransRecordRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryTransRecordRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LaunchManageMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LaunchManageMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageEmployeeBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageEmployeeBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageGoodsBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageGoodsBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageInsiderBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageInsiderBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageLossBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageLossBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageStoreBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageStoreBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageTradeBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageTradeBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardCollectionBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardCollectionBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardInsiderBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardInsiderBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardLossBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardLossBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardRefundBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardRefundBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardTradeBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardTradeBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddBookDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddBookDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/GuideApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/GuideApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/XMLHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/XMLHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddImportDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddImportDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddTransDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddTransDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/ChooseGoodsDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/ChooseGoodsDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/TradeGoodsDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/TradeGoodsDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/UpdateGoodsDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/UpdateGoodsDialog.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -40,26 +16,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="ManageEmployeeBoundary.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageEmployeeBoundary.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1824">
-              <caret line="93" column="74" selection-start-line="93" selection-start-column="74" selection-end-line="93" selection-end-column="74" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LaunchManageMode.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LaunchManageMode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="864">
-              <caret line="49" column="48" lean-forward="true" selection-start-line="49" selection-start-column="48" selection-end-line="49" selection-end-column="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -106,12 +63,10 @@
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LaunchStandardMode.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddGoodsDialog.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/common/SnowflakeIdWorker.java" />
-        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/XMLHandler.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/BootApplication.java" />
         <option value="$PROJECT_DIR$/image/button/SnowflakeIdWorker.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/constant/IconManager.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/UpdateEmployeeDialog.java" />
-        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddImportDialog.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/StandardInsiderBoundary.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryGoodsRequestDto.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageGoodsBoundary.java" />
@@ -139,6 +94,8 @@
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddTransDialog.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddBookDialog.java" />
         <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/LaunchManageMode.java" />
+        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddImportDialog.java" />
+        <option value="$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/XMLHandler.java" />
       </list>
     </option>
   </component>
@@ -169,6 +126,44 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="smmgr" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="smmgr" type="462c0819:PsiDirectoryNode" />
+              <item name="system" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="smmgr" type="462c0819:PsiDirectoryNode" />
+              <item name="system" type="462c0819:PsiDirectoryNode" />
+              <item name="handler" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
       <pane id="AndroidView" />
       <pane id="PackagesPane">
         <subPane>
@@ -199,29 +194,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
-              <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
-              <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="swing-smmgr" type="b2602c69:ProjectViewProjectNode" />
-              <item name="swing-smmgr" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="smmgr" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -386,7 +358,8 @@
       <workItem from="1526714583941" duration="852000" />
       <workItem from="1526715699462" duration="796000" />
       <workItem from="1526717437200" duration="7428000" />
-      <workItem from="1526870521114" duration="735000" />
+      <workItem from="1526870521114" duration="785000" />
+      <workItem from="1527600894213" duration="1643000" />
     </task>
     <task id="LOCAL-00001" summary="team commit">
       <created>1521178982060</created>
@@ -458,11 +431,18 @@
       <option name="project" value="LOCAL" />
       <updated>1526717581884</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="team commit">
+      <created>1526873418567</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1526873418567</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="132115000" />
+    <option name="totallyTimeSpent" value="133808000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="274" y="27" width="1360" height="994" extended-state="0" />
@@ -476,19 +456,19 @@
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5005208" side_tool="true" weight="0.26170212" />
       <window_info anchor="right" id="Maven Projects" order="7" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49947917" weight="0.26170212" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.30264673" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49947917" visible="true" weight="0.26082003" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="6" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22098215" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22098215" />
       <window_info anchor="right" id="Database" order="5" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="8" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="6" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -553,20 +533,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/QueryTransRecordRequestDto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="20" column="46" selection-start-line="20" selection-start-column="46" selection-end-line="20" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/DeleteInsiderTypeRequestDto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/model/request/DeleteStoreRequestDto.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
@@ -777,13 +743,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/HttpHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="620">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/ManageStoreBoundary.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="277">
@@ -907,6 +866,27 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="864">
           <caret line="49" column="48" lean-forward="true" selection-start-line="49" selection-start-column="48" selection-end-line="49" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/view/dialog/AddImportDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="209" column="81" selection-start-line="209" selection-start-column="81" selection-end-line="209" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/HttpHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="18" selection-start-line="18" selection-end-line="141" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/tizzer/smmgr/system/handler/XMLHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="30" column="9" lean-forward="true" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
         </state>
       </provider>
     </entry>

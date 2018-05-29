@@ -1,6 +1,5 @@
 package org.tizzer.smmgr.system.handler;
 
-import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -11,10 +10,6 @@ import org.dom4j.io.XMLWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author tizzer
@@ -30,31 +25,40 @@ public class XMLHandler {
         file = new File("config/" + xmlName);
         try {
             doc = new SAXReader().read(file);
+            root = doc.getRootElement();
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-        root = doc.getRootElement();
     }
 
+    /**
+     * 获取Object类型的结点值
+     *
+     * @param tagName
+     * @return
+     */
     public Object getObject(String tagName) {
         return root.element(tagName).getData();
     }
 
+    /**
+     * 获取String类型的结点值
+     *
+     * @param tagName
+     * @return
+     */
     public String getString(String tagName) {
         return String.valueOf(getObject(tagName));
     }
 
+    /**
+     * 获取boolean类型的结点值
+     *
+     * @param tagName
+     * @return
+     */
     public boolean getBoolean(String tagName) {
         return Boolean.parseBoolean(getString(tagName));
-    }
-
-    public Map<String, Object> getAttributes(String tagName) {
-        Map<String, Object> map = new HashMap<>();
-        List<Attribute> attributes = root.element(tagName).attributes();
-        for (Attribute attribute : attributes) {
-            map.put(attribute.getName(), attribute.getValue());
-        }
-        return map;
     }
 
     public XMLHandler putElementValue(String tagName, Object value) {
@@ -63,26 +67,10 @@ public class XMLHandler {
         return this;
     }
 
-    public XMLHandler putElementValue(Map<String, Object> valMap) {
-        Set<Map.Entry<String, Object>> entry = valMap.entrySet();
-        for (Map.Entry<String, Object> map : entry) {
-            Element element = root.element(map.getKey());
-            element.setText(String.valueOf(map.getValue()));
-        }
-        return this;
-    }
-
-    public XMLHandler putAttributeValue(String tagName, Map<String, Object> valMap) {
-        Element element = root.element(tagName);
-        Set<Map.Entry<String, Object>> entry = valMap.entrySet();
-        for (Map.Entry<String, Object> map : entry) {
-            Attribute attribute = element.attribute(map.getKey());
-            attribute.setValue(String.valueOf(map.getValue()));
-        }
-        return this;
-    }
-
-    public void apply() {
+    /**
+     * 提交变化
+     */
+    public void commit() {
         FileOutputStream fos = null;
         XMLWriter writer = null;
         try {
